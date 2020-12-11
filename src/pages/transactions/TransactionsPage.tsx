@@ -20,7 +20,7 @@ const TrasactionPage: React.FC = () => {
     const getAllTransferFc = () => {
         setActiveItem('Transfer');
         setLoader(true);
-        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAllRequest").then(response => {
+        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAllTransfer").then(response => {
             getAllTransfer(response.data);
             formatDataToCsv(response.data);
             setLoader(false);
@@ -65,13 +65,13 @@ const TrasactionPage: React.FC = () => {
         data.forEach((rest: any) => {
             custom.push({
                 'Sender name': rest.senderData.user_name,
-                'Sender country': rest.senderData.user_country,
+                'Sender country': rest.senderData.country_name,
                 'Sender code': rest.senderData.user_code,
-                'Sender phone number': rest.senderData.user_phoneNumber,
+                'Sender phone number': rest.senderData.user_phone_number,
                 'Receiver name': rest.recieverData.user_name,
-                'Receiver country': rest.recieverData.user_country,
+                'Receiver country': rest.recieverData.country_name,
                 'Receiver code': rest.recieverData.user_code,
-                'Receiver phone number': rest.senderData.user_phoneNumber,
+                'Receiver phone number': rest.senderData.user_phone_number,
                 'Amount': rest.amount,
                 'Currency': rest.currency,
                 'Opperation Data': rest.created_at,
@@ -141,8 +141,8 @@ const TrasactionPage: React.FC = () => {
                 </tr>
                 {transferData.map((res) => {
                     return (<tr>
-                        <td> <img src={imageUrl + res.senderData.user_avatar} className="user__avatar" alt="avatar" /> {res.senderData.user_name} <span className="span__contry">{res.senderData.user_country} ➚ </span> </td>
-                        <td><img src={imageUrl + res.recieverData.user_avatar} className="user__avatar" alt="avatar" /> {res.recieverData.user_name} <span className="span__contry">➘ {res.recieverData.user_country}</span></td>
+                        <td> <img src={imageUrl + res.senderData.user_avatar} className="user__avatar" alt="avatar" /> {res.senderData.user_name} <span className="span__contry">{res.senderData.country_name} ➚ </span> </td>
+                        <td><img src={imageUrl + res.recieverData.user_avatar} className="user__avatar" alt="avatar" /> {res.recieverData.user_name} <span className="span__contry">➘ {res.recieverData.country_name}</span></td>
                         {activeItem === 'Request' ? (<td>{res.reason}</td>) : null}
                         <td>{res.created_at}</td>
                         <td>{res.amount}</td>
