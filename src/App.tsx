@@ -7,6 +7,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import LoginPage from './pages/authPage/login';
 
 function App() {
   return (
@@ -15,8 +16,11 @@ function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/">
+          <Route path="/admin">
             <HomePage />
+          </Route>
+          <Route path="/login">
+            <LoginPage />
           </Route>
         </Switch>
       </Router>

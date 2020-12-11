@@ -12,6 +12,7 @@ import {
 import TrasactionPage from './transactions/TransactionsPage';
 import AdministrationsPage from './administrations/AdministrationsPage';
 import AccessLogPage from './accessLogPage/AccessLogPage';
+import DetailTransactionUserPage from './transactions/DetailTransactionUserPage';
 
 
 const HomePage: React.FC = () => {
@@ -116,17 +117,18 @@ const HomePage: React.FC = () => {
             </div>
             <div className="row">
                 <div className="col-md-2 side__menu">
-                    <li><Link to="/transactions">Transactions</Link></li>
-                    <li><Link to="/administrations">Administrations</Link></li>
-                    <li><Link to="/access-log">Access log</Link></li>
+                    <li><Link to="/admin/transactions">Transactions</Link></li>
+                    <li><Link to="/admin/administrations">Administrations</Link></li>
+                    <li><Link to="/admin/access-log">Access log</Link></li>
                 </div>
                 <div className="col-md-10 main__row">
                     <Switch>
-                        <Route path="/transactions">
+                        <Route path="/admin/transactions">
                             <TrasactionPage />
                         </Route>
-                        <Route path="/administrations" component={AdministrationsPage}></Route>
-                        <Route path="/access-log" component={AccessLogPage}></Route>
+                        <Route path="/admin/administrations" component={AdministrationsPage}></Route>
+                        <Route path="/admin/access-log" component={AccessLogPage}></Route>
+                        <Route path="/admin/detailtransactionUser" component={DetailTransactionUserPage}></Route>
                     </Switch>
 
                 </div>
