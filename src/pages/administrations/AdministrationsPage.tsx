@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useForm } from "react-hook-form";
+import ApiService from '../../services/ApiService';
 
 const AdministrationPage: React.FC = () => {
 
@@ -23,8 +24,19 @@ const AdministrationPage: React.FC = () => {
 
     const { register, handleSubmit, watch, errors } = useForm<Inputs>();
 
-    const onSubmit = (data: any) => {
+    const onSubmit = async (data: any) => {
         console.log(data);
+
+        var response = await ApiService.postData("dashboard/createAdmin", data);
+
+        if (response.success) {
+            // vide le formulaire
+            //actualise le tableau des admin
+            //met le loader sur le formulare
+        } else {
+            alert("error while create admin");
+        }
+
     };
     console.log(watch("name")) // watch input value by passing the name of it
 

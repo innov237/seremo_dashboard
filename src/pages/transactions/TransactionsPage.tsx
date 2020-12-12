@@ -1,10 +1,12 @@
 import axios from 'axios';
+import { pid } from 'process';
 import React, { useState, useEffect } from 'react'
 import { CSVLink, CSVDownload } from "react-csv";
 import { history } from "../../config/history";
+import ApiService from '../../services/ApiService';
 
 const TrasactionPage: React.FC = () => {
-  
+
     const [transferData, getAllTransfer] = useState<any[]>([]);
     const [isLoad, setLoader] = useState(false);
     const [searchValue, setsearchValue] = useState('');
@@ -19,9 +21,10 @@ const TrasactionPage: React.FC = () => {
 
    
 
-    const getAllTransferFc = () => {
+    const getAllTransferFc = async () => {
         setActiveItem('Transfer');
         setLoader(true);
+<<<<<<< HEAD
         axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAllTransfer").then(response => {
             getAllTransfer(response.data);
             formatDataToCsv(response.data);
@@ -30,19 +33,23 @@ const TrasactionPage: React.FC = () => {
             setLoader(false);
             console.log(err);
         });
+=======
+        var response = await ApiService.getData("dashboard/getAllTransfer");
+        console.log(response);
+        getAllTransfer(response);
+        formatDataToCsv(response);
+        setLoader(false);
+>>>>>>> 9c67b3c1670248f50f619b850ccff1dd4b283894
     };
 
-    const getAllRequestFc = () => {
+
+    const getAllRequestFc = async () => {
         setActiveItem('Request');
         setLoader(true);
-        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAllRequest").then(response => {
-            getAllTransfer(response.data);
-            formatDataToCsv(response.data);
-            setLoader(false);
-        }).catch(err => {
-            setLoader(false);
-            console.log(err);
-        });
+        var response = await ApiService.getData("dashboard/getAllRequest");
+        getAllTransfer(response);
+        formatDataToCsv(response);
+        setLoader(false);
     };
 
     function filterByStatus(value: any) {
@@ -84,8 +91,8 @@ const TrasactionPage: React.FC = () => {
         });
     }
 
-    function detailUser(id : any) {
-        sessionStorage.setItem('id',JSON.stringify(id));
+    function detailUser(id: any) {
+        sessionStorage.setItem('id', JSON.stringify(id));
         history.push("/admin/detailtransactionUser");
     }
 

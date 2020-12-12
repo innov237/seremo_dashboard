@@ -14,7 +14,7 @@ const AccessLogPage: React.FC = () => {
 
     const getAllLog = () => {
         setLoader(true);
-        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAdminAccessLog ").then(response => {
+        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAdminAccessLog").then(response => {
             getData(response.data);
             setLoader(false);
         }).catch(err => {

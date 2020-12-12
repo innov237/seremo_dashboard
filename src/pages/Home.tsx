@@ -13,6 +13,7 @@ import TrasactionPage from './transactions/TransactionsPage';
 import AdministrationsPage from './administrations/AdministrationsPage';
 import AccessLogPage from './accessLogPage/AccessLogPage';
 import DetailTransactionUserPage from './transactions/DetailTransactionUserPage';
+import ApiService from '../services/ApiService';
 
 
 const HomePage: React.FC = () => {
@@ -27,39 +28,32 @@ const HomePage: React.FC = () => {
 
     useEffect(() => {
         getAllTransferFc();
+        getAllRequestFc();
     }, [])
 
 
-    const getAllTransferFc = () => {
+    const getAllTransferFc = async () => {
         setActiveItem('Transfer');
         setLoader(true);
-        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAllRequest").then(response => {
-            getAllTransfer(response.data);
-            formatDataToCsv(response.data);
-            setLoader(false);
-        }).catch(err => {
-            setLoader(false);
-            console.log(err);
-        });
+        var response = await ApiService.getData("dashboard/getAllTransfer");
+        getAllTransfer(response);
+        formatDataToCsv(response);
+        setLoader(false);
     };
 
-    const getAllRequestFc = () => {
+    const getAllRequestFc = async () => {
         setActiveItem('Request');
         setLoader(true);
-        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAllRequest").then(response => {
-            getAllTransfer(response.data);
-            formatDataToCsv(response.data);
-            setLoader(false);
-        }).catch(err => {
-            setLoader(false);
-            console.log(err);
-        });
+        setActiveItem('Transfer');
+        setLoader(true);
+        var response = await ApiService.getData("dashboard/getAllRequest");
+        getAllTransfer(response);
+        formatDataToCsv(response);
+        setLoader(false);
     };
 
     function filterByStatus(value: any) {
-
         const filterData = transferData.filter(elt => elt.status.toLowerCase() === value.toLowerCase());
-
         if (filterData != null) {
             getAllTransfer(filterData);
             formatDataToCsv(filterData);
@@ -124,7 +118,7 @@ const HomePage: React.FC = () => {
                 </div>
                 <div className="col-md-10 main__row">
                     <Switch>
-                        <Route path="/admin/transactions"> 
+                        <Route path="/admin/transactions">
                             <TrasactionPage />
                         </Route>
                         <Route path="/admin/administrations" component={AdministrationsPage}></Route>
