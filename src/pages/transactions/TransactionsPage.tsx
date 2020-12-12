@@ -24,22 +24,11 @@ const TrasactionPage: React.FC = () => {
     const getAllTransferFc = async () => {
         setActiveItem('Transfer');
         setLoader(true);
-<<<<<<< HEAD
-        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAllTransfer").then(response => {
-            getAllTransfer(response.data);
-            formatDataToCsv(response.data);
-            setLoader(false);
-        }).catch(err => {
-            setLoader(false);
-            console.log(err);
-        });
-=======
         var response = await ApiService.getData("dashboard/getAllTransfer");
         console.log(response);
         getAllTransfer(response);
         formatDataToCsv(response);
         setLoader(false);
->>>>>>> 9c67b3c1670248f50f619b850ccff1dd4b283894
     };
 
 
