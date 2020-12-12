@@ -1,9 +1,14 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, } from 'react'
 import { CSVLink, CSVDownload } from "react-csv";
+// import { history } from "../../config/history";
+import { useHistory } from 'react-router-dom';
 import ApiService from '../../services/ApiService';
 
+
 const DetailTrasactionPage: React.FC = () => {
+
+    const history = useHistory();
 
     const [transferData, getAllTransfer] = useState<any[]>([]);
     const [isLoad, setLoader] = useState(false);
@@ -24,7 +29,8 @@ const DetailTrasactionPage: React.FC = () => {
         // console.log(userId);
         setActiveItem('Transfer');
         setLoader(true);
-         let userId = 5;
+        let userId = history.location.state;
+        console.log(history.location.state);
         var response = await ApiService.getData("transfer/getUserTransfer/" + userId);
         console.log(response)
         if(response !== null){
@@ -38,7 +44,8 @@ const DetailTrasactionPage: React.FC = () => {
 
     const getAllRequestFc = async () => {
         // let userId = sessionStorage.getItem(JSON.stringify('userId'));
-        let userId = 5;
+        let userId = history.location.state;
+        console.log(history.location.state);
         setActiveItem('Request');
         setLoader(true);
         var response = await ApiService.getData("request/getUserRequest/" + userId);
@@ -118,6 +125,7 @@ const DetailTrasactionPage: React.FC = () => {
                 (transferData.length > 0) &&<div className="px-2 py-2">
                 <div className="row px-10 border border-primary rounded px-2 py-2">
                     <div className=" mr-5 ml-2 border border-primary mt-3 bg-primary" style={{ height: "150px", width: "150px" }}>
+                            <img src={ApiService.imageUrl + transferData[0]?.user_avatar }/>
                     </div>
 
                     <div className="form-group  mt-2">
@@ -171,7 +179,7 @@ const DetailTrasactionPage: React.FC = () => {
                 {transferData.map((res) => {
                     return (<tr>
                         {/* <td> <img src={imageUrl + res.senderData.user_avatar} className="user__avatar" alt="avatar" /> {res.senderData.user_name} <span className="span__contry">{res.senderData.user_country} ➚ </span> </td> */}
-                        <td><img src={imageUrl + res.recieverData?.user_avatar} className="user__avatar" alt="avatar" /> {res.recieverData?.user_name} <span className="span__contry">➘ {res.recieverData?.user_country}</span></td>
+                        <td><img src={ApiService.imageUrl + res.recieverData?.userData.user_avatar} className="user__avatar" alt="avatar" /> {res.recieverData?.user_name} <span className="span__contry">➘ {res.recieverData?.user_country}</span></td>
                         {activeItem === 'Request' ? (<td>{res.reason}</td>) : null}
                         <td>{res.created_at}</td>
                         <td>{res.amount}</td>

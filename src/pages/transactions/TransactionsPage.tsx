@@ -2,10 +2,13 @@ import axios from 'axios';
 import { pid } from 'process';
 import React, { useState, useEffect } from 'react'
 import { CSVLink, CSVDownload } from "react-csv";
-import { history } from "../../config/history";
+// import { history } from "../../config/history";
+import { useHistory } from 'react-router-dom';
 import ApiService from '../../services/ApiService';
 
 const TrasactionPage: React.FC = () => {
+
+    const history = useHistory();
 
     const [transferData, getAllTransfer] = useState<any[]>([]);
     const [isLoad, setLoader] = useState(false);

@@ -3,6 +3,7 @@ import 'react';
 
 class ApiService {
     baseUrl: String = "https://seremoworld.com/seremoapi/public/api/";
+    imageUrl : String = "https://seremoworld.com/seremoapi/public/storage/";
 
     getData = async (route: string) => {
         var response = Axios.get(this.baseUrl + route).then((result) => {
