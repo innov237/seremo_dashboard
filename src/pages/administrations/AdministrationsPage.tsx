@@ -1,15 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import ApiService from '../../services/ApiService';
 
 const AdministrationPage: React.FC = () => {
 
-    var userData = [
-        { 'id': 1, 'name': 'innov237', 'type': 'super admin', 'status': 'activated' },
-        { 'id': 2, 'name': 'cedric djiele', 'type': 'admin', 'status': 'activated' },
-        { 'id': 3, 'name': 'lorent bobo', 'type': 'admin', 'statut': 'activated' },
-        { 'id': 4, 'name': 'sonia', 'type': 'admin', 'status': 'activated' },
-    ];
+
+    const [userData, setUserData] = useState<any>([]);
+    const [isLoad, setLoader] = useState(false);
 
     type Inputs = {
         name: string,
@@ -18,23 +15,35 @@ const AdministrationPage: React.FC = () => {
         type: string,
     };
 
+    useEffect(() => {
+        getAllAdmin();
+    },[userData]);
+
+    const getAllAdmin = async () => {
+        var response = await ApiService.getData("dashboard/getAllAdmin");
+        setUserData(response);
+    }
+
     const { register, handleSubmit, watch, errors } = useForm<Inputs>();
 
     const onSubmit = async (data: any) => {
+        setLoader(true);
         console.log(data);
 
         var response = await ApiService.postData("dashboard/createAdmin", data);
 
         if (response.success) {
             // vide le formulaire
-            //actualise le tableau des admin
-            //met le loader sur le formulare
+            setLoader(false);
+            getAllAdmin();
         } else {
+            setLoader(false);
             alert("error while create admin");
         }
 
     };
     console.log(watch("name")) // watch input value by passing the name of it
+
 
     return (
         <div>
@@ -66,7 +75,8 @@ const AdministrationPage: React.FC = () => {
                                 {errors.type && <span>This field is required</span>}
                             </div>
                             <div className="form-group col-12">
-                                <input type="submit" value="Create" className="btn btn-primary" />
+                                {!isLoad && <input type="submit" value="Create" className="btn btn-primary" />}
+                                {isLoad && <button className="btn btn-primary" value="load..." />}
                             </div>
                         </div>
                     </div>
@@ -79,20 +89,16 @@ const AdministrationPage: React.FC = () => {
                     <thead>
                         <tr className="theader">
                             <th>User Name</th>
+                            <th>Email</th>
                             <th>User Type</th>
-                            <th>More</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {userData.map((res) => {
+                        {userData.map((res: any) => {
                             return (<tr key={res.name}>
                                 <td>{res.name} </td>
+                                <td>{res.email} </td>
                                 <td>{res.type}</td>
-                                <td style={{ textAlign: "center" }} className="more__td">
-                                    <span className="dot"></span>
-                                    <span className="dot"></span>
-                                    <span className="dot"></span>
-                                </td>
                             </tr>)
                         })}
                     </tbody>
