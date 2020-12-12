@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import { CSVLink, CSVDownload } from "react-csv";
+import ApiService from '../../services/ApiService';
 
 const DetailTrasactionPage: React.FC = () => {
 
@@ -18,32 +19,36 @@ const DetailTrasactionPage: React.FC = () => {
     }, [])
 
 
-    const getAllTransferFc = () => {
-         let userId = sessionStorage.getItem(JSON.stringify('userId'));
+    const getAllTransferFc = async() => {
+        // let userId = sessionStorage.getItem(JSON.stringify('userId'));
+        // console.log(userId);
         setActiveItem('Transfer');
         setLoader(true);
-        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/transfer/getUserTransfer/" + userId).then(response => {
-            getAllTransfer(response.data);
-            formatDataToCsv(response.data);
+         let userId = 5;
+        var response = await ApiService.getData("transfer/getUserTransfer/" + userId);
+        console.log(response)
+        if(response !== null){
+            getAllTransfer(response);
+            // formatDataToCsv(response);
             setLoader(false);
-        }).catch(err => {
+        }else{
             setLoader(false);
-            console.log(err);
-        });
+        }
     };
 
-    const getAllRequestFc = () => {
-        let userId = sessionStorage.getItem(JSON.stringify('userId'));
+    const getAllRequestFc = async () => {
+        // let userId = sessionStorage.getItem(JSON.stringify('userId'));
+        let userId = 5;
         setActiveItem('Request');
         setLoader(true);
-        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/transfer/getUserRequest/" + userId).then(response => {
+        var response = await ApiService.getData("request/getUserRequest/" + userId);
+        if(response !== null){
             getAllTransfer(response.data);
-            formatDataToCsv(response.data);
+            // formatDataToCsv(response.data);
             setLoader(false);
-        }).catch(err => {
+        }else{
             setLoader(false);
-            console.log(err);
-        });
+        }
     };
 
     function filterByStatus(value: any) {
@@ -110,27 +115,19 @@ const DetailTrasactionPage: React.FC = () => {
                 </div>
             </div>
             <div className="px-2 py-2">
-                <div className="row px-10 border border-primary rounded px-2 py-2 justify-content-between">
+                <div className="row px-10 border border-primary rounded px-2 py-2">
                     <div className=" mr-5 ml-2 border border-primary mt-3 bg-primary" style={{ height: "150px", width: "150px" }}>
                     </div>
 
                     <div className="form-group  mt-2">
                         <p className="p-0 m-0 text-primary">Client Code</p>
-                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.code}</h5>
-                        <p className="p-0 m-0 text-primary">Nom et Prénom</p>
-                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.nom + ' ' + transferData[0]?.prenom}</h5>
-                        <p className="p-0 m-0 text-primary">Date de naissance</p>
-                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.date_naissance}</h5>
+                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.userData?.user_id}</h5>
+                        <p className="p-0 m-0 text-primary">Nom </p>
+                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.userData?.user_name}</h5>
+                        <p className="p-0 m-0 text-primary">Pays</p>
+                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.userData?.country_name}</h5>
                     </div>
 
-                    <div className="form-group  mt-2">
-                        <p className="p-0 m-0 text-primary">Client Code</p>
-                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.code}</h5>
-                        <p className="p-0 m-0 text-primary">Nom et Prénom</p>
-                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.nom + ' ' + transferData[0]?.prenom}</h5>
-                        <p className="p-0 m-0 text-primary">Date de naissance</p>
-                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.date_naissance}</h5>
-                    </div>
                 </div>
             </div>
            

@@ -40,20 +40,7 @@ const AdministrationPage: React.FC = () => {
     };
     console.log(watch("name")) // watch input value by passing the name of it
 
-    useEffect(() => {
-        getAllDatauser();
-    }, [])
-
-    const getAllDatauser = () => {
-        setLoader(true);
-        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAdminAccessLog ").then(response => {
-            getData(response.data);
-            setLoader(false);
-        }).catch(err => {
-            setLoader(false);
-            console.log(err);
-        });
-    };
+   
 
     return (
         <div>

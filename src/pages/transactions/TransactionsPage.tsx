@@ -81,8 +81,7 @@ const TrasactionPage: React.FC = () => {
     }
 
     function detailUser(id: any) {
-        sessionStorage.setItem('id', JSON.stringify(id));
-        history.push("/admin/detailtransactionUser");
+        history.push("/admin/detailtransactionUser", id);
     }
 
     return (

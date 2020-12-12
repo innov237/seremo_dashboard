@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios';
 import { history } from "../../config/history";
 import ApiService from '../../services/ApiService';
 
@@ -26,7 +25,8 @@ const LoginPage: React.FC = () => {
 
         if (response.success) {
             localStorage.setItem("AuthUserData", JSON.stringify(response.data));
-            let log = saveLog(response.data.data);
+            console.log(response.data);
+            let log = saveLog(response.data);
             console.log(log);
             history.push("/admin/transactions");
         } else {
