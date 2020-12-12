@@ -5,7 +5,7 @@ import { history } from "../../config/history";
 
 const LoginPage: React.FC = () => {
 
-     const [email, setEmail] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPass] = useState("");
     const [msg, setmsg] = useState("");
 
@@ -21,14 +21,31 @@ const LoginPage: React.FC = () => {
             "password" : password,
         };
         axios.post("https://seremoworld.com/seremoapi/public/api/dashboard/login", datapost).then((res : any) => {
-            console.log(res)    
-        if (res.data.success){
+            console.log(res.data.data.id)    
+            if (res.data.success){
+                saveLog(res.data.data)
                 history.push("/admin/transactions");
             }else{
                 setmsg("email ou password incorrect");
             }
         }).catch(error =>{
             console.log(error);
+        });
+    }
+
+    const saveLog = (data : any) => {
+        console.log('eeeeeeeeee');
+        var datalog = {
+            "id": data.id,
+            "status": "in"
+        }
+        console.log(datalog);
+        axios.post("https://seremoworld.com/seremoapi/public/api/dashboard/createAccessLog", datalog).then((res: any) => {
+            if (res.data.success) {
+                localStorage.setItem("Userdata", JSON.stringify(data));
+            } else {
+                return false;
+            }
         });
     }
 

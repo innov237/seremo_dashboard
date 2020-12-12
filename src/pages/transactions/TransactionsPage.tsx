@@ -17,31 +17,13 @@ const TrasactionPage: React.FC = () => {
         getAllTransferFc();
     }, [])
 
-    // j'ai besoin de l'id de l'utilisateur connecté
-
-    // const saveLog = (id) => {
-    //     var datalog = {
-    //         "id" : id,
-    //         "status": "in" 
-    //     }
-    //     axios.post("https://seremoworld.com/seremoapi/public/api/dashboard/createAccessLog", datalog).then((res: any) => {
-    //         if (res.data.success) {
-    //             return true;
-    //         } else {
-    //             return false;
-    //         }
-    //     });
-    // }
+   
 
     const getAllTransferFc = () => {
         setActiveItem('Transfer');
         setLoader(true);
         axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAllTransfer").then(response => {
             getAllTransfer(response.data);
-           
-            // j'ai besoin de l'id de l'utilisateur connecté
-            // saveLog(response.data.);
-           
             formatDataToCsv(response.data);
             setLoader(false);
         }).catch(err => {

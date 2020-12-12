@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'
 import { useForm } from "react-hook-form";
 
 const AdministrationPage: React.FC = () => {
 
-    var userData = [
-        { 'id': 1, 'name': 'innov237', 'type': 'super admin', 'status': 'activated' },
-        { 'id': 2, 'name': 'cedric djiele', 'type': 'admin', 'status': 'activated' },
-        { 'id': 3, 'name': 'lorent bobo', 'type': 'admin', 'statut': 'activated' },
-        { 'id': 4, 'name': 'sonia', 'type': 'admin', 'status': 'activated' },
-    ];
+    const [isLoad, setLoader] = useState(false);
+    
+    const [userData, getData] = useState<any[]>([]);
+
+    // var userData = [
+    //     { 'id': 1, 'name': 'innov237', 'type': 'super admin', 'status': 'activated' },
+    //     { 'id': 2, 'name': 'cedric djiele', 'type': 'admin', 'status': 'activated' },
+    //     { 'id': 3, 'name': 'lorent bobo', 'type': 'admin', 'statut': 'activated' },
+    //     { 'id': 4, 'name': 'sonia', 'type': 'admin', 'status': 'activated' },
+    // ];
 
     type Inputs = {
         name: string,
@@ -23,6 +27,21 @@ const AdministrationPage: React.FC = () => {
         console.log(data);
     };
     console.log(watch("name")) // watch input value by passing the name of it
+
+    useEffect(() => {
+        getAllDatauser();
+    }, [])
+
+    const getAllDatauser = () => {
+        setLoader(true);
+        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAdminAccessLog ").then(response => {
+            getData(response.data);
+            setLoader(false);
+        }).catch(err => {
+            setLoader(false);
+            console.log(err);
+        });
+    };
 
     return (
         <div>

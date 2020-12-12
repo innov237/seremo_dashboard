@@ -33,8 +33,7 @@ const DetailTrasactionPage: React.FC = () => {
     };
 
     const getAllRequestFc = () => {
-        // let userId = sessionStorage.getItem(JSON.stringify('userId'));
-        let userId = 1;
+        let userId = sessionStorage.getItem(JSON.stringify('userId'));
         setActiveItem('Request');
         setLoader(true);
         axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/transfer/getUserRequest/" + userId).then(response => {
@@ -111,8 +110,17 @@ const DetailTrasactionPage: React.FC = () => {
                 </div>
             </div>
             <div className="px-2 py-2">
-                <div className="row px-10 border border-primary rounded px-2 py-2">
+                <div className="row px-10 border border-primary rounded px-2 py-2 justify-content-between">
                     <div className=" mr-5 ml-2 border border-primary mt-3 bg-primary" style={{ height: "150px", width: "150px" }}>
+                    </div>
+
+                    <div className="form-group  mt-2">
+                        <p className="p-0 m-0 text-primary">Client Code</p>
+                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.code}</h5>
+                        <p className="p-0 m-0 text-primary">Nom et Prénom</p>
+                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.nom + ' ' + transferData[0]?.prenom}</h5>
+                        <p className="p-0 m-0 text-primary">Date de naissance</p>
+                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.date_naissance}</h5>
                     </div>
 
                     <div className="form-group  mt-2">
