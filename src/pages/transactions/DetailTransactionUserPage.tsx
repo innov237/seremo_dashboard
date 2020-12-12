@@ -124,7 +124,7 @@ const DetailTrasactionPage: React.FC = () => {
             {
                 (transferData.length > 0) &&<div className="px-2 py-2">
                 <div className="row px-10 border border-primary rounded px-2 py-2">
-                    <div className=" mr-5 ml-2 border border-primary mt-3 bg-primary"  style={{ height: "150px", width: "150px" }}>
+                    <div className=" mr-5 ml-2 border mt-3 rounded"  style={{ height: "150px", width: "150px" }}>
                             <img src={ApiService.imageUrl + transferData[0]?.userData.user_avatar} style={{ height: "150px", width: "150px" }}/>
                     </div>
 
