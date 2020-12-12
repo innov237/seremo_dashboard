@@ -114,14 +114,15 @@ const DetailTrasactionPage: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <div className="px-2 py-2">
+            {
+                (transferData.length > 0) &&<div className="px-2 py-2">
                 <div className="row px-10 border border-primary rounded px-2 py-2">
                     <div className=" mr-5 ml-2 border border-primary mt-3 bg-primary" style={{ height: "150px", width: "150px" }}>
                     </div>
 
                     <div className="form-group  mt-2">
                         <p className="p-0 m-0 text-primary">Client Code</p>
-                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.userData?.user_id}</h5>
+                        <h5 className="text-uppercase font-weight-bold"> {transferData[0]?.userData?.user_id}</h5>
                         <p className="p-0 m-0 text-primary">Nom </p>
                         <h5 className="text-uppercase font-weight-bold">{transferData[0]?.userData?.user_name}</h5>
                         <p className="p-0 m-0 text-primary">Pays</p>
@@ -130,6 +131,7 @@ const DetailTrasactionPage: React.FC = () => {
 
                 </div>
             </div>
+            }
            
             {isLoad ? (
                 <div className="progress">
