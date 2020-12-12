@@ -1,15 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
+import { CSVLink, CSVDownload } from "react-csv";
 
 const AccessLogPage: React.FC = () => {
 
-    var userData = [
-        { 'name': 'innov237', 'type': 'super admin', 'datetime': '12/11/2020 12:30:20' },
-        { 'name': 'innov237', 'type': 'super admin', 'datetime': '12/11/2020 06:40:08' },
-        { 'name': 'cedric djiele', 'type': 'admin', 'datetime': '12/11/2020 08:59:02' },
-        { 'name': 'lorent bobo', 'type': 'admin', 'datetime': '12/11/2020 02:08:20' },
-        { 'name': 'lorent bobo', 'type': 'admin', 'datetime': '20/11/2020 11:20:56' },
-        { 'name': 'sonia', 'type': 'admin', 'datetime': '12/11/2020 12:00:12' },
-    ]
+    const [isLoad, setLoader] = useState(false);
+    // const [csvData, getCSVData] = useState<any[]>([]);
+    const [userData, getData] = useState<any[]>([]);
+
+    useEffect(() => {
+        getAllLog();
+    }, [])
+
+    const getAllLog = () => {
+        setLoader(true);
+        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAdminAccessLog ").then(response => {
+            getData(response.data);
+            setLoader(false);
+        }).catch(err => {
+            setLoader(false);
+            console.log(err);
+        });
+    };
 
     return (
         <div>
@@ -21,6 +33,7 @@ const AccessLogPage: React.FC = () => {
                     <tr className="theader">
                         <th>User Name</th>
                         <th>User Type</th>
+                        <th>status</th>
                         <th>Access Date time</th>
                         <th>More</th>
                     </tr>
@@ -28,7 +41,8 @@ const AccessLogPage: React.FC = () => {
                         return (<tr>
                             <td>{res.name} </td>
                             <td>{res.type}</td>
-                            <td>{res.datetime}</td>
+                            <td>{res.status}</td>
+                            <td>{res.created_at}</td>
                             <td style={{ textAlign: "center" }} className="more__td">
                                 <span className="dot"></span>
                                 <span className="dot"></span>

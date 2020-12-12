@@ -1,28 +1,33 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import './App.css';
 import HomePage from './pages/Home';
 import {
-  BrowserRouter as Router,
+  BrowserRouter as Routers,
   Switch,
   Route,
-  Link
+  Link,
+  Router
 } from "react-router-dom";
 import LoginPage from './pages/authPage/login';
+import { UserDetails} from "./pages/UserDetails";
+import {history} from './config/history';
 
 function App() {
   return (
     <div className="App">
-      <Router>
+      <Router history={history}>
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path="/admin">
-            <HomePage />
-          </Route>
-          <Route path="/login">
-            <LoginPage />
-          </Route>
-        </Switch>
+          <Suspense fallback = {<UserDetails></UserDetails>}>
+            <Switch>
+              <Route path="/admin">
+                <HomePage />
+              </Route>
+              <Route path="/login">
+                <LoginPage />
+              </Route>
+            </Switch>
+          </Suspense>
       </Router>
     </div >
   );

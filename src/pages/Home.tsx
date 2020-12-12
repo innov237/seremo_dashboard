@@ -120,10 +120,11 @@ const HomePage: React.FC = () => {
                     <li><Link to="/admin/transactions">Transactions</Link></li>
                     <li><Link to="/admin/administrations">Administrations</Link></li>
                     <li><Link to="/admin/access-log">Access log</Link></li>
+                    <li><Link to="/admin/detailtransactionUser">User search</Link></li>
                 </div>
                 <div className="col-md-10 main__row">
                     <Switch>
-                        <Route path="/admin/transactions">
+                        <Route path="/admin/transactions"> 
                             <TrasactionPage />
                         </Route>
                         <Route path="/admin/administrations" component={AdministrationsPage}></Route>

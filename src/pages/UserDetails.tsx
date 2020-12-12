@@ -1,1 +1,13 @@
-import react from 'react';
+import React, { Component } from 'react';
+
+class UserDetails extends Component {
+    render() {
+        return (
+            <div>
+                
+            </div>
+        );
+    }
+}
+
+export {UserDetails};

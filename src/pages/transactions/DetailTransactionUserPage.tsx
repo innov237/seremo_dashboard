@@ -14,13 +14,15 @@ const DetailTrasactionPage: React.FC = () => {
 
     useEffect(() => {
         getAllTransferFc();
+
     }, [])
 
 
     const getAllTransferFc = () => {
+         let userId = sessionStorage.getItem(JSON.stringify('userId'));
         setActiveItem('Transfer');
         setLoader(true);
-        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAllRequest").then(response => {
+        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/transfer/getUserTransfer/" + userId).then(response => {
             getAllTransfer(response.data);
             formatDataToCsv(response.data);
             setLoader(false);
@@ -31,9 +33,11 @@ const DetailTrasactionPage: React.FC = () => {
     };
 
     const getAllRequestFc = () => {
+        // let userId = sessionStorage.getItem(JSON.stringify('userId'));
+        let userId = 1;
         setActiveItem('Request');
         setLoader(true);
-        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAllRequest").then(response => {
+        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/transfer/getUserRequest/" + userId).then(response => {
             getAllTransfer(response.data);
             formatDataToCsv(response.data);
             setLoader(false);
@@ -113,11 +117,11 @@ const DetailTrasactionPage: React.FC = () => {
 
                     <div className="form-group  mt-2">
                         <p className="p-0 m-0 text-primary">Client Code</p>
-                        <h5 className="text-uppercase font-weight-bold">5001</h5>
+                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.code}</h5>
                         <p className="p-0 m-0 text-primary">Nom et Prénom</p>
-                        <h5 className="text-uppercase font-weight-bold">NJIKAM NCHOUTNSU DAN STEVE</h5>
+                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.nom + ' ' + transferData[0]?.prenom}</h5>
                         <p className="p-0 m-0 text-primary">Date de naissance</p>
-                        <h5 className="text-uppercase font-weight-bold">26/06/2005</h5>
+                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.date_naissance}</h5>
                     </div>
                 </div>
             </div>
@@ -128,10 +132,27 @@ const DetailTrasactionPage: React.FC = () => {
                 </div>
             ) : ""}
 
+            <div className="col-md-8">
+                <div className="form-row">
+                    <div className="form-check form-group mr-5 ml-2">
+                        <input className="form-check-input" type="radio" onClick={getAllTransferFc} name="exampleRadios" id="exampleRadios2" value="option2" checked={activeItem === 'Transfer'} onChange={e => { }} />
+                        <label className="form-check-label" >
+                            Transfer list
+                               </label>
+                    </div>
+
+                    <div className="form-check form-group">
+                        <input className="form-check-input" onClick={getAllRequestFc} type="radio" name="exampleRadios" id="exampleRadios2" value="option2" checked={activeItem === 'Request'} onChange={e => { }} />
+                        <label className="form-check-label" >
+                            Request list
+                               </label>
+                    </div>
+                </div>
+            </div>
 
             <table className="table">
                 <tr className="theader">
-                    <th>Sender</th>
+                    {/* <th>Sender</th> */}
                     <th>Reciever</th>
                     {activeItem === 'Request' ? (<th>Reason of Request</th>) : null}
                     <th>Date of Operation </th>
@@ -142,8 +163,8 @@ const DetailTrasactionPage: React.FC = () => {
                 </tr>
                 {transferData.map((res) => {
                     return (<tr>
-                        <td> <img src={imageUrl + res.senderData.user_avatar} className="user__avatar" alt="avatar" /> {res.senderData.user_name} <span className="span__contry">{res.senderData.user_country} ➚ </span> </td>
-                        <td><img src={imageUrl + res.recieverData.user_avatar} className="user__avatar" alt="avatar" /> {res.recieverData.user_name} <span className="span__contry">➘ {res.recieverData.user_country}</span></td>
+                        {/* <td> <img src={imageUrl + res.senderData.user_avatar} className="user__avatar" alt="avatar" /> {res.senderData.user_name} <span className="span__contry">{res.senderData.user_country} ➚ </span> </td> */}
+                        <td><img src={imageUrl + res.recieverData?.user_avatar} className="user__avatar" alt="avatar" /> {res.recieverData?.user_name} <span className="span__contry">➘ {res.recieverData?.user_country}</span></td>
                         {activeItem === 'Request' ? (<td>{res.reason}</td>) : null}
                         <td>{res.created_at}</td>
                         <td>{res.amount}</td>

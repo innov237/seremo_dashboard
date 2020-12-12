@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import { CSVLink, CSVDownload } from "react-csv";
+import { history } from "../../config/history";
 
 const TrasactionPage: React.FC = () => {
   
@@ -16,12 +17,31 @@ const TrasactionPage: React.FC = () => {
         getAllTransferFc();
     }, [])
 
+    // j'ai besoin de l'id de l'utilisateur connecté
+
+    // const saveLog = (id) => {
+    //     var datalog = {
+    //         "id" : id,
+    //         "status": "in" 
+    //     }
+    //     axios.post("https://seremoworld.com/seremoapi/public/api/dashboard/createAccessLog", datalog).then((res: any) => {
+    //         if (res.data.success) {
+    //             return true;
+    //         } else {
+    //             return false;
+    //         }
+    //     });
+    // }
 
     const getAllTransferFc = () => {
         setActiveItem('Transfer');
         setLoader(true);
         axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAllTransfer").then(response => {
             getAllTransfer(response.data);
+           
+            // j'ai besoin de l'id de l'utilisateur connecté
+            // saveLog(response.data.);
+           
             formatDataToCsv(response.data);
             setLoader(false);
         }).catch(err => {
@@ -82,6 +102,11 @@ const TrasactionPage: React.FC = () => {
         });
     }
 
+    function detailUser(id : any) {
+        sessionStorage.setItem('id',JSON.stringify(id));
+        history.push("/admin/detailtransactionUser");
+    }
+
     return (
         <div>
             <div className="row filter__header">
@@ -140,7 +165,7 @@ const TrasactionPage: React.FC = () => {
                     <th>More</th>
                 </tr>
                 {transferData.map((res) => {
-                    return (<tr>
+                    return (<tr onClick={(e) => detailUser(res?.sender_id)}>
                         <td> <img src={imageUrl + res.senderData.user_avatar} className="user__avatar" alt="avatar" /> {res.senderData.user_name} <span className="span__contry">{res.senderData.country_name} ➚ </span> </td>
                         <td><img src={imageUrl + res.recieverData.user_avatar} className="user__avatar" alt="avatar" /> {res.recieverData.user_name} <span className="span__contry">➘ {res.recieverData.country_name}</span></td>
                         {activeItem === 'Request' ? (<td>{res.reason}</td>) : null}
