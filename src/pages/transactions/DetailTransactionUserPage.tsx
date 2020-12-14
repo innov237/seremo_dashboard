@@ -97,14 +97,30 @@ const DetailTrasactionPage: React.FC = () => {
         });
     }
 
+    async function searchByCode(e : any){
+        setActiveItem('Transfer');
+        setLoader(true);
+        var res = await ApiService.getData("dashboard/getTransferByCode/" + e.target.value);
+        if (res !== null){
+            getAllTransfer(res.data);
+            // formatDataToCsv(response.data);
+            setLoader(false);
+        } else {
+            setLoader(false);
+        }
+    }
+
     return (
         <div>
             <div className="row filter__header">
-                <div className="col-md-8">
+                <div className="col-md-4">
                 </div>
-                <div className="col-md-4 d-flex justify-content-end">
+                <div className="col-md-8 d-flex justify-content-end">
                     <div className="row">
-                        <div className="col-md-8">
+                        <div className="col-md-4">
+                            <input className="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" checked={activeItem === 'Request'} onChange={e => { searchByCode(e) }} />
+                        </div>
+                        <div className="col-md-4">
                             <select id="inputState" value={'status'} defaultValue={'status'} className="form-control"
                                 onChange={(evt) => filterByStatus(evt.target.value)} >
                                 <option selected value="status">{activeItem} Status</option>
@@ -136,7 +152,6 @@ const DetailTrasactionPage: React.FC = () => {
                         <p className="p-0 m-0 text-primary">Pays</p>
                         <h5 className="text-uppercase font-weight-bold">{transferData[0]?.userData?.country_name}</h5>
                     </div>
-
                 </div>
             </div>
             }

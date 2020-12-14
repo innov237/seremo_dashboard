@@ -4,7 +4,9 @@ import React, { useState, useEffect } from 'react'
 import { CSVLink, CSVDownload } from "react-csv";
 // import { history } from "../../config/history";
 import { useHistory } from 'react-router-dom';
+import { Modal, Button } from "react-bootstrap";
 import ApiService from '../../services/ApiService';
+
 
 const TrasactionPage: React.FC = () => {
 
@@ -15,6 +17,11 @@ const TrasactionPage: React.FC = () => {
     const [searchValue, setsearchValue] = useState('');
     const [activeItem, setActiveItem] = useState('Transfer');
     const [csvData, getCSVData] = useState<any[]>([]);
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
 
     const imageUrl = "https://seremoworld.com/seremoapi/public/storage/";
 
@@ -57,9 +64,39 @@ const TrasactionPage: React.FC = () => {
 
     }
 
-    function search(value: any) {
-        alert(value);
+    const search = async (value: any) =>{
+        setLoader(true);
+        var res = await ApiService.getData("dashboard/getTransferByCode/" + value);
+        console.log(res);
+        getAllTransfer(res);
+        setLoader(false);
     }
+
+    function getModal() {
+        return (
+            <Modal
+                show={show}
+                onHide={handleClose}
+                backdrop="static"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Modifier</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="">
+                        
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                </Button>
+                </Modal.Footer>
+            </Modal>
+        );
+    }
+
 
     function formatDataToCsv(data: any) {
         let custom: any = [];
@@ -83,12 +120,14 @@ const TrasactionPage: React.FC = () => {
         });
     }
 
+
     function detailUser(id: any) {
         history.push("/admin/detailtransactionUser", id);
     }
 
     return (
         <div>
+            
             <div className="row filter__header">
                 <div className="col-md-8">
                     <div className="form-row">
@@ -108,8 +147,10 @@ const TrasactionPage: React.FC = () => {
                     </div>
                 </div>
                 <div className="col-md-4 d-flex justify-content-end">
+                      
                     <div className="row">
-                        <div className="col-md-8">
+
+                        <div className="col-md-4">
                             <select id="inputState" value={'status'} defaultValue={'status'} className="form-control"
                                 onChange={(evt) => filterByStatus(evt.target.value)} >
                                 <option selected value="status">{activeItem} Status</option>

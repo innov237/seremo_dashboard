@@ -3,6 +3,7 @@ import './Home.css';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import { CSVLink, CSVDownload } from "react-csv";
+import { useHistory } from 'react-router-dom';
 import {
     BrowserRouter as Router,
     Switch,
@@ -18,6 +19,7 @@ import ApiService from '../services/ApiService';
 
 const HomePage: React.FC = () => {
 
+    const history = useHistory();
     const [transferData, getAllTransfer] = useState<any[]>([]);
     const [isLoad, setLoader] = useState(false);
     const [searchValue, setsearchValue] = useState('');
@@ -63,8 +65,13 @@ const HomePage: React.FC = () => {
 
     }
 
-    function search(value: any) {
-        alert(value);
+    async function search(value: any){
+        setLoader(true);
+        var res = await ApiService.getData("dashboard/getTransferByCode/" + value);
+        console.log(res);
+        getAllTransfer(res);
+        history.push("/admin/transactions", res);
+        setLoader(false);
     }
 
     function formatDataToCsv(data: any) {
