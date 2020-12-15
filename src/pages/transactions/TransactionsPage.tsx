@@ -85,7 +85,7 @@ const TrasactionPage: React.FC = () => {
                 </Modal.Header>
                 <Modal.Body>
                     <div className="">
-                        
+
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -186,7 +186,7 @@ const TrasactionPage: React.FC = () => {
                     <th>More</th>
                 </tr>
                 {transferData.map((res) => {
-                    return (<tr onClick={(e) => detailUser(res?.sender_id)}>
+                    return (<tr>
                         <td> <img src={imageUrl + res.senderData.user_avatar} className="user__avatar" alt="avatar" /> {res.senderData.user_name} <span className="span__contry">{res.senderData.country_name} ➚ </span> </td>
                         <td><img src={imageUrl + res.recieverData.user_avatar} className="user__avatar" alt="avatar" /> {res.recieverData.user_name} <span className="span__contry">➘ {res.recieverData.country_name}</span></td>
                         {activeItem === 'Request' ? (<td>{res.reason}</td>) : null}

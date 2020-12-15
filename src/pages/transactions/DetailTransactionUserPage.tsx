@@ -11,6 +11,7 @@ const DetailTrasactionPage: React.FC = () => {
     const history = useHistory();
 
     const [transferData, getAllTransfer] = useState<any[]>([]);
+    const [transfers, getAllTransferData] = useState<any[]>([]);
     const [isLoad, setLoader] = useState(false);
     const [searchValue, setsearchValue] = useState('');
     const [activeItem, setActiveItem] = useState('Transfer');
@@ -19,22 +20,14 @@ const DetailTrasactionPage: React.FC = () => {
     const imageUrl = "https://seremoworld.com/seremoapi/public/storage/";
 
     useEffect(() => {
-        getAllTransferFc();
-
+       
     }, [])
 
-
-    const getAllTransferFc = async() => {
-        // let userId = sessionStorage.getItem(JSON.stringify('userId'));
-        // console.log(userId);
-        setActiveItem('Transfer');
+    const getAllTransferFc = async (userId : any) => {
         setLoader(true);
-        let userId = history.location.state;
-        console.log(history.location.state);
         var response = await ApiService.getData("transfer/getUserTransfer/" + userId);
-        console.log(response)
         if(response !== null){
-            getAllTransfer(response);
+            getAllTransferData(response);
             // formatDataToCsv(response);
             setLoader(false);
         }else{
@@ -42,15 +35,11 @@ const DetailTrasactionPage: React.FC = () => {
         }
     };
 
-    const getAllRequestFc = async () => {
-        // let userId = sessionStorage.getItem(JSON.stringify('userId'));
-        let userId = history.location.state;
-        console.log(history.location.state);
-        setActiveItem('Request');
+    const getAllRequestFc = async (id : any) => {
         setLoader(true);
-        var response = await ApiService.getData("request/getUserRequest/" + userId);
+        var response = await ApiService.getData("request/getUserRequest/" + id);
         if(response !== null){
-            getAllTransfer(response.data);
+            getAllTransferData(response);
             // formatDataToCsv(response.data);
             setLoader(false);
         }else{
@@ -71,9 +60,22 @@ const DetailTrasactionPage: React.FC = () => {
 
     }
 
-    function search(value: any) {
-        alert(value);
+    async function search(value: any) {
+        var res = await ApiService.getData("user/getUserByCode?key=" + value.target.value);
+        console.log(res);
+        if (res !== null) {
+            getAllTransfer(res);
+            console.log(res);
+            var response = await ApiService.getData("dashboard/getTransferByCode/" + res[0].user_id);
+            if (response !== null){
+                getAllTransferData(response);
+            }
+            setLoader(false);
+        } else {
+            setLoader(false);
+        }
     }
+
 
     function formatDataToCsv(data: any) {
         let custom: any = [];
@@ -101,8 +103,9 @@ const DetailTrasactionPage: React.FC = () => {
         setActiveItem('Transfer');
         setLoader(true);
         var res = await ApiService.getData("dashboard/getTransferByCode/" + e.target.value);
+        console.log(res)
         if (res !== null){
-            getAllTransfer(res.data);
+            getAllTransfer(res);
             // formatDataToCsv(response.data);
             setLoader(false);
         } else {
@@ -117,8 +120,8 @@ const DetailTrasactionPage: React.FC = () => {
                 </div>
                 <div className="col-md-8 d-flex justify-content-end">
                     <div className="row">
-                        <div className="col-md-4">
-                            <input className="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" checked={activeItem === 'Request'} onChange={e => { searchByCode(e) }} />
+                        <div className="col-md-5">
+                            <input type="text" id="" placeholder = "Search By code" className="form-control" onBlur={(e) => search(e)}/>
                         </div>
                         <div className="col-md-4">
                             <select id="inputState" value={'status'} defaultValue={'status'} className="form-control"
@@ -131,7 +134,7 @@ const DetailTrasactionPage: React.FC = () => {
                                 <option value="cancel">Cancel</option>
                             </select>
                         </div>
-                        <div className="col-md-4">
+                        <div className="col-md-3">
                             <CSVLink filename="cvs-SeRemo.csv" data={csvData}> <button className="btn btn-primary">Export CSV</button></CSVLink>
                         </div>
                     </div>
@@ -141,16 +144,16 @@ const DetailTrasactionPage: React.FC = () => {
                 (transferData.length > 0) &&<div className="px-2 py-2">
                 <div className="row px-10 border border-primary rounded px-2 py-2">
                     <div className=" mr-5 ml-2 border mt-3 rounded"  style={{ height: "150px", width: "150px" }}>
-                            <img src={ApiService.imageUrl + transferData[0]?.userData.user_avatar} style={{ height: "150px", width: "150px" }}/>
+                            <img src={ApiService.imageUrl + transferData[0]?.user_avatar} style={{ height: "150px", width: "150px" }}/>
                     </div>
 
                     <div className="form-group  mt-2">
                         <p className="p-0 m-0 text-primary">Client Code</p>
-                        <h5 className="text-uppercase font-weight-bold"> {transferData[0]?.userData?.user_id}</h5>
+                            <h5 className="text-uppercase font-weight-bold"> {transferData[0]?.user_code}</h5>
                         <p className="p-0 m-0 text-primary">Nom </p>
-                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.userData?.user_name}</h5>
+                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.user_name}</h5>
                         <p className="p-0 m-0 text-primary">Pays</p>
-                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.userData?.country_name}</h5>
+                        <h5 className="text-uppercase font-weight-bold">{transferData[0]?.country_name}</h5>
                     </div>
                 </div>
             </div>
@@ -165,14 +168,14 @@ const DetailTrasactionPage: React.FC = () => {
             <div className="col-md-8">
                 <div className="form-row">
                     <div className="form-check form-group mr-5 ml-2">
-                        <input className="form-check-input" type="radio" onClick={getAllTransferFc} name="exampleRadios" id="exampleRadios2" value="option2" checked={activeItem === 'Transfer'} onChange={e => { }} />
+                        <input className="form-check-input" type="radio" onClick={getAllTransferFc} name="exampleRadios" id="exampleRadios2" value="option2" checked={activeItem === 'Transfer'} onChange={e => {getAllTransferFc()}} />
                         <label className="form-check-label" >
                             Transfer list
                                </label>
                     </div>
 
                     <div className="form-check form-group">
-                        <input className="form-check-input" onClick={getAllRequestFc} type="radio" name="exampleRadios" id="exampleRadios2" value="option2" checked={activeItem === 'Request'} onChange={e => { }} />
+                        <input className="form-check-input" onClick={getAllRequestFc} type="radio" name="exampleRadios" id="exampleRadios2" value="option2" checked={activeItem === 'Request'} onChange={e => { getAllRequestFc()}} />
                         <label className="form-check-label" >
                             Request list
                                </label>
@@ -182,7 +185,7 @@ const DetailTrasactionPage: React.FC = () => {
 
             <table className="table">
                 <tr className="theader">
-                    {/* <th>Sender</th> */}
+                    <th>Sender</th>
                     <th>Reciever</th>
                     {activeItem === 'Request' ? (<th>Reason of Request</th>) : null}
                     <th>Date of Operation </th>
@@ -191,10 +194,10 @@ const DetailTrasactionPage: React.FC = () => {
                     <th >status</th>
                     <th>More</th>
                 </tr>
-                {transferData.map((res) => {
+                {transfers.map((res) => {
                     return (<tr>
-                        {/* <td> <img src={imageUrl + res.senderData.user_avatar} className="user__avatar" alt="avatar" /> {res.senderData.user_name} <span className="span__contry">{res.senderData.user_country} ➚ </span> </td> */}
-                        <td><img src={ApiService.imageUrl + res.userData.user_avatar} className="user__avatar" alt="avatar" /> {res.recieverData?.user_name} <span className="span__contry">➘ {res.recieverData?.user_country}</span></td>
+                        <td><img src={ApiService.imageUrl + res.senderData.user_avatar} className="user__avatar" alt="avatar" /> {res.senderData?.user_name} <span className="span__contry">➘ {res.senderData?.user_country}</span></td>
+                        <td><img src={ApiService.imageUrl + res.recieverData.user_avatar} className="user__avatar" alt="avatar" /> {res.recieverData?.user_name} <span className="span__contry">➘ {res.recieverData?.user_country}</span></td>
                         {activeItem === 'Request' ? (<td>{res.reason}</td>) : null}
                         <td>{res.created_at}</td>
                         <td>{res.amount}</td>
