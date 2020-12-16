@@ -6,6 +6,7 @@ import { CSVLink, CSVDownload } from "react-csv";
 import { useHistory } from 'react-router-dom';
 import { Modal, Button } from "react-bootstrap";
 import ApiService from '../../services/ApiService';
+import { resolveAny } from 'dns';
 
 
 const TrasactionPage: React.FC = () => {
@@ -14,7 +15,7 @@ const TrasactionPage: React.FC = () => {
 
     const [transferData, getAllTransfer] = useState<any[]>([]);
     const [isLoad, setLoader] = useState(false);
-    const [searchValue, setsearchValue] = useState('');
+    const [currentTransaction, getCurrentTransaction] = useState<any>(null);
     const [activeItem, setActiveItem] = useState('Transfer');
     const [csvData, getCSVData] = useState<any[]>([]);
     const [show, setShow] = useState(false);
@@ -72,7 +73,7 @@ const TrasactionPage: React.FC = () => {
         setLoader(false);
     }
 
-    function getModal() {
+    function getModalDetail() {
         return (
             <Modal
                 show={show}
@@ -81,20 +82,95 @@ const TrasactionPage: React.FC = () => {
                 keyboard={false}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Modifier</Modal.Title>
+                    <Modal.Title></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div className="">
 
-                    </div>
+                    {(currentTransaction !== null) && <div className="">
+                        <div className="card px-2 py-2 mb-3">
+                            <div className="row px-10 px-2 py-2">
+                                <div className="col-4" style={{ height: "150px", width: "150px" }}>
+                                    <img src={imageUrl + currentTransaction?.senderData.user_avatar} style={{ height: "140px", width: "140px" }} className="user__avatar" alt="avatar" />
+                                </div>
+
+                                <div className="col-4  mt-2">
+                                    <p className="p-0 m-0 text-primary">User</p>
+                                    <h5 className="text-uppercase font-weight-bold">Sender</h5>
+                                    <p className="p-0 m-0 text-primary">Name </p>
+                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.senderData?.user_name} {currentTransaction.senderData?.['user_last_name']}</h5>
+
+                                </div>
+
+                                <div className="col-4  mt-2">
+                                    <p className="p-0 m-0 text-primary">Country Code</p>
+                                    <h5 className="text-uppercase font-weight-bold"> {currentTransaction?.senderData?.country_code}</h5>
+                                    <p className="p-0 m-0 text-primary">Country</p>
+                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.senderData?.country_name}</h5>
+
+                                </div>
+                                <div />
+                            </div>
+                        </div>
+
+                        <div className="card px-2 py-2 mb-3">
+                            <div className="row px-10 px-2 py-2">
+                                <div className="col-4" style={{ height: "150px", width: "150px" }}>
+                                    <img src={imageUrl + currentTransaction.recieverData.user_avatar} style={{ height: "140px", width: "140px" }} className="user__avatar" alt="avatar" />
+                                </div>
+
+                                <div className="col-4  mt-2">
+                                    <p className="p-0 m-0 text-primary">User</p>
+                                    <h5 className="text-uppercase font-weight-bold">Reciever</h5>
+                                    <p className="p-0 m-0 text-primary">Name </p>
+                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.recieverData?.user_name} {currentTransaction.recieverData?.['user_last_name']}</h5>
+                                </div>
+
+
+                                <div className="col-4  mt-2">
+                                    <p className="p-0 m-0 text-primary">Country code</p>
+                                    <h5 className="text-uppercase font-weight-bold"> {currentTransaction?.recieverData?.country_code}</h5>
+                                    <p className="p-0 m-0 text-primary">Country</p>
+                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.recieverData?.country_name}</h5>
+
+                                </div>
+                                <div />
+                            </div>
+                        </div>
+
+                        <div className="card px-2 py-2 mb-3">
+                            <div className="row px-10 px-2 py-2">
+
+                                <div className="col-6  mt-2">
+                                    <p className="p-0 m-0 text-primary">Status</p>
+                                    <h5 className="text-uppercase font-weight-bold"> {currentTransaction?.status}</h5>
+                                </div>
+                                <div className="col-6  mt-2">
+                                    <p className="p-0 m-0 text-primary">Amount</p>
+                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.amount} {currentTransaction?.currency} </h5>
+
+                                </div>
+                                <div className="col-6  mt-2">
+                                    <p className="p-0 m-0 text-primary">Date </p>
+                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.created_at}</h5>
+                                </div>
+                                <div />
+                            </div>
+                        </div>
+                    </div>}
+
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
-                </Button>
+                    </Button>
                 </Modal.Footer>
             </Modal>
         );
+    }
+
+    function opendetail(data: any) {
+        getCurrentTransaction(data);
+        handleShow();
     }
 
 
@@ -128,45 +204,9 @@ const TrasactionPage: React.FC = () => {
     return (
         <div>
             <p className="header__title pb-2">All Transactions</p>
-            <div className="row filter__header">
-                <div className="col-md-8">
-                    <div className="form-row">
-                        <div className="form-check form-group mr-5 ml-2">
-                            <input className="form-check-input" type="radio" onClick={getAllTransferFc} name="exampleRadios" id="exampleRadios2" value="option2" checked={activeItem === 'Transfer'} onChange={e => { }} />
-                            <label className="form-check-label" >
-                                Transfer list
-                               </label>
-                        </div>
+            
+            {getModalDetail()}
 
-                        <div className="form-check form-group">
-                            <input className="form-check-input" onClick={getAllRequestFc} type="radio" name="exampleRadios" id="exampleRadios2" value="option2" checked={activeItem === 'Request'} onChange={e => { }} />
-                            <label className="form-check-label" >
-                                Request list
-                               </label>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-4 d-flex justify-content-end">
-
-                    <div className="row">
-
-                        <div className="col-md-4">
-                            <select id="inputState" value={'status'} defaultValue={'status'} className="form-control"
-                                onChange={(evt) => filterByStatus(evt.target.value)} >
-                                <option selected value="status">{activeItem} Status</option>
-                                <option value="successful">Successful</option>
-                                <option value="pending">Pending</option>
-                                <option value="accepted">Accepted</option>
-                                <option value="rejected">Rejected</option>
-                                <option value="cancel">Cancel</option>
-                            </select>
-                        </div>
-                        <div className="col-md-4">
-                            <CSVLink filename="cvs-SeRemo.csv" data={csvData}> <button className="btn btn-primary">Export CSV</button></CSVLink>
-                        </div>
-                    </div>
-                </div>
-            </div>
             {isLoad ? (
                 <div className="progress">
                     <div className="progress-bar progress-bar-striped" role="progressbar" style={{ width: "100%" }}></div>
@@ -194,7 +234,7 @@ const TrasactionPage: React.FC = () => {
                         <td>{res.amount}</td>
                         <td>{res.currency}</td>
                         <td>{res.status}</td>
-                        <td style={{ textAlign: "center" }} className="more__td">
+                        <td style={{ textAlign: "center" }} className="more__td" onClick={(e) => opendetail(res)}>
                             <span className="dot"></span>
                             <span className="dot"></span>
                             <span className="dot"></span>
