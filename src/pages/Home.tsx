@@ -15,6 +15,7 @@ import AdministrationsPage from './administrations/AdministrationsPage';
 import AccessLogPage from './accessLogPage/AccessLogPage';
 import DetailTransactionUserPage from './transactions/DetailTransactionUserPage';
 import ApiService from '../services/ApiService';
+import UsersListPage from './users/UsersListPage';
 
 
 const HomePage: React.FC = () => {
@@ -65,7 +66,7 @@ const HomePage: React.FC = () => {
 
     }
 
-    async function search(value: any){
+    async function search(value: any) {
         setLoader(true);
         var res = await ApiService.getData("dashboard/getTransferByCode/" + value);
         console.log(res);
@@ -121,7 +122,8 @@ const HomePage: React.FC = () => {
                     <li><Link to="/admin/transactions">Transactions</Link></li>
                     <li><Link to="/admin/administrations">Administrations</Link></li>
                     <li><Link to="/admin/access-log">Access log</Link></li>
-                    <li><Link to="/admin/detailtransactionUser">User search</Link></li>
+                    <li><Link to="/admin/detailtransactionUser">Search User</Link></li>
+                    <li><Link to="/admin/all-users">All Users</Link></li>
                     <li><Link to="/login">Log out</Link></li>
                 </div>
                 <div className="col-md-10 main__row">
@@ -132,11 +134,12 @@ const HomePage: React.FC = () => {
                         <Route path="/admin/administrations" component={AdministrationsPage}></Route>
                         <Route path="/admin/access-log" component={AccessLogPage}></Route>
                         <Route path="/admin/detailtransactionUser" component={DetailTransactionUserPage}></Route>
+                        <Route path="/admin/all-users" component={UsersListPage}/>
                     </Switch>
 
                 </div>
+                </div >
             </div >
-        </div >
     )
 }
 
