@@ -73,6 +73,7 @@ const TrasactionPage: React.FC = () => {
         setLoader(false);
     }
 
+
     function getModalDetail() {
         return (
             <Modal
@@ -80,62 +81,65 @@ const TrasactionPage: React.FC = () => {
                 onHide={handleClose}
                 backdrop="static"
                 keyboard={false}
+                className="full-width-modal"
+
             >
                 <Modal.Header closeButton>
                     <Modal.Title></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
 
-                    {(currentTransaction !== null) && <div className="">
-                        <div className="card px-2 py-2 mb-3">
-                            <div className="row px-10 px-2 py-2">
-                                <div className="col-4" style={{ height: "150px", width: "150px" }}>
-                                    <img src={imageUrl + currentTransaction?.senderData.user_avatar} style={{ height: "140px", width: "140px" }} className="user__avatar" alt="avatar" />
-                                </div>
+                    {(currentTransaction !== null) && <div className="container-fluid">
+                        <h4>Sender</h4>
+                        <div className="row">
+                            <div className="col-4" style={{ height: "150px", width: "150px" }}>
+                                <img src={ApiService.imageUrl + currentTransaction.senderData?.user_avatar} style={{ height: "150px", width: "150px" }} />
+                            </div>
 
-                                <div className="col-4  mt-2">
-                                    <p className="p-0 m-0 text-primary">User</p>
-                                    <h5 className="text-uppercase font-weight-bold">Sender</h5>
-                                    <p className="p-0 m-0 text-primary">Name </p>
-                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.senderData?.user_name} {currentTransaction.senderData?.['user_last_name']}</h5>
+                            <div className="col-4  mt-2">
+                                <p className="p-0 m-0 text-primary"><i className="fa fa-sort-numeric-down-alt text-primary"></i> User Code</p>
+                                <p className="text-uppercase font-weight-bold"> {currentTransaction.senderData?.user_code}</p>
+                                <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
+                                <p className="text-uppercase font-weight-bold">{currentTransaction.senderData?.user_name} {currentTransaction.senderData?.['user_last_name']}</p>
+                                <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
+                                <p className="text-uppercase font-weight-bold">{currentTransaction.senderData?.country_name}</p>
+                            </div>
 
-                                </div>
+                            <div className="col-4  mt-2">
+                                <p className="p-0 m-0 text-primary"><i className="fa fa-phone text-primary"></i> Phone number</p>
+                                <h5 className="text-uppercase font-weight-bold"> {currentTransaction.senderData?.user_phone_number}</h5>
+                                <p className="pt-1 m-0 text-primary"><i className="fa fa-envelope-square text-primary"></i> Email</p>
+                                <p className="pt-0 text-uppercase font-weight-bold">{currentTransaction.senderData?.user_email}</p>
+                                <p className="p-0 m-0 text-primary"><i className="fa fa-wifi text-primary"></i> Provider </p>
+                                <p className="text-uppercase font-weight-bold">{currentTransaction.senderData?.provider_name}</p>
+                            </div>
+                        </div>
+                        <hr />
+                        <h4>Reciever</h4>
+                        <div className="row px-10 px-2 py-2">
+                            <div className="col-4" style={{ height: "150px", width: "150px" }}>
+                                <img src={ApiService.imageUrl + currentTransaction.recieverData?.user_avatar} style={{ height: "150px", width: "150px" }} />
+                            </div>
 
-                                <div className="col-4  mt-2">
-                                    <p className="p-0 m-0 text-primary">Country Code</p>
-                                    <h5 className="text-uppercase font-weight-bold"> {currentTransaction?.senderData?.country_code}</h5>
-                                    <p className="p-0 m-0 text-primary">Country</p>
-                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.senderData?.country_name}</h5>
+                            <div className="col-4  mt-2">
+                                <p className="p-0 m-0 text-primary"><i className="fa fa-sort-numeric-down-alt text-primary"></i> User Code</p>
+                                <p className="text-uppercase font-weight-bold"> {currentTransaction.recieverData?.user_code}</p>
+                                <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
+                                <p className="text-uppercase font-weight-bold">{currentTransaction.recieverData?.user_name} {currentTransaction.recieverData?.['user_last_name']}</p>
+                                <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
+                                <p className="text-uppercase font-weight-bold">{currentTransaction.senderData?.country_name}</p>
+                            </div>
 
-                                </div>
-                                <div />
+                            <div className="col-4  mt-2">
+                                <p className="p-0 m-0 text-primary"><i className="fa fa-phone text-primary"></i> Phone number</p>
+                                <h5 className="text-uppercase font-weight-bold"> {currentTransaction.recieverData?.user_phone_number}</h5>
+                                <p className="pt-1 m-0 text-primary"><i className="fa fa-envelope-square text-primary"></i> Email</p>
+                                <p className="pt-0 text-uppercase font-weight-bold">{currentTransaction.recieverData?.user_email}</p>
+                                <p className="p-0 m-0 text-primary"><i className="fa fa-wifi text-primary"></i> Provider </p>
+                                <p className="text-uppercase font-weight-bold">{currentTransaction.recieverData?.provider_name}</p>
                             </div>
                         </div>
 
-                        <div className="card px-2 py-2 mb-3">
-                            <div className="row px-10 px-2 py-2">
-                                <div className="col-4" style={{ height: "150px", width: "150px" }}>
-                                    <img src={imageUrl + currentTransaction.recieverData.user_avatar} style={{ height: "140px", width: "140px" }} className="user__avatar" alt="avatar" />
-                                </div>
-
-                                <div className="col-4  mt-2">
-                                    <p className="p-0 m-0 text-primary">User</p>
-                                    <h5 className="text-uppercase font-weight-bold">Reciever</h5>
-                                    <p className="p-0 m-0 text-primary">Name </p>
-                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.recieverData?.user_name} {currentTransaction.recieverData?.['user_last_name']}</h5>
-                                </div>
-
-
-                                <div className="col-4  mt-2">
-                                    <p className="p-0 m-0 text-primary">Country code</p>
-                                    <h5 className="text-uppercase font-weight-bold"> {currentTransaction?.recieverData?.country_code}</h5>
-                                    <p className="p-0 m-0 text-primary">Country</p>
-                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.recieverData?.country_name}</h5>
-
-                                </div>
-                                <div />
-                            </div>
-                        </div>
 
                         <div className="card px-2 py-2 mb-3">
                             <div className="row px-10 px-2 py-2">
@@ -197,16 +201,48 @@ const TrasactionPage: React.FC = () => {
     }
 
 
-    function detailUser(id: any) {
-        history.push("/admin/detailtransactionUser", id);
-    }
-
     return (
         <div>
             <p className="header__title pb-2">All Transactions</p>
-            
             {getModalDetail()}
 
+            <div className="row filter__header">
+                <div className="col-md-8">
+                    <div className="form-row">
+                        <div className="form-check form-group mr-5 ml-2">
+                            <input className="form-check-input" type="radio" onClick={getAllTransferFc} name="exampleRadios" id="exampleRadios2" value="option2" checked={activeItem === 'Transfer'} />
+                            <label className="form-check-label" >
+                                Transfer list
+                               </label>
+                        </div>
+
+                        <div className="form-check form-group">
+                            <input className="form-check-input" onClick={getAllRequestFc} type="radio" name="exampleRadios" id="exampleRadios2" value="option2" checked={activeItem === 'Request'} />
+                            <label className="form-check-label" >
+                                Request list
+                               </label>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-4 d-flex justify-content-end">
+                    <div className="row">
+                        <div className="form-group col-md-4">
+                            <select id="inputState" value={'status'} defaultValue={'status'} className="form-control"
+                                onChange={(evt) => filterByStatus(evt.target.value)} >
+                                <option selected value="status">{activeItem} Status</option>
+                                <option value="successful">Successful</option>
+                                <option value="pending">Pending</option>
+                                <option value="accepted">Accepted</option>
+                                <option value="rejected">Rejected</option>
+                                <option value="cancel">Cancel</option>
+                            </select>
+                        </div>
+                        <div className="col-md-4">
+                            <CSVLink filename="cvs-SeRemo.csv" data={csvData}> <button className="btn btn-primary">Export CSV</button></CSVLink>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {isLoad ? (
                 <div className="progress">
                     <div className="progress-bar progress-bar-striped" role="progressbar" style={{ width: "100%" }}></div>
