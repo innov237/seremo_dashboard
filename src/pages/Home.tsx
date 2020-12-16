@@ -119,12 +119,13 @@ const HomePage: React.FC = () => {
             </div>
             <div className="row">
                 <div className="col-md-2 side__menu">
-                    <li><Link to="/admin/transactions">Transactions</Link></li>
-                    <li><Link to="/admin/administrations">Administrations</Link></li>
-                    <li><Link to="/admin/access-log">Access log</Link></li>
-                    <li><Link to="/admin/detailtransactionUser">Search User</Link></li>
-                    <li><Link to="/admin/all-users">All Users</Link></li>
-                    <li><Link to="/login">Log out</Link></li>
+                    <li><i className="fa fa-tachometer-alt"></i> <Link to="/admin/transactions">Dashboard</Link></li>
+                    <li><i className="fa fa-exchange-alt"></i> <Link to="/admin/transactions">Transactions</Link></li>
+                    <li><i className="fa fa-users-cog"></i> <Link to="/admin/administrations">Administrations</Link></li>
+                    <li><i className="fa fa-list"></i> <Link to="/admin/access-log">Access log</Link></li>
+                    <li><i className="fa fa-search"></i> <Link to="/admin/detailtransactionUser">Search User</Link></li>
+                    <li><i className="fa fa-users"></i> <Link to="/admin/all-users">All Users</Link></li>
+                    <li className='mt-5'><i className="fa fa-sign-out-alt"></i> <Link to="/login">Log out</Link></li>
                 </div>
                 <div className="col-md-10 main__row">
                     <Switch>
@@ -134,12 +135,12 @@ const HomePage: React.FC = () => {
                         <Route path="/admin/administrations" component={AdministrationsPage}></Route>
                         <Route path="/admin/access-log" component={AccessLogPage}></Route>
                         <Route path="/admin/detailtransactionUser" component={DetailTransactionUserPage}></Route>
-                        <Route path="/admin/all-users" component={UsersListPage}/>
+                        <Route path="/admin/all-users" component={UsersListPage} />
                     </Switch>
 
                 </div>
-                </div >
             </div >
+        </div >
     )
 }
 

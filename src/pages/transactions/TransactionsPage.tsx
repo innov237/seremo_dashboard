@@ -29,7 +29,7 @@ const TrasactionPage: React.FC = () => {
         getAllTransferFc();
     }, [])
 
-   
+
 
     const getAllTransferFc = async () => {
         setActiveItem('Transfer');
@@ -64,7 +64,7 @@ const TrasactionPage: React.FC = () => {
 
     }
 
-    const search = async (value: any) =>{
+    const search = async (value: any) => {
         setLoader(true);
         var res = await ApiService.getData("dashboard/getTransferByCode/" + value);
         console.log(res);
@@ -127,7 +127,7 @@ const TrasactionPage: React.FC = () => {
 
     return (
         <div>
-            
+            <p className="header__title pb-2">All Transactions</p>
             <div className="row filter__header">
                 <div className="col-md-8">
                     <div className="form-row">
@@ -147,7 +147,7 @@ const TrasactionPage: React.FC = () => {
                     </div>
                 </div>
                 <div className="col-md-4 d-flex justify-content-end">
-                      
+
                     <div className="row">
 
                         <div className="col-md-4">

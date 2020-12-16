@@ -1,2 +1,23 @@
-.main__row{
+.side__menu {
+    background-color: #34495e;
+}
+
+li {
+    margin-bottom: 20px;
+    text-transform: capitalize;
+    list-style: none;
+    font-size: 17px;
+}
+
+a {
+    color: white;
+}
+
+a:hover {
+    color: white;
+    text-decoration: none;
+}
+
+i{
+    color: white;
 }

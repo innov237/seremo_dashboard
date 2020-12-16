@@ -26,9 +26,9 @@ const AdministrationPage: React.FC = () => {
 
     useEffect(() => {
         getAllAdmin();
-    },[]);
+    }, []);
 
-    function edit(data : any){
+    function edit(data: any) {
         setName(data.name);
         setEmail(data.email);
         setType(data.type);
@@ -61,12 +61,12 @@ const AdministrationPage: React.FC = () => {
     };
 
 
-    const enableOrDisabledAdmin = async( id : any, status : String ) =>{
-       var data = {
-          "id": id,
-          "status": status
-       };
-       console.log(data);
+    const enableOrDisabledAdmin = async (id: any, status: String) => {
+        var data = {
+            "id": id,
+            "status": status
+        };
+        console.log(data);
         var response = await ApiService.postData("dashboard/enableOrDisabledAdmin", data);
         if (response.success) {
             alert("Update");
@@ -75,7 +75,7 @@ const AdministrationPage: React.FC = () => {
         }
     }
 
-    const deleteAdmin = async (data : any) =>{
+    const deleteAdmin = async (data: any) => {
         console.log(data)
         // ROUTE DELETE ADMIN
         // var response = await ApiService.getData("dashboard/deleteAdmin" + data.id);
@@ -104,7 +104,7 @@ const AdministrationPage: React.FC = () => {
 
     console.log(watch("name")) // watch input value by passing the name of it
 
-    function getModal(){
+    function getModal() {
         return (
             <Modal
                 show={show}
@@ -120,15 +120,15 @@ const AdministrationPage: React.FC = () => {
                         <div className="form" >
                             <div className="form-row pt-3 p-2">
                                 <div className="form-group col-12">
-                                    <input type="text" value = {name} placeholder="User Name" className="form-control" ref={register({ required: true })} />
+                                    <input type="text" value={name} placeholder="User Name" className="form-control" ref={register({ required: true })} />
                                     {errors.name && <span>This field is required</span>}
                                 </div>
                                 <div className="form-group col-12">
-                                    <input type="text" value = {email} placeholder="User Email" className="form-control" ref={register({ required: true })} />
+                                    <input type="text" value={email} placeholder="User Email" className="form-control" ref={register({ required: true })} />
                                     {errors.name && <span>This field is required</span>}
                                 </div>
                                 <div className="form-group col-12">
-                                    <select value= {type} className="form-control" ref={register({ required: true })}>
+                                    <select value={type} className="form-control" ref={register({ required: true })}>
                                         <option value="admin">Account type</option>
                                         <option value="admin">Admin</option>
                                         <option value="super-admin">Super Admin</option>
@@ -156,6 +156,7 @@ const AdministrationPage: React.FC = () => {
     return (
         <div>
             {getModal()}
+            <p className="header__title pb-2">Administrations</p>
             <div className="card">
                 <div className="card-header">
                     <h1>New user</h1>
@@ -211,13 +212,13 @@ const AdministrationPage: React.FC = () => {
                                 <td>{res.type}</td>
                                 <td className="d-flex">
                                     <div className="form-group mr-1">
-                                        <input type="submit" value="Edite" onClick={(e) =>edit(res)} className="btn btn-info" />                  
+                                        <input type="submit" value="Edite" onClick={(e) => edit(res)} className="btn btn-info" />
                                     </div>
                                     <div className="form-group mr-1">
                                         <input type="submit" value="Delete" onClick={(e) => deleteAdmin(res)} className="btn btn-danger" />
                                     </div>
                                     <div className="form-group mr-1">
-                                        <input type="submit" value="disable" onClick={(e) => enableOrDisabledAdmin(res.id,'unactivated')} className="btn btn-warning" />
+                                        <input type="submit" value="disable" onClick={(e) => enableOrDisabledAdmin(res.id, 'unactivated')} className="btn btn-warning" />
                                     </div>
                                     <div className="form-group">
                                         <input type="submit" value="enable" onClick={(e) => enableOrDisabledAdmin(res.id, 'activated')} className="btn btn-warning" />

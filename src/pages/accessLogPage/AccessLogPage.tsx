@@ -25,6 +25,7 @@ const AccessLogPage: React.FC = () => {
 
     return (
         <div>
+            <p className="header__title">Access Log</p>
             <div className="card mt-2">
                 <div className="card-header">
                     <h1>User Access</h1>
@@ -32,22 +33,19 @@ const AccessLogPage: React.FC = () => {
                 <table className="table">
                     <tr className="theader">
                         <th>User Name</th>
+                        <th>User Email</th>
                         <th>User Type</th>
                         <th>status</th>
                         <th>Access Date time</th>
-                        <th>More</th>
                     </tr>
                     {userData.map((res) => {
                         return (<tr>
                             <td>{res.name} </td>
+                            <td>{res.email}</td>
                             <td>{res.type}</td>
                             <td>{res.status}</td>
                             <td>{res.created_at}</td>
-                            <td style={{ textAlign: "center" }} className="more__td">
-                                <span className="dot"></span>
-                                <span className="dot"></span>
-                                <span className="dot"></span>
-                            </td>
+                           
                         </tr>)
                     })}
                 </table>
