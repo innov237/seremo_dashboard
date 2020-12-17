@@ -16,7 +16,8 @@ import AccessLogPage from './accessLogPage/AccessLogPage';
 import DetailTransactionUserPage from './transactions/DetailTransactionUserPage';
 import ApiService from '../services/ApiService';
 import UsersListPage from './users/UsersListPage';
-
+import DashBoardPage from './dashboard/DashboardPage';
+import { useLocation } from 'react-router-dom';
 
 const HomePage: React.FC = () => {
 
@@ -97,6 +98,8 @@ const HomePage: React.FC = () => {
         });
     }
 
+    const location = useLocation();
+ 
     return (
         <div className="container-fluid">
             <div className="row pt-2 header_search__bar">
@@ -119,25 +122,26 @@ const HomePage: React.FC = () => {
             </div>
             <div className="row">
                 <div className="col-md-2 side__menu">
-                    <li><i className="fa fa-tachometer-alt"></i> <Link to="/admin/transactions">Dashboard</Link></li>
-                    <li><i className="fa fa-exchange-alt"></i> <Link to="/admin/transactions">Transactions</Link></li>
-                    <li><i className="fa fa-users-cog"></i> <Link to="/admin/administrations">Administrations</Link></li>
-                    <li><i className="fa fa-list"></i> <Link to="/admin/access-log">Access log</Link></li>
-                    <li><i className="fa fa-search"></i> <Link to="/admin/detailtransactionUser">Search User</Link></li>
-                    <li><i className="fa fa-users"></i> <Link to="/admin/all-users">All Users</Link></li>
-                    <li className='mt-5'><i className="fa fa-sign-out-alt"></i> <Link to="/login">Log out</Link></li>
+                    <li className={location.pathname == '/admin/dashboard' ? "active" : ""}><i className="fa fa-tachometer-alt"></i> <Link to="/admin/dashboard">Dashboard</Link></li>
+                    <li className={location.pathname == '/admin/transactions' ? "active" : ""}><i className="fa fa-exchange-alt"></i> <Link to="/admin/transactions">Transactions</Link></li>
+                    <li className={location.pathname == '/admin/administrations' ? "active" : ""}><i className="fa fa-users-cog"></i> <Link to="/admin/administrations">Administrations</Link></li>
+                    <li className={location.pathname == '/admin/access-log' ? "active" : ""}><i className="fa fa-list"></i> <Link to="/admin/access-log">Access log</Link></li>
+                    <li className={location.pathname == '/admin/detailtransactionUser' ? "active" : ""}><i className="fa fa-search"></i> <Link to="/admin/detailtransactionUser">Search User</Link></li>
+                    <li className={location.pathname == '/admin/all-users' ? "active" : ""}><i className="fa fa-users"></i> <Link to="/admin/all-users">All Users</Link></li>
+                    <li className={location.pathname == '/login' ? "mt-5 active" : "mt-5"}><i className="fa fa-sign-out-alt"></i> <Link to="/login">Log out</Link></li>
                 </div>
                 <div className="col-md-10 main__row">
                     <Switch>
                         <Route path="/admin/transactions">
                             <TrasactionPage />
                         </Route>
-                        <Route path="/admin/administrations" component={AdministrationsPage}></Route>
+                        <Route path="/admin/administrations" component={AdministrationsPage} ></Route>
                         <Route path="/admin/access-log" component={AccessLogPage}></Route>
                         <Route path="/admin/detailtransactionUser" component={DetailTransactionUserPage}></Route>
                         <Route path="/admin/all-users" component={UsersListPage} />
+                        <Route path="/admin/dashboard" component={DashBoardPage} />
+                        <Route path="/admin/" component={DashBoardPage} />
                     </Switch>
-
                 </div>
             </div >
         </div >

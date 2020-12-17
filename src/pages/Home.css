@@ -18,6 +18,12 @@ a:hover {
     text-decoration: none;
 }
 
-i{
+i {
     color: white;
+}
+
+.active {
+    border: 1px solid white;
+    border-radius: 20px;
+    padding-left: 10px;
 }

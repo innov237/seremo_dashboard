@@ -1,0 +1,31 @@
+.users__count__card {
+    background-color: #3598db;
+}
+
+.admin__count__card {
+    background-color: #9b58b5;
+}
+
+.transfert__count__card {
+    background-color: #2dcc70;
+}
+
+.card_number,
+h2 {
+    color: white;
+}
+
+.icon__row {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
+
+.icon__row i {
+    font-size: 90px;
+}
+
+.counter__boxes .card:hover {
+    cursor: pointer;
+    border-bottom: 5px solid #2dcc70;
+}
