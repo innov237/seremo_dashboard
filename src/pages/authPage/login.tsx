@@ -52,6 +52,7 @@ const LoginPage: React.FC = () => {
     function getEmail(e: any) {
         setEmail(e.target.value);
     }
+    
     function getpassword(e: any) {
         setPass(e.target.value);
     }

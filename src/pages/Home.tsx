@@ -3,7 +3,7 @@ import './Home.css';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import { CSVLink, CSVDownload } from "react-csv";
-import { useHistory } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import {
     BrowserRouter as Router,
     Switch,
@@ -99,7 +99,7 @@ const HomePage: React.FC = () => {
     }
 
     const location = useLocation();
- 
+
     return (
         <div className="container-fluid">
             <div className="row pt-2 header_search__bar">
@@ -141,6 +141,9 @@ const HomePage: React.FC = () => {
                         <Route path="/admin/all-users" component={UsersListPage} />
                         <Route path="/admin/dashboard" component={DashBoardPage} />
                         <Route path="/admin/" component={DashBoardPage} />
+                        <Route exact path="/admin">
+                            <Redirect to="/admin/dashboard"></Redirect>
+                        </Route>
                     </Switch>
                 </div>
             </div >

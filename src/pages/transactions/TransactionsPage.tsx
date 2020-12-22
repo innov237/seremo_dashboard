@@ -257,7 +257,7 @@ const TrasactionPage: React.FC = () => {
                     {activeItem === 'Request' ? (<th>Reason of Request</th>) : null}
                     <th>Date of Operation </th>
                     <th>amount</th>
-                    <th>Currency</th>
+                    <th>Rate</th>
                     <th >status</th>
                     <th>More</th>
                 </tr>
@@ -268,7 +268,7 @@ const TrasactionPage: React.FC = () => {
                         {activeItem === 'Request' ? (<td>{res.reason}</td>) : null}
                         <td>{res.created_at}</td>
                         <td>{res.amount}</td>
-                        <td>{res.currency}</td>
+                        <td>{res.rate}</td>
                         <td>{res.status}</td>
                         <td style={{ textAlign: "center" }} className="more__td" onClick={(e) => opendetail(res)}>
                             <span className="dot"></span>
