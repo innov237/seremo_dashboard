@@ -77,7 +77,7 @@ const DashBoardPage: React.FC = (props) => {
                 <div className="col-4">
                     <Link to="/admin/all-users">
                         <div className="card users__count__card p-5">
-                            <h1 className="card_number">03</h1>
+                            <h1 className="card_number">02</h1>
                             <h2>All Users</h2>
                             <div className='icon__row'>
                                 <i className="fa fa-users"></i>
@@ -88,7 +88,7 @@ const DashBoardPage: React.FC = (props) => {
                 <div className="col-4">
                     <Link to="/admin/administrations">
                         <div className="card admin__count__card p-5">
-                            <h1 className="card_number">08</h1>
+                            <h1 className="card_number">03</h1>
                             <h2>All Admin</h2>
                             <div className='icon__row'>
                                 <i className="fa fa-users-cog"></i>
