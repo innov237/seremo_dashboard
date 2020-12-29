@@ -5,6 +5,8 @@ import ApiService from '../../services/ApiService';
 
 const UsersListPage: React.FC = () => {
 
+    
+
     const [usersData, setUsersData] = useState<any>([]);
     const [isLoad, setLoader] = useState(true);
     const history = useHistory();
@@ -34,6 +36,7 @@ const UsersListPage: React.FC = () => {
                 </div>
             ) : ""}
             <table className="table">
+                <tbody>
                 <tr className="theader">
                     <th>Avatar</th>
                     <th>Name</th>
@@ -43,8 +46,9 @@ const UsersListPage: React.FC = () => {
                     <th>Country</th>
                     <th>More</th>
                 </tr>
-                {usersData.length > 0 && usersData.map((res: any) => {
-                    return (<tr>
+                {console.log(usersData)}
+                {usersData.length > 0 && usersData.map((res: any,index: any) => {
+                    return (<tr key={index}>
                         <td><img src={ApiService.imageUrl + res.user_avatar} className="user__avatar" alt="avatar" /> {res.userData?.user_name} <span className="span__contry"></span></td>
                         <td>{res.user_name}</td>
                         <td>{res.user_phone_number}</td>
@@ -58,6 +62,7 @@ const UsersListPage: React.FC = () => {
                         </td>
                     </tr>)
                 })}
+                </tbody>
             </table>
         </div>
     )

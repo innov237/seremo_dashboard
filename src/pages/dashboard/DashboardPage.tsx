@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Dashboard.css';
-import { Bar, Doughnut, Line, Pie } from "react-chartjs-2";
+import { Bar, Line, } from "react-chartjs-2";
 import { getHeapStatistics } from 'v8';
 import ApiService from '../../services/ApiService';
 
@@ -23,6 +23,8 @@ const DashBoardPage: React.FC = (props) => {
             var data: any = [];
             var nombre: any = [];
             var amount: any = 0;
+
+            
 
             response.forEach((element: any) => {
                 console.log(element.date);

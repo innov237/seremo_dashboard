@@ -33,6 +33,8 @@ const TrasactionPage: React.FC = () => {
 
 
     const getAllTransferFc = async () => {
+
+        
         setActiveItem('Transfer');
         setLoader(true);
         var response = await ApiService.getData("dashboard/getAllTransfer");
@@ -262,11 +264,11 @@ const TrasactionPage: React.FC = () => {
                     <th>More</th>
                 </tr>
                 {transferData.map((res) => {
-                    return (<tr>
+                    return (<tr key={res.id}>
                         <td> <img src={imageUrl + res.senderData.user_avatar} className="user__avatar" alt="avatar" /> {res.senderData.user_name} <span className="span__contry">{res.senderData.country_name} ➚ </span> </td>
                         <td><img src={imageUrl + res.recieverData.user_avatar} className="user__avatar" alt="avatar" /> {res.recieverData.user_name} <span className="span__contry">➘ {res.recieverData.country_name}</span></td>
                         {activeItem === 'Request' ? (<td>{res.reason}</td>) : null}
-                        <td>{res.created_at}</td>
+                        <td>{res.created_at} </td>
                         <td>{res.amount}</td>
                         <td>{res.rate}</td>
                         <td>{res.status}</td>
