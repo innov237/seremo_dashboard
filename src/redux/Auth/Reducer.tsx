@@ -6,7 +6,7 @@ import {
   
   const initializeState: any = {
     user: {},
-    isAuthentificated: false,
+    isAuthentificated: true,
     linkToRedirect: null,
   };
   

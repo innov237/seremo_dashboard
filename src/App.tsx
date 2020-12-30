@@ -26,9 +26,6 @@ import {
 
 import HomePage from './pages/Home';
 import LoginPage from './pages/authPage/login';
-
-//import ProtectedRoute from "./component/Route";
-
 import ProtectedRoute from "./component/DataComponent"
 
 import './App.css';
@@ -55,7 +52,11 @@ function App() {
                 <Switch>
                   
                   <Route path="/admin" component={ProtectedRoute(HomePage)} />
-                  <Route path="/login" component={LoginPage} />
+                  <Route path="/login" component={ProtectedRoute(LoginPage)} />
+
+                  <Route path="/" component={LoginPage}>
+                    <Redirect to="login" />
+                  </Route>
                    
                 </Switch>
               </Suspense>

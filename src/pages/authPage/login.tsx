@@ -10,6 +10,10 @@ import {
     ACTION_LOGIN,
 } from '../../redux/Auth/Actions'
 
+import {
+    AppRoutes
+} from '../AppRoute'
+
 import ApiService from '../../services/ApiService';
 import { history } from "../../config/history";
 
@@ -19,13 +23,10 @@ const LoginPage: React.FC = (props) => {
     const [email, setEmail] = useState("beignetharicot@gmail.com");
     const [password, setPass] = useState("sucker32");
     const [msg, setmsg] = useState("");
+    
     const auth  = useSelector((state: any) => state.auth);
 
     const dispatch = useDispatch();
-
-    
-    console.log(auth)
-
      
     if (auth.linkToRedirect){
         history.push('/admin/transactions')
@@ -41,11 +42,7 @@ const LoginPage: React.FC = (props) => {
 
         if (response.success) {
             localStorage.setItem("AuthUserData", JSON.stringify(response.data));
-            //let log = saveLog(response.data);
-            dispatch(ACTION_LOGIN(response.data))
-
-            //history.push('/admin/transactions')
-            
+            let log = saveLog(response.data);           
             
         } else {
             setmsg(response.message);
@@ -54,13 +51,16 @@ const LoginPage: React.FC = (props) => {
     }
 
     const saveLog = async (data: any) => {
+        
         var datalog = {
             "id": data.id,
             "status": "in"
         }
-        console.log(datalog);
+        
         var response = await ApiService.postData("dashboard/createAccessLog", datalog);
+
         if(response.success){
+            dispatch(ACTION_LOGIN(data))
             return true;
         }else{
             return false;

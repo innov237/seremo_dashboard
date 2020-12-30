@@ -10,6 +10,16 @@ import {
     Route,
     Link
 } from "react-router-dom";
+
+import {
+    useDispatch
+} from 'react-redux'
+
+import {
+    ACTION_LOGOUT,
+} from '../redux/Auth/Actions'
+
+
 import TrasactionPage from './transactions/TransactionsPage';
 import AdministrationsPage from './administrations/AdministrationsPage';
 import AccessLogPage from './accessLogPage/AccessLogPage';
@@ -20,6 +30,9 @@ import DashBoardPage from './dashboard/DashboardPage';
 import { useLocation } from 'react-router-dom';
 
 const HomePage: React.FC = () => {
+
+
+    const dispatch = useDispatch()
 
     const history = useHistory();
     const [transferData, getAllTransfer] = useState<any[]>([]);
@@ -119,7 +132,7 @@ const HomePage: React.FC = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> 
             <div className="row">
                 <div className="col-md-2 side__menu">
                     <li className={location.pathname == '/admin/dashboard' ? "active" : ""}><i className="fa fa-tachometer-alt"></i> <Link to="/admin/dashboard">Dashboard</Link></li>
@@ -128,7 +141,7 @@ const HomePage: React.FC = () => {
                     <li className={location.pathname == '/admin/access-log' ? "active" : ""}><i className="fa fa-list"></i> <Link to="/admin/access-log">Access log</Link></li>
                     <li className={location.pathname == '/admin/detailtransactionUser' ? "active" : ""}><i className="fa fa-search"></i> <Link to="/admin/detailtransactionUser">Search User</Link></li>
                     <li className={location.pathname == '/admin/all-users' ? "active" : ""}><i className="fa fa-users"></i> <Link to="/admin/all-users">All Users</Link></li>
-                    <li className={location.pathname == '/login' ? "mt-5 active" : "mt-5"}><i className="fa fa-sign-out-alt"></i> <Link to="/login">Log out</Link></li>
+                    <li className={location.pathname == '/login' ? "mt-5 active" : "mt-5"}><i className="fa fa-sign-out-alt"></i> <Link to="/login" onClick={ () => dispatch(ACTION_LOGOUT())}>Log out</Link></li>
                 </div>
                 <div className="col-md-10 main__row">
                     <Switch>

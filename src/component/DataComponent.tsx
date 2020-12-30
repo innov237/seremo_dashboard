@@ -3,9 +3,16 @@ import React from 'react';
 
 import { connect } from 'react-redux'
 
+import {
+    AppRoutes
+} from '../pages/AppRoute';
+import { AnyARecord } from 'dns';
+
 export default function(ComposedComponent:any): any {
 
     class Authentificated extends React.Component {
+        
+        _builPageTile: any = (pathname: String): any => Object.values(AppRoutes).find((route:any) => route.path === pathname)
         
 
         componentWillMount(){
@@ -13,12 +20,14 @@ export default function(ComposedComponent:any): any {
 
             const {history, isAuth} = props
 
-            if (!isAuth)
-                history.push('/login')
+            const route = this._builPageTile(history.location.pathname);
 
-            console.log('compnentwill mount in Auth')
-            
+            document.title = `Seremo-dashbord ${route.title}`
+
+            if (!isAuth && history.location.pathname != '/login')
+                history.push('/login')            
         }
+
         componentWillUpdate(){
 
         }
