@@ -22,7 +22,7 @@ export default function(ComposedComponent:any): any {
 
             const route = this._builPageTile(history.location.pathname);
 
-            document.title = `Seremo-dashbord ${route.title}`
+            document.title = (route) ? `Seremo-dashbord ${route.title}` : `Seremo-dashbord`
 
             if (!isAuth && history.location.pathname != '/login')
                 history.push('/login')            

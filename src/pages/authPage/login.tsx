@@ -20,7 +20,7 @@ import { history } from "../../config/history";
 
 const LoginPage: React.FC = (props) => {
 
-    const [email, setEmail] = useState("beignetharicot@gmail.com");
+    const [email, setEmail] = useState("fucker@gmail.com");
     const [password, setPass] = useState("sucker32");
     const [msg, setmsg] = useState("");
     
@@ -33,14 +33,19 @@ const LoginPage: React.FC = (props) => {
     }
 
     const login = async () => {
-        var datapost = {
-            "email": email,
-            "password": password,
-        };
+        
+        var datapost ={
+            "data":{
+                "attributes": {
+                    email,password
+                }
+            }
+        }
 
-        var response = await ApiService.postData("dashboard/login", datapost);
+        var response = await ApiService.postData("v1/login", datapost);
 
-        if (response.success) {
+        if (response.response) {
+            console.log(response)
             localStorage.setItem("AuthUserData", JSON.stringify(response.data));
             let log = saveLog(response.data);           
             
@@ -53,7 +58,7 @@ const LoginPage: React.FC = (props) => {
     const saveLog = async (data: any) => {
         
         var datalog = {
-            "id": data.id,
+            "id": data.user.id,
             "status": "in"
         }
         

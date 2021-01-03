@@ -1,18 +1,20 @@
-import axios from 'axios';
-import { pid } from 'process';
+
 import React, { useState, useEffect } from 'react'
 import { CSVLink, CSVDownload } from "react-csv";
 // import { history } from "../../config/history";
 import { useHistory } from 'react-router-dom';
 import { Modal, Button } from "react-bootstrap";
 import ApiService from '../../services/ApiService';
-import { resolveAny } from 'dns';
+
+
+import moment from 'moment';
 
 
 const TrasactionPage: React.FC = () => {
 
     const history = useHistory();
 
+    const [selectOptionValue, setSelectOptionValue] = useState('status')
     const [transferData, getAllTransfer] = useState<any[]>([]);
     const [isLoad, setLoader] = useState(false);
     const [currentTransaction, getCurrentTransaction] = useState<any>(null);
@@ -36,9 +38,9 @@ const TrasactionPage: React.FC = () => {
 
         
         setActiveItem('Transfer');
-        setLoader(true);
+        setLoader(true); 
         var response = await ApiService.getData("dashboard/getAllTransfer");
-        console.log(response);
+        //console.log(response);
         getAllTransfer(response);
         formatDataToCsv(response);
         setLoader(false);
@@ -157,7 +159,7 @@ const TrasactionPage: React.FC = () => {
                                 </div>
                                 <div className="col-6  mt-2">
                                     <p className="p-0 m-0 text-primary">Date </p>
-                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.created_at}</h5>
+                                    <h5 className="text-uppercase font-weight-bold">{ moment(currentTransaction?.created_at).format("DD-MMM-YYYY HH:mm:ss")}</h5>
                                 </div>
                                 <div />
                             </div>
@@ -229,7 +231,7 @@ const TrasactionPage: React.FC = () => {
                 <div className="col-md-4 d-flex justify-content-end">
                     <div className="row">
                         <div className="form-group col-md-4">
-                            <select id="inputState" value={'status'} defaultValue={'status'} className="form-control"
+                            <select id="inputState" value='status' className="form-control"
                                 onChange={(evt) => filterByStatus(evt.target.value)} >
                                 <option selected value="status">{activeItem} Status</option>
                                 <option value="successful">Successful</option>
@@ -253,32 +255,35 @@ const TrasactionPage: React.FC = () => {
 
 
             <table className="table">
-                <tr className="theader">
-                    <th>Sender</th>
-                    <th>Reciever</th>
-                    {activeItem === 'Request' ? (<th>Reason of Request</th>) : null}
-                    <th>Date of Operation </th>
-                    <th>amount</th>
-                    <th>Rate</th>
-                    <th >status</th>
-                    <th>More</th>
-                </tr>
-                {transferData.map((res) => {
-                    return (<tr key={res.id}>
-                        <td> <img src={imageUrl + res.senderData.user_avatar} className="user__avatar" alt="avatar" /> {res.senderData.user_name} <span className="span__contry">{res.senderData.country_name} ➚ </span> </td>
-                        <td><img src={imageUrl + res.recieverData.user_avatar} className="user__avatar" alt="avatar" /> {res.recieverData.user_name} <span className="span__contry">➘ {res.recieverData.country_name}</span></td>
-                        {activeItem === 'Request' ? (<td>{res.reason}</td>) : null}
-                        <td>{res.created_at} </td>
-                        <td>{res.amount}</td>
-                        <td>{res.rate}</td>
-                        <td>{res.status}</td>
-                        <td style={{ textAlign: "center" }} className="more__td" onClick={(e) => opendetail(res)}>
-                            <span className="dot"></span>
-                            <span className="dot"></span>
-                            <span className="dot"></span>
-                        </td>
-                    </tr>)
-                })}
+                <tbody>
+                    <tr className="theader">
+                        <th>Sender</th>
+                        <th>Reciever</th>
+                        {activeItem === 'Request' ? (<th>Reason of Request</th>) : null}
+                        <th>Date of Operation </th>
+                        <th>amount</th>
+                        <th>Rate</th>
+                        <th >status</th>
+                        <th>More</th>
+                    </tr>
+                    {transferData.map((res) => {
+                        return (<tr key={res.id}>
+                            <td> <img src={imageUrl + res.senderData.user_avatar} className="user__avatar" alt="avatar" /> {res.senderData.user_name} <span className="span__contry">{res.senderData.country_name} ➚ </span> </td>
+                            <td><img src={imageUrl + res.recieverData.user_avatar} className="user__avatar" alt="avatar" /> {res.recieverData.user_name} <span className="span__contry">➘ {res.recieverData.country_name}</span></td>
+                            {activeItem === 'Request' ? (<td>{res.reason}</td>) : null}
+                            <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
+                            <td>{res.amount}</td>
+                            <td>{res.rate}</td>
+                            <td>{res.status}</td>
+                            <td style={{ textAlign: "center" }} className="more__td" onClick={(e) => opendetail(res)}>
+                                <span className="dot"></span>
+                                <span className="dot"></span>
+                                <span className="dot"></span>
+                            </td>
+                        </tr>)
+                    })} 
+                </tbody>
+                
             </table>
         </div>
     )

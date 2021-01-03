@@ -6,6 +6,7 @@ import {
   
   const initializeState: any = {
     user: {},
+    token: null,
     isAuthentificated: true,
     linkToRedirect: null,
   };
@@ -19,7 +20,8 @@ import {
     
             return {
                 ...state,
-                user: action.payload,
+                user: action.payload.user,
+                token: action.payload.token,
                 isAuthentificated: true,
                 linkToRedirect: '/admin/transaction'
             };

@@ -102,14 +102,14 @@ const AdministrationPage: React.FC = () => {
 
     };
 
-    console.log(watch("name")) // watch input value by passing the name of it
+    
 
     function getModal() {
         return (
             <Modal
                 show={show}
                 onHide={handleClose}
-                backdrop="static"
+                backdrop="static"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
                 keyboard={false}
             >
                 <Modal.Header closeButton>

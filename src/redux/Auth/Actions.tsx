@@ -11,10 +11,10 @@ export const ACTION_REDIRECT = (link: String) => {
   };
 };
 
-export const ACTION_LOGIN = (user: any) => {
+export const ACTION_LOGIN = (data: any) => {
   return {
     type: LOGIN,
-    payload: user
+    payload: data
   };
 };
 
