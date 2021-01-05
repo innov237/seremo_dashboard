@@ -6,7 +6,7 @@ import {
   
   const initializeState: any = {
     user: {},
-    token: null,
+    token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC92MVwvcmVmcmVzaCIsImlhdCI6MTYwOTc1NTAwMCwibmJmIjoxNjA5NzU1MDIxLCJqdGkiOiJSVW12cGxLUGVvTW5hT0lDIiwic3ViIjo1LCJwcnYiOiIxNmZjZjU4NjA0NzNmNjJlZjdjZTUzZDRkYjY3YTFjZDIxZDBjMjczIn0.aztoe0HqIHKxrQGm2cN7GZoVSA2nfqwOaxCERyCfc3Q",
     isAuthentificated: true,
     linkToRedirect: null,
   };
@@ -26,6 +26,7 @@ import {
                 linkToRedirect: '/admin/transaction'
             };
         case LOGOUT:
+          localStorage.removeItem("AuthUserData");
             return {
                 ...state,
                 user: {},

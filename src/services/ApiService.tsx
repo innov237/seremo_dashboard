@@ -5,8 +5,9 @@ class ApiService {
     baseUrl: String =  `${process.env.REACT_APP_API_URL}api/`;
     imageUrl : String = `${process.env.REACT_APP_API_URL}public/storage/`;
 
-    getData = async (route: string) => {
-        var response = Axios.get(this.baseUrl + route).then((result) => {
+    getData = async (route: string, header: any | null = null) => {
+        
+        var response = Axios.get(this.baseUrl + route, header).then((result) => {
             if (result.status === 200) {
                 return result.data;
             } else {
@@ -17,10 +18,10 @@ class ApiService {
         return response;
     }
 
-    postData = async (route: string, data: any) => {
+    postData = async (route: string, data: any, header: any | null = null) => {
 
-        console.log(`${this.baseUrl}${route}`)
-        var response = Axios.post(this.baseUrl + route, data).then((result) => {
+        
+        var response = Axios.post(this.baseUrl + route, data,header).then((result) => {
             if (result.status === 200) {
                 return result.data;
             } else {

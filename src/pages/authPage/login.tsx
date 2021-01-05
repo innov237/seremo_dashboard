@@ -23,6 +23,7 @@ const LoginPage: React.FC = (props) => {
     const [email, setEmail] = useState("fucker@gmail.com");
     const [password, setPass] = useState("sucker32");
     const [msg, setmsg] = useState("");
+    const [checked, setChecked] = useState(false);
     
     const auth  = useSelector((state: any) => state.auth);
 
@@ -33,20 +34,25 @@ const LoginPage: React.FC = (props) => {
     }
 
     const login = async () => {
+        setmsg('')
         
-        var datapost ={
-            "data":{
-                "attributes": {
-                    email,password
-                }
+        var datapost = {
+            data:{
+               attributes:{
+                "email": email,
+                "password": password,
+               }
             }
-        }
+        };
 
         var response = await ApiService.postData("v1/login", datapost);
 
+        
+
         if (response.response) {
-            console.log(response)
-            localStorage.setItem("AuthUserData", JSON.stringify(response.data));
+
+            if (checked)
+                localStorage.setItem("AuthUserData", response.data.token);
             let log = saveLog(response.data);           
             
         } else {
@@ -97,7 +103,7 @@ const LoginPage: React.FC = (props) => {
                         <input type="password" placeholder="Entrer votre Password" value={password} id="password" onChange={(e) => { getpassword(e) }} className="form-control flex-1 mr-1" />
                     </div>
                     <div className="form-check">
-                        <input type="checkbox" className="form-check-input" />
+                        <input type="checkbox" className="form-check-input" onChange={() => setChecked(!checked)} defaultChecked={checked}/>
                         <label className="form-check-label">Resté connecté</label>
                     </div>
                     <div className="mt-3">
