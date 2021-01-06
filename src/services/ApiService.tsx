@@ -3,7 +3,11 @@ import 'react';
 
 class ApiService {
     baseUrl: String =  `${process.env.REACT_APP_API_URL}api/`;
-    imageUrl : String = `${process.env.REACT_APP_API_URL}public/storage/`;
+    
+
+    get imageUrl() {
+        return `${process.env.REACT_APP_API_URL}public/storage/`;
+    }
 
     getData = async (route: string, header: any | null = null) => {
         

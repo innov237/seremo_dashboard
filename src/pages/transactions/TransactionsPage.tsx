@@ -41,7 +41,7 @@ const TrasactionPage: React.FC = () => {
     const handleShow = () => setShow(true);
 
 
-    const imageUrl = "https://seremoworld.com/seremoapi/public/storage/";
+    
 
     useEffect(() => {
         getAllTransferFc();
@@ -128,10 +128,12 @@ const TrasactionPage: React.FC = () => {
     }
 
     const search = async (value: any) => {
+        getAllMovement();
         setLoader(true);
-        var res = await ApiService.getData("dashboard/getTransferByCode/" + value);
-        console.log(res);
-        getAllTransfer(res);
+        getAllTransfer([]);
+        var res = await ApiService.getData(`v1/transactions?code=${value}`);
+        
+        getAllTransfer(res.data);
         setLoader(false);
     }
 
@@ -152,7 +154,7 @@ const TrasactionPage: React.FC = () => {
                 <Modal.Body>
 
                     {(currentTransaction !== null) && <div className="container-fluid">
-                        <h4>Sender</h4>
+                    <h4>Sender</h4>
                         <div className="row">
                             <div className="col-4" style={{ height: "150px", width: "150px" }}>
                                 <img src={ApiService.imageUrl + currentTransaction.sender?.user_avatar} style={{ height: "150px", width: "150px" }} />
@@ -208,11 +210,11 @@ const TrasactionPage: React.FC = () => {
 
                                 <div className="col-6  mt-2">
                                     <p className="p-0 m-0 text-primary">Status</p>
-                                    <h5 className="text-uppercase font-weight-bold"> {currentTransaction?.status}</h5>
+                                    <h5 className="text-uppercase font-weight-bold"> {currentTransaction?.movement_type}</h5>
                                 </div>
                                 <div className="col-6  mt-2">
                                     <p className="p-0 m-0 text-primary">Amount</p>
-                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.amount} {currentTransaction?.currency} </h5>
+                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.balance} {currentTransaction?.currency} </h5>
 
                                 </div>
                                 <div className="col-6  mt-2">
@@ -233,7 +235,7 @@ const TrasactionPage: React.FC = () => {
             </Modal>
         );
     }
-
+ 
     function opendetail(data: any) {
         getCurrentTransaction(data);
         handleShow();
@@ -243,8 +245,8 @@ const TrasactionPage: React.FC = () => {
     const tabItem = (res:any, type:string='Transfert') => {
         if ('Transfert' === type )
             return <tr key={res.id}>
-            <td> <img src={imageUrl + res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
-            <td><img src={imageUrl + res.sender.user_avatar} className="user__avatar" alt="avatar" /> {res.sender.user_name} <span className="span__contry">➘ {res.sender.country.name}</span></td>
+            <td> <img src={ApiService.imageUrl + res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
+            <td><img src={ApiService.imageUrl + res.sender.user_avatar} className="user__avatar" alt="avatar" /> {res.sender.user_name} <span className="span__contry">➘ {res.sender.country.name}</span></td>
             <td>{res.reason}</td>
             <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
             <td>{res.balance}</td>
@@ -258,8 +260,8 @@ const TrasactionPage: React.FC = () => {
         </tr>
         else
             return <tr key={res.id}>
-            <td> <img src={imageUrl + res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
-            <td><img src={imageUrl + res.requester.user_avatar} className="user__avatar" alt="avatar" /> {res.requester.user_name} <span className="span__contry">➘ {res.requester.country.name}</span></td>
+            <td> <img src={ApiService.imageUrl + res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
+            <td><img src={ApiService.imageUrl + res.requester.user_avatar} className="user__avatar" alt="avatar" /> {res.requester.user_name} <span className="span__contry">➘ {res.requester.country.name}</span></td>
 
             <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
             <td>{`${res.from_amount} ${res.requester.country.currency}`}</td>
