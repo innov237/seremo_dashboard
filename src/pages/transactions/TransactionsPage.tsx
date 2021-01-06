@@ -56,21 +56,37 @@ const TrasactionPage: React.FC = () => {
 
     };
 
+    const _filterRequest = (filter:string): void => {
+        getAllTransfer([]);
+    	setStatus(filter);
 
-    const updateStatus  = (filter:string): void => {
-    	getAllTransfer([]);
+    	if (filter == 'All')
+            getAllRequestFc();
+        else
+            getAllRequestFc(filter);
+    }
+
+    const _filterTransaction = (filter:string): void => {
+        getAllTransfer([]);
     	setStatus(filter);
 
     	if (filter == 'All')
           getAllTransferFc();
         else
           getAllTransferFc(filter);
+    }
+
+    const updateStatus  = (filter:string): void => {
+        if (activeItem == 'Transfer')
+            _filterTransaction(filter)
+        else
+            _filterRequest(filter)
     };
 
     const getAllTransferFc = async (param:any | null = null) => {
-	getAllMovement();
-	setLoader(true);
-	getAllTransfer([]);
+        getAllMovement();
+        setLoader(true);
+        getAllTransfer([]);
         const url =  (param != null) ? `v1/transactions?type=${param}` : `v1/transactions`;
 
         setActiveItem('Transfer');
@@ -85,12 +101,13 @@ const TrasactionPage: React.FC = () => {
 
 
 
-    const getAllRequestFc = async () => {
+    const getAllRequestFc = async (param:any | null = null) => {
         setLoader(true);
+        getAllTransfer([]);
         setActiveItem('Request');
         setMovement(statusRequest)
-
-        var response = await ApiService.getData("v1/requests");
+        const url =  (param != null) ? `v1/requests?type=${param}` : `v1/requests`;
+        var response = await ApiService.getData(url);
 
         getAllTransfer(response.data);
         formatDataToCsv(response.data);
@@ -245,8 +262,9 @@ const TrasactionPage: React.FC = () => {
             <td><img src={imageUrl + res.requester.user_avatar} className="user__avatar" alt="avatar" /> {res.requester.user_name} <span className="span__contry">➘ {res.requester.country.name}</span></td>
 
             <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
-            <td>{res.balance}</td>
-            <td>{res.currency}</td>
+            <td>{`${res.from_amount} ${res.requester.country.currency}`}</td>
+            <td>{`${res.to_amount} ${res.receiver.country.currency}`}</td>
+            <td>{res.applied_rate}</td>
             <td>{res.status}</td>
             <td style={{ textAlign: "center" }} className="more__td" onClick={(e) => opendetail(res)}>
                 <span className="dot"></span>
@@ -338,9 +356,18 @@ const TrasactionPage: React.FC = () => {
                         <th>Reciever</th>
                         {activeItem === 'Transfer' ? (<th>Reason of Request</th>) : null}
                         <th>Date of Operation </th>
-                        <th>amount</th>
+
+                        {activeItem === 'Transfer' ? <><th>amount</th>
                         <th>currency</th>
-                        <th >status</th>
+                        <th >status</th></>:
+                        <>
+                            <th>From amout</th>
+                            <th>To amount</th>
+                            <th >Rate</th>
+                            <th >Status</th>
+                        </>
+                        }
+                        
                         <th>More</th>
                     </tr>
                     {   (isLoad) ? <></> :
