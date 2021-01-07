@@ -1,13 +1,16 @@
 import {
     LOGIN,
     LOGOUT,
-    REDIRECT
+    REDIRECT,
+    REFRESH
   } from './Actions';
   
   const initializeState: any = {
     user: {},
+    token: null,
     isAuthentificated: true,
     linkToRedirect: null,
+    pageHasbeRefresh: false
   };
   
   export const authReducer = (
@@ -16,14 +19,16 @@ import {
   ): any => {
     switch (action.type) {
         case LOGIN:
-    
             return {
                 ...state,
-                user: action.payload,
+                user: action.payload.user,
+                token: action.payload.token,
                 isAuthentificated: true,
-                linkToRedirect: '/admin/transaction'
+                pageHasbeRefresh: true,
+                linkToRedirect: true
             };
         case LOGOUT:
+          localStorage.removeItem("AuthUserData");
             return {
                 ...state,
                 user: {},
@@ -36,7 +41,14 @@ import {
                   ...state,
                   linkToRedirect:action.payload
               };
+
+        case REFRESH:
+            console.log("yes refresth")
+            return {
+                  ...state,
+                  pageHasbeRefresh: true
+              };
         default:
             return state;
     }
-  };
+  }; 

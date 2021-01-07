@@ -20,28 +20,39 @@ import { history } from "../../config/history";
 
 const LoginPage: React.FC = (props) => {
 
-    const [email, setEmail] = useState("beignetharicot@gmail.com");
+    const [email, setEmail] = useState("fucker@gmail.com");
     const [password, setPass] = useState("sucker32");
     const [msg, setmsg] = useState("");
+    const [checked, setChecked] = useState(true);
     
     const auth  = useSelector((state: any) => state.auth);
 
     const dispatch = useDispatch();
      
     if (auth.linkToRedirect){
-        history.push('/admin/transactions')
+        console.log(auth)
+        return <Redirect to='/admin/transactions' />
+       // history.push('/admin/transactions')
     }
 
     const login = async () => {
+        setmsg('')
+        
         var datapost = {
-            "email": email,
-            "password": password,
+            data:{
+               attributes:{
+                "email": email,
+                "password": password,
+               }
+            }
         };
 
-        var response = await ApiService.postData("dashboard/login", datapost);
+        var response = await ApiService.postData("v1/login", datapost);
 
-        if (response.success) {
-            localStorage.setItem("AuthUserData", JSON.stringify(response.data));
+        if (response.response) {
+
+            if (checked)
+                localStorage.setItem("AuthUserData", response.data.token);
             let log = saveLog(response.data);           
             
         } else {
@@ -53,12 +64,12 @@ const LoginPage: React.FC = (props) => {
     const saveLog = async (data: any) => {
         
         var datalog = {
-            "id": data.id,
+            "id": data.user.id,
             "status": "in"
         }
         
         var response = await ApiService.postData("dashboard/createAccessLog", datalog);
-
+        
         if(response.success){
             dispatch(ACTION_LOGIN(data))
             return true;
@@ -92,7 +103,7 @@ const LoginPage: React.FC = (props) => {
                         <input type="password" placeholder="Entrer votre Password" value={password} id="password" onChange={(e) => { getpassword(e) }} className="form-control flex-1 mr-1" />
                     </div>
                     <div className="form-check">
-                        <input type="checkbox" className="form-check-input" />
+                        <input type="checkbox" className="form-check-input" onChange={() => setChecked(!checked)} defaultChecked={checked}/>
                         <label className="form-check-label">Resté connecté</label>
                     </div>
                     <div className="mt-3">

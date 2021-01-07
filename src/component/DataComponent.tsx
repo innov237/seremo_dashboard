@@ -6,26 +6,82 @@ import { connect } from 'react-redux'
 import {
     AppRoutes
 } from '../pages/AppRoute';
-import { AnyARecord } from 'dns';
+
+
+import {
+    ACTION_REFRESH,
+    ACTION_LOGIN
+} from '../redux/Auth/Actions'
+
+import  ApiService from '../services/ApiService'
+
+
 
 export default function(ComposedComponent:any): any {
 
     class Authentificated extends React.Component {
         
-        _builPageTile: any = (pathname: String): any => Object.values(AppRoutes).find((route:any) => route.path === pathname)
+        builTitle: any = (pathname: String): any => Object.values(AppRoutes).find((route:any) => route.path === pathname)
         
+
+        updateTile: any = (pathname: String) => {
+            const route = this.builTitle(pathname);
+
+            document.title = (route) ? `Seremo-dashbord ${route.title}` : `Seremo-dashbord`
+           
+        }
+
+        async refreshToken() {
+            const token = localStorage.getItem("AuthUserData");
+
+            if(token){
+                const response = await ApiService.getData('v1/refresh',{
+                    headers:{
+                        Authorization: `Bearer ${token}`,
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    }
+                })
+
+                return response;
+            }else{
+                localStorage.removeItem("AuthUserData");
+                return false;
+            }
+        }
+        
+
+ 
 
         componentWillMount(){
             const props:any = this.props
 
-            const {history, isAuth} = props
+            const {history, user, refresh, login} = props
 
-            const route = this._builPageTile(history.location.pathname);
+            console.log("user.pageHasbeRefresh",user.pageHasbeRefresh)
 
-            document.title = `Seremo-dashbord ${route.title}`
+            this.updateTile(history.location.pathname)
 
-            if (!isAuth && history.location.pathname != '/login')
-                history.push('/login')            
+           
+            if (user.pageHasbeRefresh == false){
+                this.refreshToken()
+                    .then((e:any) => {
+                        console.log(e)
+                        if (e == false){
+                            refresh()
+                            history.push('/login')
+                        }else
+                            login(e.data)
+                    })
+                    .catch((e:any) => refresh() )
+
+            }else{
+                if (!user.isAuthentificated)
+                history.push('/login')
+            }
+            
+
+                      
         }
 
         componentWillUpdate(){
@@ -33,9 +89,17 @@ export default function(ComposedComponent:any): any {
         }
 
         render(){
-            return (
-                <ComposedComponent {...this.props} />
-            )
+            const props:any = this.props
+            const {user} = props;
+
+            if (user.pageHasbeRefresh)
+                return (
+                    <ComposedComponent {...this.props} />
+                )
+            else 
+                return (
+                    <></>
+                )
         }
     }
 
@@ -43,9 +107,16 @@ export default function(ComposedComponent:any): any {
 
     function mapStateToProps(state: any): any {
         return {
-            isAuth: state.auth.isAuthentificated,
+            user: state.auth,
         }
     }
-    return connect(mapStateToProps)(Authentificated)
+
+    function mapDispatchToProps(dispatch: any): any {
+        return {
+            refresh: () => dispatch(ACTION_REFRESH()),
+            login: (data:any) => dispatch(ACTION_LOGIN(data))
+        }
+    }
+    return connect(mapStateToProps,mapDispatchToProps)(Authentificated)
 }
 

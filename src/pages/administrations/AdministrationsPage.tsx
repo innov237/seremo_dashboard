@@ -17,6 +17,8 @@ const AdministrationPage: React.FC = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const [roles, setRoles] = useState([]);
+
     type Inputs = {
         name: string,
         email: string,
@@ -25,32 +27,44 @@ const AdministrationPage: React.FC = () => {
     };
 
     useEffect(() => {
+        getAllRoles();
         getAllAdmin();
     }, []);
 
-    function edit(data: any) {
-        setName(data.name);
-        setEmail(data.email);
-        setType(data.type);
+    function edit(res: any, role:any) {
+        setName(res.attributes.name);
+        setEmail(res.attributes.email);
+        setType(role.id);
         handleShow();
     }
 
     const getAllAdmin = async () => {
-        var response = await ApiService.getData("dashboard/getAllAdmin");
-        setUserData(response);
+        var response = await ApiService.getData("v1/admins");
+        setUserData(response.data);
+    }
+
+    const getAllRoles = async () => {
+        var response = await ApiService.getData("v1/roles");
+        setRoles(response.data);
     }
 
     const { register, handleSubmit, watch, errors } = useForm<Inputs>();
 
     const onSubmit = async (data: any) => {
         setLoader(true);
-        console.log(data);
+        
 
-        var response = await ApiService.postData("dashboard/createAdmin", data);
+        const posData = {
+            "data":{
+                "attributes":data
+            }
+        }
 
-        if (response.success) {
-            // vide le formulaire
-            data.name = "";
+        var response = await ApiService.postData("v1/admins", posData);
+
+        if (response.data.id) {
+            
+            alert("Admin have been created");
             setLoader(false);
             getAllAdmin();
         } else {
@@ -58,58 +72,76 @@ const AdministrationPage: React.FC = () => {
             alert("error while create admin");
         }
 
+        //setLoader(true);
+
     };
 
 
-    const enableOrDisabledAdmin = async (id: any, status: String) => {
-        var data = {
-            "id": id,
-            "status": status
+    const enableOrDisabledAdmin = async (data: any) => {
+        var postData = {
+            data:{
+                attributes: {
+                    account_status: (data.attributes.account_status == "actived") ? "unactived" : "actived"
+                }
+            }
         };
-        console.log(data);
-        var response = await ApiService.postData("dashboard/enableOrDisabledAdmin", data);
-        if (response.success) {
+        
+        var response = await ApiService.patchData("v1/admins/" + data.id,postData);
+        if (response.data.id) {
             alert("Update");
+            getAllAdmin();
         } else {
             alert("check your connexion an try again");
         }
     }
-
+    
     const deleteAdmin = async (data: any) => {
-        console.log(data)
-        // ROUTE DELETE ADMIN
-        // var response = await ApiService.getData("dashboard/deleteAdmin" + data.id);
-        // if(response.success){
-        //     alert("Delete");
-        // }else{
-        //     alert("check your connexion an try again");
-        // }
+        
+        var response = await ApiService.deleteData("v1/admins/" + data.id);
+        
+         if(response){
+             alert("Delete");
+             getAllAdmin()
+         }else{
+             alert("check your connexion an try again");
+         }
     }
 
     const onUpdate = async (data: any) => {
         setLoader(true);
-        console.log(data);
+        const posData = {
+            data:{
+                attributes:{
+                    name,
+                    email,
+                    account_type:type
+                }
+            }
+        }
+        console.log(posData);
         // ROUTE UPDATE ADMIN ??
         // var response = await ApiService.postData("dashboard/updateAdmin", data);
         // if (response.success) {
         //     // vide le formulaire
-        //     setLoader(false);
+        //     
         //     getAllAdmin();
         // } else {
-        //     setLoader(false);
+        //    
         //     alert("error while create admin");
         // }
 
+        setLoader(false);
+
     };
 
-    console.log(watch("name")) // watch input value by passing the name of it
+    
 
     function getModal() {
         return (
             <Modal
                 show={show}
                 onHide={handleClose}
-                backdrop="static"
+                backdrop="static"                                                                                                                  
                 keyboard={false}
             >
                 <Modal.Header closeButton>
@@ -120,18 +152,25 @@ const AdministrationPage: React.FC = () => {
                         <div className="form" >
                             <div className="form-row pt-3 p-2">
                                 <div className="form-group col-12">
-                                    <input type="text" value={name} placeholder="User Name" className="form-control" ref={register({ required: true })} />
+                                    <input type="text" value={name} placeholder="User Name" onChange = {evt => setName(evt.target.value)} className="form-control" ref={register({ required: true })} />
                                     {errors.name && <span>This field is required</span>}
                                 </div>
                                 <div className="form-group col-12">
-                                    <input type="text" value={email} placeholder="User Email" className="form-control" ref={register({ required: true })} />
+                                    <input type="text" value={email} placeholder="User Email" 
+                                        onChange = {evt => setEmail(evt.target.value)}
+                                    className="form-control" ref={register({ required: true })} />
                                     {errors.name && <span>This field is required</span>}
                                 </div>
                                 <div className="form-group col-12">
                                     <select value={type} className="form-control" ref={register({ required: true })}>
-                                        <option value="admin">Account type</option>
-                                        <option value="admin">Admin</option>
-                                        <option value="super-admin">Super Admin</option>
+                                        {
+                                        roles.map((e:any) => 
+                                            <option 
+                                                value={e.id} key={e.id}
+                                                selected={type == e.id}
+                                            >{e.attributes.name}</option>
+                                        )
+                                    }
                                     </select>
                                     {errors.type && <span>This field is required</span>}
                                 </div>
@@ -177,16 +216,18 @@ const AdministrationPage: React.FC = () => {
                                 {errors.password && <span>This field is required</span>}
                             </div>
                             <div className="form-group col-3">
-                                <select name="type" className="form-control" ref={register({ required: true })}>
-                                    <option value="admin">Account type</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="super-admin">Super Admin</option>
+                                <select name="role_id" className="form-control" ref={register({ required: true })}>
+                                    {
+                                        roles.map((e:any) => 
+                                            <option value={e.id} key={e.id} >{e.attributes.name}</option>
+                                        )
+                                    }
+                                  
                                 </select>
                                 {errors.type && <span>This field is required</span>}
                             </div>
                             <div className="form-group col-12">
-                                {!isLoad && <input type="submit" value="Create" className="btn btn-primary" />}
-                                {isLoad && <button className="btn btn-primary" value="load..." />}
+                                <input type="submit" value="Create account" className="btn btn-primary" disabled={isLoad}/>
                             </div>
                         </div>
                     </div>
@@ -206,23 +247,28 @@ const AdministrationPage: React.FC = () => {
                     </thead>
                     <tbody>
                         {userData.map((res: any) => {
-                            return (<tr key={res.name}>
-                                <td>{res.name} </td>
-                                <td>{res.email} </td>
-                                <td>{res.type}</td>
+                            const statuts = (res.attributes.account_status == 'actived') ? 'Unactived' : 'Actived'
+                            
+
+                            const role:any = roles.find((e:any) => e.id == res.relationships.roles.data[0].id)
+
+                            
+
+                            return (<tr key={res.attributes.name}>
+                                <td>{res.attributes.name} </td>
+                                <td>{res.attributes.email} </td>
+                                <td>{role.attributes.name}</td>
                                 <td className="d-flex">
                                     <div className="form-group mr-1">
-                                        <input type="submit" value="Edite" onClick={(e) => edit(res)} className="btn btn-info" />
+                                        <input type="submit" value="Edite" onClick={(e) => edit(res, role)} className="btn btn-info" />
                                     </div>
                                     <div className="form-group mr-1">
                                         <input type="submit" value="Delete" onClick={(e) => deleteAdmin(res)} className="btn btn-danger" />
                                     </div>
                                     <div className="form-group mr-1">
-                                        <input type="submit" value="disable" onClick={(e) => enableOrDisabledAdmin(res.id, 'unactivated')} className="btn btn-warning" />
+                                        <input type="submit" value={statuts} onClick={(e) => enableOrDisabledAdmin(res)} className="btn btn-warning" />
                                     </div>
-                                    <div className="form-group">
-                                        <input type="submit" value="enable" onClick={(e) => enableOrDisabledAdmin(res.id, 'activated')} className="btn btn-warning" />
-                                    </div>
+                                   
                                 </td>
                             </tr>)
                         })}
