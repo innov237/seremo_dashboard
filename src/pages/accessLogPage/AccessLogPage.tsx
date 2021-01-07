@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { CSVLink, CSVDownload } from "react-csv";
 
+import moment from 'moment';
+
+import ApiService from '../../services/ApiService';
+
 const AccessLogPage: React.FC = () => {
 
     const [isLoad, setLoader] = useState(false);
@@ -12,15 +16,13 @@ const AccessLogPage: React.FC = () => {
         getAllLog();
     }, [])
 
-    const getAllLog = () => {
+    const getAllLog = async() => {
         setLoader(true);
-        axios.get("https://seremoworld.com/seremoapi/public/api/dashboard/getAdminAccessLog").then(response => {
-            getData(response.data);
-            setLoader(false);
-        }).catch(err => {
-            setLoader(false);
-            console.log(err);
-        });
+
+        var response = await ApiService.getData("dashboard/getAdminAccessLog");
+        
+        getData(response)
+        setLoader(false)
     };
 
     return (
@@ -38,16 +40,18 @@ const AccessLogPage: React.FC = () => {
                         <th>status</th>
                         <th>Access Date time</th>
                     </tr>
-                    {userData.map((res) => {
-                        return (<tr>
+                    <tbody>
+                    {userData.map((res,index) => {
+                        return (<tr key={index}>
                             <td>{res.name} </td>
                             <td>{res.email}</td>
                             <td>{res.type}</td>
                             <td>{res.status}</td>
-                            <td>{res.created_at}</td>
+                            <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")}</td>
                            
                         </tr>)
                     })}
+                    </tbody>
                 </table>
             </div>
         </div>

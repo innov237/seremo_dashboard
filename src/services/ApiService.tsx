@@ -11,10 +11,21 @@ class ApiService {
 
     getData = async (route: string, header: any | null = null) => {
         
-        var response = Axios.get(this.baseUrl + route, header).then((result) => {
+        var response = await Axios.get(this.baseUrl + route, header).then((result) => {
             if (result.status === 200) {
                 return result.data;
-            } else {
+            } 
+
+            if (result.status === 201) {
+                return result.data;
+            } 
+
+            if (result.status === 401) {
+                return {
+                    error : 'Unauthorize',
+                    message: 'Token invalid or expire'
+                }
+            }  else {
                 throw (result.headers);
             }
         });
@@ -24,7 +35,7 @@ class ApiService {
 
     patchData = async (route: string, header: any | null = null) => {
         
-        var response = Axios.patch(this.baseUrl + route, header).then((result) => {
+        var response = await Axios.patch(this.baseUrl + route, header).then((result) => {
             if (result.status === 200) {
                 return result.data;
             } else {
@@ -37,7 +48,7 @@ class ApiService {
 
     deleteData = async (route: string, header: any | null = null) => {
         
-        var response = Axios.delete(this.baseUrl + route, header).then((result) => {
+        var response = await Axios.delete(this.baseUrl + route, header).then((result) => {
             if (result.status === 204) {
                 return true;
             } else {
@@ -51,11 +62,21 @@ class ApiService {
     postData = async (route: string, data: any, header: any | null = null) => {
 
         
-        var response = Axios.post(this.baseUrl + route, data,header).then((result) => {
+        var response = await Axios.post(this.baseUrl + route, data,header).then((result) => {
+
+
+            if (result.status === 201) {
+                return result.data;
+            } 
             if (result.status === 200) {
                 return result.data;
-            } else {
-                console.log(result);
+            } 
+            if (result.status === 401) {
+                return {
+                    error : 'Unauthorize',
+                    message: 'Token invalid or expire'
+                }
+            }  else {
                 throw (result.headers);
             }
         });

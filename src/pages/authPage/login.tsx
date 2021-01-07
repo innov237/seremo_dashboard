@@ -23,14 +23,16 @@ const LoginPage: React.FC = (props) => {
     const [email, setEmail] = useState("fucker@gmail.com");
     const [password, setPass] = useState("sucker32");
     const [msg, setmsg] = useState("");
-    const [checked, setChecked] = useState(false);
+    const [checked, setChecked] = useState(true);
     
     const auth  = useSelector((state: any) => state.auth);
 
     const dispatch = useDispatch();
      
     if (auth.linkToRedirect){
-        history.push('/admin/transactions')
+        console.log(auth)
+        return <Redirect to='/admin/transactions' />
+       // history.push('/admin/transactions')
     }
 
     const login = async () => {
@@ -46,8 +48,6 @@ const LoginPage: React.FC = (props) => {
         };
 
         var response = await ApiService.postData("v1/login", datapost);
-
-        
 
         if (response.response) {
 
@@ -69,7 +69,7 @@ const LoginPage: React.FC = (props) => {
         }
         
         var response = await ApiService.postData("dashboard/createAccessLog", datalog);
-
+        
         if(response.success){
             dispatch(ACTION_LOGIN(data))
             return true;

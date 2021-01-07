@@ -32,7 +32,6 @@ const AdministrationPage: React.FC = () => {
     }, []);
 
     function edit(res: any, role:any) {
-        console.log(res)
         setName(res.attributes.name);
         setEmail(res.attributes.email);
         setType(role.id);
@@ -64,14 +63,16 @@ const AdministrationPage: React.FC = () => {
         var response = await ApiService.postData("v1/admins", posData);
 
         if (response.data.id) {
-            // vide le formulaire
-            data.name = "";
+            
+            alert("Admin have been created");
             setLoader(false);
             getAllAdmin();
         } else {
             setLoader(false);
             alert("error while create admin");
         }
+
+        //setLoader(true);
 
     };
 
@@ -95,10 +96,9 @@ const AdministrationPage: React.FC = () => {
     }
     
     const deleteAdmin = async (data: any) => {
-        console.log(data)
-        // ROUTE DELETE ADMIN
+        
         var response = await ApiService.deleteData("v1/admins/" + data.id);
-        console.log(response)
+        
          if(response){
              alert("Delete");
              getAllAdmin()
@@ -109,17 +109,28 @@ const AdministrationPage: React.FC = () => {
 
     const onUpdate = async (data: any) => {
         setLoader(true);
-        console.log(data);
+        const posData = {
+            data:{
+                attributes:{
+                    name,
+                    email,
+                    account_type:type
+                }
+            }
+        }
+        console.log(posData);
         // ROUTE UPDATE ADMIN ??
         // var response = await ApiService.postData("dashboard/updateAdmin", data);
         // if (response.success) {
         //     // vide le formulaire
-        //     setLoader(false);
+        //     
         //     getAllAdmin();
         // } else {
-        //     setLoader(false);
+        //    
         //     alert("error while create admin");
         // }
+
+        setLoader(false);
 
     };
 
@@ -216,8 +227,7 @@ const AdministrationPage: React.FC = () => {
                                 {errors.type && <span>This field is required</span>}
                             </div>
                             <div className="form-group col-12">
-                                {!isLoad && <input type="submit" value="Create account" className="btn btn-primary" />}
-                                {isLoad && <button className="btn btn-primary" value="load..." />}
+                                <input type="submit" value="Create account" className="btn btn-primary" disabled={isLoad}/>
                             </div>
                         </div>
                     </div>

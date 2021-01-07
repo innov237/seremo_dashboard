@@ -1,14 +1,16 @@
 import {
     LOGIN,
     LOGOUT,
-    REDIRECT
+    REDIRECT,
+    REFRESH
   } from './Actions';
   
   const initializeState: any = {
     user: {},
-    token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC92MVwvcmVmcmVzaCIsImlhdCI6MTYwOTc1NTAwMCwibmJmIjoxNjA5NzU1MDIxLCJqdGkiOiJSVW12cGxLUGVvTW5hT0lDIiwic3ViIjo1LCJwcnYiOiIxNmZjZjU4NjA0NzNmNjJlZjdjZTUzZDRkYjY3YTFjZDIxZDBjMjczIn0.aztoe0HqIHKxrQGm2cN7GZoVSA2nfqwOaxCERyCfc3Q",
+    token: null,
     isAuthentificated: true,
     linkToRedirect: null,
+    pageHasbeRefresh: false
   };
   
   export const authReducer = (
@@ -17,13 +19,13 @@ import {
   ): any => {
     switch (action.type) {
         case LOGIN:
-    
             return {
                 ...state,
                 user: action.payload.user,
                 token: action.payload.token,
                 isAuthentificated: true,
-                linkToRedirect: '/admin/transaction'
+                pageHasbeRefresh: true,
+                linkToRedirect: true
             };
         case LOGOUT:
           localStorage.removeItem("AuthUserData");
@@ -39,7 +41,14 @@ import {
                   ...state,
                   linkToRedirect:action.payload
               };
+
+        case REFRESH:
+            console.log("yes refresth")
+            return {
+                  ...state,
+                  pageHasbeRefresh: true
+              };
         default:
             return state;
     }
-  };
+  }; 
