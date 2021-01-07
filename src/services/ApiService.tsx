@@ -22,6 +22,32 @@ class ApiService {
         return response;
     }
 
+    patchData = async (route: string, header: any | null = null) => {
+        
+        var response = Axios.patch(this.baseUrl + route, header).then((result) => {
+            if (result.status === 200) {
+                return result.data;
+            } else {
+                throw (result.headers);
+            }
+        });
+
+        return response;
+    }
+
+    deleteData = async (route: string, header: any | null = null) => {
+        
+        var response = Axios.delete(this.baseUrl + route, header).then((result) => {
+            if (result.status === 204) {
+                return true;
+            } else {
+                throw (result.headers);
+            }
+        });
+
+        return response;
+    }
+
     postData = async (route: string, data: any, header: any | null = null) => {
 
         
