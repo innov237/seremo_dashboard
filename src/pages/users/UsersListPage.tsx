@@ -13,8 +13,8 @@ const UsersListPage: React.FC = () => {
 
     const getAllUser = async () => {
 
-        var response = await ApiService.getData("dashboard/getAllUsers");
-        setUsersData(response);
+        var response = await ApiService.getData("v1/users");
+        setUsersData(response.data);
         setLoader(false);
     }
 
@@ -46,15 +46,15 @@ const UsersListPage: React.FC = () => {
                     <th>Country</th>
                     <th>More</th>
                 </tr>
-                {console.log(usersData)}
+                
                 {usersData.length > 0 && usersData.map((res: any,index: any) => {
                     return (<tr key={index}>
-                        <td><img src={ApiService.imageUrl + res.user_avatar} className="user__avatar" alt="avatar" /> {res.userData?.user_name} <span className="span__contry"></span></td>
-                        <td>{res.user_name}</td>
-                        <td>{res.user_phone_number}</td>
-                        <td>{res?.user_email}</td>
-                        <td>{res?.provider_name}</td>
-                        <td>{res.country_name}</td>
+                        <td><img src={ApiService.imageUrl + res.attributes.user_avatar} className="user__avatar" alt="avatar" /> {res.attributes.userData?.user_name} <span className="span__contry"></span></td>
+                        <td>{res.attributes.user_name}</td>
+                        <td>{res.attributes.user_phone_number}</td>
+                        <td>{(res.attributes.user_email) ? res.attributes.user_email : '-'}</td>
+                        <td>{res.attributes.provider_name}</td>
+                        <td>{res.attributes.country.name}</td>
                         <td style={{ textAlign: "center" }} className="more__td" onClick={() => getUserDetail(res)}>
                             <span className="dot"></span>
                             <span className="dot"></span>

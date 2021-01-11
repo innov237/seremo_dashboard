@@ -17,7 +17,7 @@ const DashBoardPage: React.FC = (props) => {
     }, []);
 
     const getStatData = async () => {
-        var response = await ApiService.getData("dashboard/getTransferStat");
+        var response = await ApiService.getData("v1/transactions/stats");
 
         if (response != null) {
             var data: any = [];

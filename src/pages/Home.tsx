@@ -43,10 +43,10 @@ const HomePage: React.FC = () => {
 
     const imageUrl = "https://seremoworld.com/seremoapi/public/storage/";
 
-    useEffect(() => {
+    /*useEffect(() => {
         getAllTransferFc();
         getAllRequestFc();
-    }, [])
+    }, []) */
 
 
     const getAllTransferFc = async () => {

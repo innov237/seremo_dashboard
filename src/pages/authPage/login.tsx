@@ -30,7 +30,7 @@ const LoginPage: React.FC = (props) => {
     const dispatch = useDispatch();
      
     if (auth.linkToRedirect){
-        console.log(auth)
+        
         return <Redirect to='/admin/transactions' />
        // history.push('/admin/transactions')
     }

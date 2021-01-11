@@ -4,16 +4,12 @@ import React from 'react';
 import { connect } from 'react-redux'
 
 import {
-    AppRoutes
-} from '../pages/AppRoute';
-
+    Redirect
+} from 'react-router-dom';
 
 import {
-    ACTION_REFRESH,
-    ACTION_LOGIN
-} from '../redux/Auth/Actions'
-
-import  ApiService from '../services/ApiService'
+    AppRoutes
+} from '../pages/AppRoute';
 
 
 
@@ -31,57 +27,18 @@ export default function(ComposedComponent:any): any {
            
         }
 
-        async refreshToken() {
-            const token = localStorage.getItem("AuthUserData");
-
-            if(token){
-                const response = await ApiService.getData('v1/refresh',{
-                    headers:{
-                        Authorization: `Bearer ${token}`,
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    }
-                })
-
-                return response;
-            }else{
-                localStorage.removeItem("AuthUserData");
-                return false;
-            }
-        }
-        
-
- 
-
         componentWillMount(){
             const props:any = this.props
 
             const {history, user, refresh, login} = props
-
-            console.log("user.pageHasbeRefresh",user.pageHasbeRefresh)
-
+            
             this.updateTile(history.location.pathname)
 
-           
-            if (user.pageHasbeRefresh == false){
-                this.refreshToken()
-                    .then((e:any) => {
-                        console.log(e)
-                        if (e == false){
-                            refresh()
-                            history.push('/login')
-                        }else
-                            login(e.data)
-                    })
-                    .catch((e:any) => refresh() )
-
-            }else{
-                if (!user.isAuthentificated)
-                history.push('/login')
-            }
             
-
-                      
+           /* 
+            if (!user.isAuthentificated)
+                return history.push('/login')*/
+                     
         }
 
         componentWillUpdate(){
@@ -92,10 +49,13 @@ export default function(ComposedComponent:any): any {
             const props:any = this.props
             const {user} = props;
 
-            if (user.pageHasbeRefresh)
+            if (user.isAuthentificated)
                 return (
                     <ComposedComponent {...this.props} />
                 )
+            
+            if (!user.isAuthentificated && user.pageHasbeRefresh)
+                return <Redirect to="/login" />
             else 
                 return (
                     <></>
@@ -111,12 +71,7 @@ export default function(ComposedComponent:any): any {
         }
     }
 
-    function mapDispatchToProps(dispatch: any): any {
-        return {
-            refresh: () => dispatch(ACTION_REFRESH()),
-            login: (data:any) => dispatch(ACTION_LOGIN(data))
-        }
-    }
-    return connect(mapStateToProps,mapDispatchToProps)(Authentificated)
+    
+    return connect(mapStateToProps)(Authentificated)
 }
 

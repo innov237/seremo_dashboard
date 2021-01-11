@@ -12,6 +12,7 @@ export const ACTION_REDIRECT = (link: String) => {
 };
 
 export const ACTION_LOGIN = (data: any) => {
+  
   return {
     type: LOGIN,
     payload: data
@@ -24,8 +25,9 @@ export const ACTION_LOGOUT = () => {
   };
 };
 
-export const ACTION_REFRESH = () => {
+export const ACTION_REFRESH = (data:boolean = false) => {
   return {
-    type: REFRESH
+    type: REFRESH,
+    payload: data
   };
 };

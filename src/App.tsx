@@ -1,5 +1,6 @@
 import React, {
-  Suspense
+  Suspense,
+  useEffect
 } from 'react';
 
 import {
@@ -11,7 +12,8 @@ import {
 } from "react-router-dom";
 
 import {
-  connect
+    useDispatch,
+    useSelector
 } from 'react-redux'
 
 import { 
@@ -31,56 +33,84 @@ import './App.css';
 
 import ApiService from './services/ApiService';
 
+import {
+    ACTION_REFRESH,
+    ACTION_LOGIN
+} from './redux/Auth/Actions'
 
-class App extends React.Component {
 
 
-  refresh = async (token: String) => {
-    return await ApiService.getData("v1/refresh",{
-      headers:{
-        'Authorization': `Bearer ${token.replace('"',"")}`
-      }
-  });
-  }
+const App: React.FC = () => {
 
-  async componentWillMount(){
-    const props:any = this.props
-    const {LOGIN, LOGOUT} = props
+  const [data, setData] = React.useState(null);
+  useEffect(() => {
+    refreshToken()
+  })
 
-    const token: String| null = localStorage.getItem("AuthUserData"); 
-   
+
+  const auth  = useSelector((state: any) => state.auth);
+
+  const dispatch = useDispatch();
+
+  const refreshToken = async() => {
     
-  }
+    const token = localStorage.getItem("AuthUserData");
+    
+    
+    if (!auth.pageHasbeRefresh){
+      if(token){
+        dispatch(ACTION_REFRESH())
+        const request = await ApiService.getData('v1/refresh',{
+            headers:{
+              Authorization: `Bearer ${token}`,
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+             }
+        })
 
+        if(request.response){
+          dispatch(ACTION_LOGIN(request.data))
+          localStorage.setItem("AuthUserData", request.data.token);
+         }else
+          dispatch(ACTION_REFRESH())
 
-  render(){
+    }else{
+        localStorage.removeItem("AuthUserData");
+        dispatch(ACTION_REFRESH())
+    }
+    } 
+    
+   }
+
+    
     return (
    
       <div className="App">
-        <Router history={history}>
-          {/* A <Switch> looks through its children <Route>s and
-              renders the first one that matches the current URL. */}
-            <Suspense fallback = {<UserDetails></UserDetails>}>
-              <Switch>
+      <Router history={history}>
+              <Suspense fallback = {<UserDetails></UserDetails>}>
+              
+       {
+         (auth.pageHasbeRefresh) ?
+             <Switch>
                
                 <Route path="/admin" component={ProtectedRoute(HomePage)} />
                 <Route path="/login" component={ProtectedRoute(LoginPage)} />
-                <Route path="/" component={ProtectedRoute(LoginPage)} />   
-              </Switch>
+                <Route path="/" component={ProtectedRoute(LoginPage)} />  
+             </Switch> 
+               :
+
+        <></>
+       }
+        
             </Suspense>
         </Router>
       </div >
 
   );
-  }
+  
   
 }
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    LOGIN: (data:any) => dispatch({ type: 'ACTION_LOGIN', payload: data }),
-    LOGOUT: () => dispatch({ type: 'ACTION_LOGOUT' }),
-  }
-}
 
-export default connect(null,mapDispatchToProps)(App);
+
+export default App;

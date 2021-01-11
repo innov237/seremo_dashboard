@@ -3,6 +3,10 @@ import { useForm } from "react-hook-form";
 import ApiService from '../../services/ApiService';
 import { Modal, Button } from "react-bootstrap";
 
+import {
+    useSelector
+} from 'react-redux'
+
 const AdministrationPage: React.FC = () => {
 
 
@@ -13,11 +17,16 @@ const AdministrationPage: React.FC = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [type, setType] = useState('');
+    const [ID, setID] = useState('');
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     const [roles, setRoles] = useState([]);
+
+    const auth  = useSelector((state: any) => state.auth);
+
+
 
     type Inputs = {
         name: string,
@@ -35,6 +44,7 @@ const AdministrationPage: React.FC = () => {
         setName(res.attributes.name);
         setEmail(res.attributes.email);
         setType(role.id);
+        setID(res.id);
         handleShow();
     }
 
@@ -109,26 +119,29 @@ const AdministrationPage: React.FC = () => {
 
     const onUpdate = async (data: any) => {
         setLoader(true);
+        
         const posData = {
             data:{
                 attributes:{
                     name,
                     email,
-                    account_type:type
+                    role_id:type
                 }
             }
         }
-        console.log(posData);
-        // ROUTE UPDATE ADMIN ??
-        // var response = await ApiService.postData("dashboard/updateAdmin", data);
-        // if (response.success) {
-        //     // vide le formulaire
-        //     
-        //     getAllAdmin();
-        // } else {
-        //    
-        //     alert("error while create admin");
-        // }
+        
+
+        var response = await ApiService.patchData("v1/admins/" + ID,posData);
+        if (response.data.id) {
+
+            alert("Update");
+            handleClose();
+            getAllAdmin();
+
+        } else {
+            alert("error while create admin");
+        }
+        
 
         setLoader(false);
 
@@ -161,8 +174,8 @@ const AdministrationPage: React.FC = () => {
                                     className="form-control" ref={register({ required: true })} />
                                     {errors.name && <span>This field is required</span>}
                                 </div>
-                                <div className="form-group col-12">
-                                    <select value={type} className="form-control" ref={register({ required: true })}>
+                                <div className="form-group col-12" style={{display: (auth.user.id== type) ? 'none' : 'block'}}>
+                                    <select onChange={(evt:any) =>  setType(evt.target.value)} className="form-control" ref={register({ required: true })}>
                                         {
                                         roles.map((e:any) => 
                                             <option 
@@ -215,7 +228,7 @@ const AdministrationPage: React.FC = () => {
                                 <input type="text" name="password" placeholder="User Passworld" className="form-control" ref={register({ required: true })} />
                                 {errors.password && <span>This field is required</span>}
                             </div>
-                            <div className="form-group col-3">
+                            <div className="form-group col-3" >
                                 <select name="role_id" className="form-control" ref={register({ required: true })}>
                                     {
                                         roles.map((e:any) => 
@@ -260,12 +273,12 @@ const AdministrationPage: React.FC = () => {
                                 <td>{role.attributes.name}</td>
                                 <td className="d-flex">
                                     <div className="form-group mr-1">
-                                        <input type="submit" value="Edite" onClick={(e) => edit(res, role)} className="btn btn-info" />
+                                        <input type="submit" value="Edite" onClick={(e) => edit(res, role)} className="btn btn-info " />
                                     </div>
-                                    <div className="form-group mr-1">
+                                    <div className="form-group mr-1" style={{display: (auth.user.id== res.id) ? 'none' : 'block'}}>
                                         <input type="submit" value="Delete" onClick={(e) => deleteAdmin(res)} className="btn btn-danger" />
                                     </div>
-                                    <div className="form-group mr-1">
+                                    <div className="form-group mr-1" style={{display: (auth.user.id== res.id) ? 'none' : 'block'}}>
                                         <input type="submit" value={statuts} onClick={(e) => enableOrDisabledAdmin(res)} className="btn btn-warning" />
                                     </div>
                                    

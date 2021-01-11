@@ -18,7 +18,9 @@ import {
     action: any
   ): any => {
     switch (action.type) {
+
         case LOGIN:
+            console.log(action.type);
             return {
                 ...state,
                 user: action.payload.user,
@@ -43,10 +45,11 @@ import {
               };
 
         case REFRESH:
-            console.log("yes refresth")
+            console.log(action)
             return {
                   ...state,
-                  pageHasbeRefresh: true
+                  pageHasbeRefresh: true,
+                  //isAuthentificated: action.payload
               };
         default:
             return state;
