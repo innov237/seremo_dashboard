@@ -11,19 +11,35 @@ const AccessLogPage: React.FC = () => {
     const [isLoad, setLoader] = useState(false);
     // const [csvData, getCSVData] = useState<any[]>([]);
     const [userData, getData] = useState<any[]>([]);
+    const [next, setNext] = useState<string>('');
+    const [prev, setPrev] = useState<string>('');
 
     useEffect(() => {
         getAllLog();
     }, [])
 
-    const getAllLog = async() => {
+    const substringURL = (url:string) => {
+        const rootURL = `${process.env.REACT_APP_API_URL}/api`
+        return url.substring(rootURL.length, url.length);
+    }
+
+    const getAllLog = async(data: string= '') => {
         setLoader(true);
 
-        var response = await ApiService.getData("dashboard/getAdminAccessLog");
-        
-        getData(response)
+        let url = "dashboard/getAdminAccessLog"
+        if (data != '')
+            url = substringURL(data)
+
+        console.log(url)
+        var response = await ApiService.getData(url);
+        setNext(response.next_page_url);
+        setPrev(response.prev_page_url)
+        getData(response.data)
         setLoader(false)
     };
+
+    const up = () => `page-item ${(next) ? '' : 'disabled'}`;
+    const down = () => `page-item ${(prev) ? '' : 'disabled'}`;
 
     return (
         <div>
@@ -53,6 +69,15 @@ const AccessLogPage: React.FC = () => {
                     })}
                     </tbody>
                 </table>
+            </div>
+             <div className="d-flex justify-content-center">
+                <nav aria-label="Page navigation example">
+                  <ul className="pagination">
+                    <li className={down()} onClick={ () => getAllLog(prev)} ><a className="page-link" >Previous</a></li>
+                    
+                    <li className={up()} onClick={ () => getAllLog(next)}><a className="page-link" >Next</a></li>
+                  </ul>
+                </nav>
             </div>
         </div>
     )

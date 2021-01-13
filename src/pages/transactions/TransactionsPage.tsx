@@ -35,6 +35,9 @@ const TrasactionPage: React.FC = () => {
     const [currentTransaction, getCurrentTransaction] = useState<any>(null);
     const [activeItem, setActiveItem] = useState('Request');
     const [csvData, getCSVData] = useState<any[]>([]);
+
+    const [next, setNext] = useState<any[]>([]);
+    const [prev, setPrev] = useState<any[]>([]);
     const [show, setShow] = useState(false);
     const [status, setStatus] = useState('All');
     const handleClose = () => setShow(false);
@@ -96,9 +99,10 @@ const TrasactionPage: React.FC = () => {
         getAllTransfer(response.data);
         formatDataToCsv(response.data);
         setLoader(false);
+
+        setNext(response.first_page_url);
+        setPrev(response.first_page_url);
     };
-
-
 
 
     const getAllRequestFc = async (param:any | null = null) => {
@@ -381,6 +385,16 @@ const TrasactionPage: React.FC = () => {
                 </tbody>
 
             </table>
+
+            <div className="d-flex justify-content-center">
+                <nav aria-label="Page navigation example">
+                  <ul className="pagination">
+                    <li className="page-item"><a className="page-link" href="#">Previous</a></li>
+                    
+                    <li className="page-item"><a className="page-link" href="#">Next</a></li>
+                  </ul>
+                </nav>
+            </div>
         </div>
     )
 }

@@ -21,6 +21,8 @@ import {
 
 
 import TrasactionPage from './transactions/TransactionsPage';
+import HistoryPage from './transactions/HistoryPage';
+import RemovePage from './transactions/RemovePage';
 import AdministrationsPage from './administrations/AdministrationsPage';
 import AccessLogPage from './accessLogPage/AccessLogPage';
 import DetailTransactionUserPage from './transactions/DetailTransactionUserPage';
@@ -141,6 +143,8 @@ const HomePage: React.FC = () => {
                     <li className={location.pathname == '/admin/access-log' ? "active" : ""}><i className="fa fa-list"></i> <Link to="/admin/access-log">Access log</Link></li>
                     <li className={location.pathname == '/admin/detailtransactionUser' ? "active" : ""}><i className="fa fa-search"></i> <Link to="/admin/detailtransactionUser">Search User</Link></li>
                     <li className={location.pathname == '/admin/all-users' ? "active" : ""}><i className="fa fa-users"></i> <Link to="/admin/all-users">All Users</Link></li>
+                    <li className={location.pathname == '/admin/retrait' ? "active" : ""}><i className="fa fa-money-check"></i> <Link to="/admin/retrait">Demande de retrait</Link></li>
+                    <li className={location.pathname == '/admin/history' ? "active" : ""}><i className="fa fa-history"></i> <Link to="/admin/history">Historiques</Link></li>
                     <li className={location.pathname == '/login' ? "mt-5 active" : "mt-5"}><i className="fa fa-sign-out-alt"></i> <Link to="/login" onClick={ () => dispatch(ACTION_LOGOUT())}>Log out</Link></li>
                 </div>
                 <div className="col-md-10 main__row">
@@ -153,6 +157,8 @@ const HomePage: React.FC = () => {
                         <Route path="/admin/detailtransactionUser" component={DetailTransactionUserPage}></Route>
                         <Route path="/admin/all-users" component={UsersListPage} />
                         <Route path="/admin/dashboard" component={DashBoardPage} />
+                        <Route path="/admin/retrait" component={RemovePage} />
+                        <Route path="/admin/history" component={HistoryPage} />
                         <Route path="/admin/" component={DashBoardPage} />
                         <Route exact path="/admin">
                             <Redirect to="/admin/dashboard"></Redirect>

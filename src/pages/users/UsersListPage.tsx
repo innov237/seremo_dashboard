@@ -6,15 +6,27 @@ import ApiService from '../../services/ApiService';
 const UsersListPage: React.FC = () => {
 
     
-
+    const [next, setNext] = useState<string>('');
+    const [prev, setPrev] = useState<string>('');
     const [usersData, setUsersData] = useState<any>([]);
     const [isLoad, setLoader] = useState(true);
     const history = useHistory();
 
-    const getAllUser = async () => {
 
-        var response = await ApiService.getData("v1/users");
+    const substringURL = (url:string) => {
+        const rootURL = `${process.env.REACT_APP_API_URL}/api`
+        return url.substring(rootURL.length, url.length);
+    }
+
+    const getAllUser = async (data:string='') => {
+        let url = "v1/users"
+        if (data != '')
+            url = substringURL(data)
+
+        var response = await ApiService.getData(url);
         setUsersData(response.data);
+        setNext(response.next);
+        setPrev(response.prev)
         setLoader(false);
     }
 
@@ -22,6 +34,8 @@ const UsersListPage: React.FC = () => {
         getAllUser();
     }, [])
 
+    const up = () => `page-item ${(next) ? '' : 'disabled'}`;
+    const down = () => `page-item ${(prev) ? '' : 'disabled'}`;
 
     const getUserDetail = (usersData: any) => {
         history.push("DetailtransactionUser", usersData);
@@ -64,6 +78,15 @@ const UsersListPage: React.FC = () => {
                 })}
                 </tbody>
             </table>
+             <div className="d-flex justify-content-center">
+                <nav aria-label="Page navigation example">
+                  <ul className="pagination">
+                    <li className={down()} onClick={ () => getAllUser(prev)} ><a className="page-link" >Previous</a></li>
+                    
+                    <li className={up()} onClick={ () => getAllUser(next)}><a className="page-link" >Next</a></li>
+                  </ul>
+                </nav>
+            </div>
         </div>
     )
 }
