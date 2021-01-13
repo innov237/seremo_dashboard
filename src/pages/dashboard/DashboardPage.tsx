@@ -12,10 +12,18 @@ const DashBoardPage: React.FC = (props) => {
     const [amount, setamount] = useState(0);
     const [isLoard, setLoarder] = useState(true);
 
+    const [customer, setCustomer] = useState({users:0 , admins:0})
+
     useEffect(() => {
         getStatData();
+        customerCount();
     }, []);
 
+    const customerCount = async () => {
+        var response = await ApiService.getData("v1/customers");
+
+        setCustomer(response.data)
+    }
     const getStatData = async () => {
         var response = await ApiService.getData("v1/transactions/stats");
 
@@ -79,7 +87,7 @@ const DashBoardPage: React.FC = (props) => {
                 <div className="col-4">
                     <Link to="/admin/all-users">
                         <div className="card users__count__card p-5">
-                            <h1 className="card_number">02</h1>
+                            <h1 className="card_number">{customer.users}</h1>
                             <h2>All Users</h2>
                             <div className='icon__row'>
                                 <i className="fa fa-users"></i>
@@ -90,7 +98,7 @@ const DashBoardPage: React.FC = (props) => {
                 <div className="col-4">
                     <Link to="/admin/administrations">
                         <div className="card admin__count__card p-5">
-                            <h1 className="card_number">03</h1>
+                            <h1 className="card_number">{customer.admins}</h1>
                             <h2>All Admin</h2>
                             <div className='icon__row'>
                                 <i className="fa fa-users-cog"></i>

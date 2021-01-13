@@ -58,10 +58,11 @@ const AccessLogPage: React.FC = () => {
                     </tr>
                     <tbody>
                     {userData.map((res,index) => {
+                        
                         return (<tr key={index}>
-                            <td>{res.name} </td>
-                            <td>{res.email}</td>
-                            <td>{res.type}</td>
+                            <td>{res.admin.name}</td>
+                            <td>{res.admin.email}</td>
+                            <td>{res.admin.roles[0].name}</td>
                             <td>{res.status}</td>
                             <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")}</td>
                            

@@ -12,7 +12,7 @@ const datas = [
     {
         avatar: '',
         name: 'Carlos Kameni',
-        email: '',
+        email: 'agent@seramo.cm',
         transaction:'WL00001',
         montant:'123.456',
         status:'PENDING',
@@ -20,7 +20,7 @@ const datas = [
     {
         avatar: '',
         name: 'Bell Antoine',
-        email: '',
+        email: 'agent1@seramo.cm',
         transaction:'WL000010',
         montant:'123.456',
         status:'ACCEPTED',
@@ -28,7 +28,7 @@ const datas = [
     {
         avatar: '',
         name: 'Tataw',
-        email: '',
+        email: 'agent5@seramo.cm',
         transaction:'WL000011',        
         montant:'123.456',
         status:'REJECTED',
@@ -79,6 +79,7 @@ const HistoryPage: React.FC = () => {
 
     useEffect(() => {
         //getAllUser();
+        setLoader(false);
     }, [])
 
     const up = () => `page-item ${(next) ? '' : 'disabled'}`;
@@ -116,7 +117,7 @@ const HistoryPage: React.FC = () => {
                         <h4>Reciever</h4>
                         <div className="row px-10 px-2 py-2">
                             <div className="col-4" style={{ height: "150px", width: "150px" }}>
-                                <img src="" style={{ height: "150px", width: "150px" }} />
+                                <img src="http://localhost:8000/api/v1/media/user_avatar.jpg" style={{ height: "150px", width: "150px" }} />
                             </div>
 
                             <div className="col-4  mt-2">
@@ -184,6 +185,24 @@ const HistoryPage: React.FC = () => {
                     <div className="progress-bar progress-bar-striped" role="progressbar" style={{ width: "100%" }}></div>
                 </div>
             ) : ""}
+            <div className="row filter__header">
+                
+                <div className="col-md-12 d-flex justify-content-end">
+                    <div className="row">
+                        <div className="form-group col-md-12">
+                            
+                            <select id="inputState"  className="form-control" >
+                                <option value="All">All</option>
+                                <option value="All">All</option>
+                                <option value="All">All</option>
+                                <option value="All">All</option>
+                                <option value="All">All</option>
+                            </select>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
             <table className="table">
                 <tbody>
                 <tr className="theader">

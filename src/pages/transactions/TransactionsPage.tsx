@@ -159,7 +159,7 @@ const TrasactionPage: React.FC = () => {
                 <Modal.Body>
 
                     {(currentTransaction !== null) && <div className="container-fluid">
-                    <h4>Sender</h4>
+                    <h4>Reciever</h4>
                         <div className="row">
                             <div className="col-4" style={{ height: "150px", width: "150px" }}>
                                 <img src={currentTransaction.sender?.user_avatar} style={{ height: "150px", width: "150px" }} />
@@ -171,7 +171,7 @@ const TrasactionPage: React.FC = () => {
                                 <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
                                 <p className="text-uppercase font-weight-bold">{currentTransaction.sender?.user_name} {currentTransaction.sender?.['user_last_name']}</p>
                                 <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
-                                <p className="text-uppercase font-weight-bold">{currentTransaction.sender?.country.name}</p>
+                                <p className="text-uppercase font-weight-bold">{currentTransaction.sender?.country.name}<img src={currentTransaction.sender?.country.flag} className="user__avatar" alt="avatar" /> </p>
                             </div>
 
                             <div className="col-4  mt-2">
@@ -184,7 +184,7 @@ const TrasactionPage: React.FC = () => {
                             </div>
                         </div>
                         <hr />
-                        <h4>Reciever</h4>
+                        <h4>Sender</h4>
                         <div className="row px-10 px-2 py-2">
                             <div className="col-4" style={{ height: "150px", width: "150px" }}>
                                 <img src={currentTransaction.receiver?.user_avatar} style={{ height: "150px", width: "150px" }} />
@@ -196,7 +196,7 @@ const TrasactionPage: React.FC = () => {
                                 <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
                                 <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.user_name} {currentTransaction.receiver?.['user_last_name']}</p>
                                 <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
-                                <p className="text-uppercase font-weight-bold">{currentTransaction.sender?.country.name}</p>
+                                <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.country.name}<img src={currentTransaction.receiver?.country.flag} className="user__avatar" alt="avatar" /> </p>
                             </div>
 
                             <div className="col-4  mt-2">
@@ -250,8 +250,8 @@ const TrasactionPage: React.FC = () => {
     const tabItem = (res:any, type:string='Transfert') => {
         if ('Transfert' === type )
             return <tr key={res.id}>
-            <td> <img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
-            <td><img src={res.sender.user_avatar} className="user__avatar" alt="avatar" /> {res.sender.user_name} <span className="span__contry">➘ {res.sender.country.name}</span></td>
+            <td><img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name}<span className="span__contry">{res.receiver.country.name} ➚ </span> <img src={res.receiver.country.flag} className="user__avatar" alt="avatar" /></td>
+            <td><img src={res.sender.user_avatar} className="user__avatar" alt="avatar" /> {res.sender.user_name} <span className="span__contry">➘ {res.sender.country.name}</span> <img src={res.sender.country.flag} className="user__avatar" alt="avatar" /></td>
             <td>{res.reason}</td>
             <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
             <td>{res.balance}</td>
@@ -265,8 +265,8 @@ const TrasactionPage: React.FC = () => {
         </tr>
         else
             return <tr key={res.id}>
-            <td> <img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
-            <td><img src={res.requester.user_avatar} className="user__avatar" alt="avatar" /> {res.requester.user_name} <span className="span__contry">➘ {res.requester.country.name}</span></td>
+            <td> <img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> <img src={res.receiver.country.flag} className="user__avatar" alt="avatar" /></td>
+            <td><img src={res.requester.user_avatar} className="user__avatar" alt="avatar" /> {res.requester.user_name} <span className="span__contry">➘ {res.requester.country.name}</span><img src={res.requester.country.flag} className="user__avatar" alt="avatar" /></td>
 
             <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
             <td>{`${res.from_amount} ${res.requester.country.currency}`}</td>

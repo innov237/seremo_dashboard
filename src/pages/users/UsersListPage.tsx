@@ -57,18 +57,20 @@ const UsersListPage: React.FC = () => {
                     <th>Phone number</th>
                     <th>Email</th>
                     <th>Provider</th>
-                    <th>Country</th>
                     <th>More</th>
                 </tr>
                 
                 {usersData.length > 0 && usersData.map((res: any,index: any) => {
                     return (<tr key={index}>
-                        <td><img src={ApiService.imageUrl + res.attributes.user_avatar} className="user__avatar" alt="avatar" /> {res.attributes.userData?.user_name} <span className="span__contry"></span></td>
+                        <td>
+                            <div><img src={res.attributes.user_avatar} className="user__avatar" alt="avatar" /> <span>{res.attributes.user_name}</span></div>
+                            <div className="d-flex justify-content-start"><img src={res.attributes.country.flag} className="user__avatar" alt="avatar" /> <span className="span__contry">{res.attributes.country.name}</span> </div>
+
+                         </td>
                         <td>{res.attributes.user_name}</td>
                         <td>{res.attributes.user_phone_number}</td>
                         <td>{(res.attributes.user_email) ? res.attributes.user_email : '-'}</td>
                         <td>{res.attributes.provider_name}</td>
-                        <td>{res.attributes.country.name}</td>
                         <td style={{ textAlign: "center" }} className="more__td" onClick={() => getUserDetail(res)}>
                             <span className="dot"></span>
                             <span className="dot"></span>
