@@ -148,6 +148,7 @@ const DetailTrasactionPage: React.FC = () => {
 
         const filterData = transferData.filter(elt => elt.status.toLowerCase() === value.toLowerCase());
 
+
         if (filterData != null) {
             getAllTransfer(filterData);
             formatDataToCsv(filterData);
@@ -174,6 +175,8 @@ const DetailTrasactionPage: React.FC = () => {
     } 
 
     const tabItem = (res:any, type:string='Transfert') => {
+        console.log(res)
+        
         if ('Transfert' === type )
             return <tr key={res.id}>
             <td> <img src={ApiService.imageUrl + res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
@@ -232,13 +235,13 @@ const DetailTrasactionPage: React.FC = () => {
             getCSVData(custom);
         });
     }
-
+    //console.log(userData)
     const userDataToMap: any = 
-        (userData[0].attributes) ? userData[0].attributes : userData[0]
+        (userData.length && userData[0].attributes) ? userData[0].attributes : userData[0]
     
 
     
-    console.log(userDataToMap)
+    
 
     return (
         <div>

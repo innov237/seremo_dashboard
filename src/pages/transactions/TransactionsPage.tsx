@@ -110,7 +110,8 @@ const TrasactionPage: React.FC = () => {
         getAllTransfer([]);
         setActiveItem('Request');
         setMovement(statusRequest)
-        const url =  (param != null) ? `v1/requests?type=${param}` : `v1/requests`;
+        
+        const url =  (param != null) ? `v1/requests?type=${statusRequest.filter(e => e.id=param)[0].label}` : `v1/requests`;
         var response = await ApiService.getData(url);
 
         getAllTransfer(response.data);
@@ -337,7 +338,7 @@ const TrasactionPage: React.FC = () => {
                                 <option value="All">All</option>
 
                                 {
-                                    movement.map(e => <option key={e.id} value={e.label}>{e.label}</option>)
+                                    movement.map(e => <option key={e.id} value={e.id}>{e.label}</option>)
                                 }
 
                             </select>
