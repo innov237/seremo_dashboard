@@ -179,8 +179,8 @@ const DetailTrasactionPage: React.FC = () => {
         
         if ('Transfert' === type )
             return <tr key={res.id}>
-            <td> <img src={ApiService.imageUrl + res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
-            <td><img src={ApiService.imageUrl + res.sender.user_avatar} className="user__avatar" alt="avatar" /> {res.sender.user_name} <span className="span__contry">➘ {res.sender.country.name}</span></td>
+            <td> <img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
+            <td><img src={res.sender.user_avatar} className="user__avatar" alt="avatar" /> {res.sender.user_name} <span className="span__contry">➘ {res.sender.country.name}</span></td>
             <td>{res.reason}</td>
             <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
             <td>{res.balance}</td>
@@ -194,8 +194,8 @@ const DetailTrasactionPage: React.FC = () => {
         </tr>
         else
             return <tr key={res.id}>
-            <td> <img src={ApiService.imageUrl + res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
-            <td><img src={ApiService.imageUrl + res.requester.user_avatar} className="user__avatar" alt="avatar" /> {res.requester.user_name} <span className="span__contry">➘ {res.requester.country.name}</span></td>
+            <td> <img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
+            <td><img src={res.requester.user_avatar} className="user__avatar" alt="avatar" /> {res.requester.user_name} <span className="span__contry">➘ {res.requester.country.name}</span></td>
 
             <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
             <td>{`${res.from_amount} ${res.requester.country.currency}`}</td>
@@ -275,7 +275,7 @@ const DetailTrasactionPage: React.FC = () => {
                 (userData.length > 0) && <div className="card shadow-sm px-2 mt-2 py-2 mb-3">
                     <div className="row px-10 px-2 py-2">
                         <div className="col-4" style={{ height: "150px", width: "150px" }}>
-                            <img src={ApiService.imageUrl + userDataToMap.user_avatar} style={{ height: "150px", width: "150px" }} />
+                            <img src={userDataToMap.user_avatar} style={{ height: "150px", width: "150px" }} />
                         </div>
 
                         <div className="col-4  mt-2">
