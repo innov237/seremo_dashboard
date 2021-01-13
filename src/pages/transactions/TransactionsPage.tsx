@@ -35,6 +35,9 @@ const TrasactionPage: React.FC = () => {
     const [currentTransaction, getCurrentTransaction] = useState<any>(null);
     const [activeItem, setActiveItem] = useState('Request');
     const [csvData, getCSVData] = useState<any[]>([]);
+
+    const [next, setNext] = useState<any[]>([]);
+    const [prev, setPrev] = useState<any[]>([]);
     const [show, setShow] = useState(false);
     const [status, setStatus] = useState('All');
     const handleClose = () => setShow(false);
@@ -96,9 +99,10 @@ const TrasactionPage: React.FC = () => {
         getAllTransfer(response.data);
         formatDataToCsv(response.data);
         setLoader(false);
+
+        setNext(response.first_page_url);
+        setPrev(response.first_page_url);
     };
-
-
 
 
     const getAllRequestFc = async (param:any | null = null) => {
@@ -106,7 +110,8 @@ const TrasactionPage: React.FC = () => {
         getAllTransfer([]);
         setActiveItem('Request');
         setMovement(statusRequest)
-        const url =  (param != null) ? `v1/requests?type=${param}` : `v1/requests`;
+        
+        const url =  (param != null) ? `v1/requests?type=${statusRequest.filter(e => e.id=param)[0].label}` : `v1/requests`;
         var response = await ApiService.getData(url);
 
         getAllTransfer(response.data);
@@ -157,7 +162,7 @@ const TrasactionPage: React.FC = () => {
                     <h4>Sender</h4>
                         <div className="row">
                             <div className="col-4" style={{ height: "150px", width: "150px" }}>
-                                <img src={ApiService.imageUrl + currentTransaction.sender?.user_avatar} style={{ height: "150px", width: "150px" }} />
+                                <img src={currentTransaction.sender?.user_avatar} style={{ height: "150px", width: "150px" }} />
                             </div>
 
                             <div className="col-4  mt-2">
@@ -182,7 +187,7 @@ const TrasactionPage: React.FC = () => {
                         <h4>Reciever</h4>
                         <div className="row px-10 px-2 py-2">
                             <div className="col-4" style={{ height: "150px", width: "150px" }}>
-                                <img src={ApiService.imageUrl + currentTransaction.receiver?.user_avatar} style={{ height: "150px", width: "150px" }} />
+                                <img src={currentTransaction.receiver?.user_avatar} style={{ height: "150px", width: "150px" }} />
                             </div>
 
                             <div className="col-4  mt-2">
@@ -245,8 +250,8 @@ const TrasactionPage: React.FC = () => {
     const tabItem = (res:any, type:string='Transfert') => {
         if ('Transfert' === type )
             return <tr key={res.id}>
-            <td> <img src={ApiService.imageUrl + res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
-            <td><img src={ApiService.imageUrl + res.sender.user_avatar} className="user__avatar" alt="avatar" /> {res.sender.user_name} <span className="span__contry">➘ {res.sender.country.name}</span></td>
+            <td> <img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
+            <td><img src={res.sender.user_avatar} className="user__avatar" alt="avatar" /> {res.sender.user_name} <span className="span__contry">➘ {res.sender.country.name}</span></td>
             <td>{res.reason}</td>
             <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
             <td>{res.balance}</td>
@@ -260,8 +265,8 @@ const TrasactionPage: React.FC = () => {
         </tr>
         else
             return <tr key={res.id}>
-            <td> <img src={ApiService.imageUrl + res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
-            <td><img src={ApiService.imageUrl + res.requester.user_avatar} className="user__avatar" alt="avatar" /> {res.requester.user_name} <span className="span__contry">➘ {res.requester.country.name}</span></td>
+            <td> <img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
+            <td><img src={res.requester.user_avatar} className="user__avatar" alt="avatar" /> {res.requester.user_name} <span className="span__contry">➘ {res.requester.country.name}</span></td>
 
             <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
             <td>{`${res.from_amount} ${res.requester.country.currency}`}</td>
@@ -333,7 +338,7 @@ const TrasactionPage: React.FC = () => {
                                 <option value="All">All</option>
 
                                 {
-                                    movement.map(e => <option key={e.id} value={e.label}>{e.label}</option>)
+                                    movement.map(e => <option key={e.id} value={e.id}>{e.label}</option>)
                                 }
 
                             </select>
@@ -381,6 +386,16 @@ const TrasactionPage: React.FC = () => {
                 </tbody>
 
             </table>
+
+            <div className="d-flex justify-content-center">
+                <nav aria-label="Page navigation example">
+                  <ul className="pagination">
+                    <li className="page-item"><a className="page-link" href="#">Previous</a></li>
+                    
+                    <li className="page-item"><a className="page-link" href="#">Next</a></li>
+                  </ul>
+                </nav>
+            </div>
         </div>
     )
 }

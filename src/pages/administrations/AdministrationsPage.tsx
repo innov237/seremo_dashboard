@@ -10,6 +10,8 @@ import {
 const AdministrationPage: React.FC = () => {
 
 
+    const [next, setNext] = useState<string>('');
+    const [prev, setPrev] = useState<string>('');
     const [userData, setUserData] = useState<any>([]);
     const [isLoad, setLoader] = useState(false);
     const [show, setShow] = useState(false);
@@ -48,7 +50,17 @@ const AdministrationPage: React.FC = () => {
         handleShow();
     }
 
-    const getAllAdmin = async () => {
+     const substringURL = (url:string) => {
+        const rootURL = `${process.env.REACT_APP_API_URL}/api`
+        return url.substring(rootURL.length, url.length);
+    }
+
+    const getAllAdmin = async (data:string='') => {
+
+        let url = "v1/admins"
+        if (data != '')
+            url = substringURL(data)
+
         var response = await ApiService.getData("v1/admins");
         setUserData(response.data);
     }
@@ -81,8 +93,6 @@ const AdministrationPage: React.FC = () => {
             setLoader(false);
             alert("error while create admin");
         }
-
-        //setLoader(true);
 
     };
 
@@ -147,9 +157,14 @@ const AdministrationPage: React.FC = () => {
 
     };
 
+    const up = () => `page-item ${(next) ? '' : 'disabled'}`;
+    const down = () => `page-item ${(prev) ? '' : 'disabled'}`;
+
+
     
 
     function getModal() {
+        
         return (
             <Modal
                 show={show}
@@ -174,7 +189,7 @@ const AdministrationPage: React.FC = () => {
                                     className="form-control" ref={register({ required: true })} />
                                     {errors.name && <span>This field is required</span>}
                                 </div>
-                                <div className="form-group col-12" style={{display: (auth.user.id== type) ? 'none' : 'block'}}>
+                                <div className="form-group col-12" style={{display: (auth.user.id == ID) ? 'none' : 'block'}}>
                                     <select onChange={(evt:any) =>  setType(evt.target.value)} className="form-control" ref={register({ required: true })}>
                                         {
                                         roles.map((e:any) => 
@@ -287,6 +302,15 @@ const AdministrationPage: React.FC = () => {
                         })}
                     </tbody>
                 </table>
+            </div>
+             <div className="d-flex justify-content-center">
+                <nav aria-label="Page navigation example">
+                  <ul className="pagination">
+                    <li className={down()} onClick={ () => getAllAdmin(prev)} ><a className="page-link" >Previous</a></li>
+                    
+                    <li className={up()} onClick={ () => getAllAdmin(next)}><a className="page-link" >Next</a></li>
+                  </ul>
+                </nav>
             </div>
         </div>
     )

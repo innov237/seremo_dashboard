@@ -20,7 +20,6 @@ import {
     switch (action.type) {
 
         case LOGIN:
-            console.log(action.type);
             return {
                 ...state,
                 user: action.payload.user,
@@ -45,7 +44,6 @@ import {
               };
 
         case REFRESH:
-            console.log(action)
             return {
                   ...state,
                   pageHasbeRefresh: true,

@@ -44,8 +44,8 @@ const DetailTrasactionPage: React.FC = () => {
         if (history.location.state != null) {
             setUserData([history.location.state]);
             let stateData: any = history.location.state;
-            setcurrenUserId(stateData.id);
-            getAllTransferFc(stateData.id);
+            
+            search({target:{value:stateData.attributes.user_code}})
         }
         getAllMovement()
     }, [])
@@ -148,6 +148,7 @@ const DetailTrasactionPage: React.FC = () => {
 
         const filterData = transferData.filter(elt => elt.status.toLowerCase() === value.toLowerCase());
 
+
         if (filterData != null) {
             getAllTransfer(filterData);
             formatDataToCsv(filterData);
@@ -174,10 +175,12 @@ const DetailTrasactionPage: React.FC = () => {
     } 
 
     const tabItem = (res:any, type:string='Transfert') => {
+        console.log(res)
+        
         if ('Transfert' === type )
             return <tr key={res.id}>
-            <td> <img src={ApiService.imageUrl + res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
-            <td><img src={ApiService.imageUrl + res.sender.user_avatar} className="user__avatar" alt="avatar" /> {res.sender.user_name} <span className="span__contry">➘ {res.sender.country.name}</span></td>
+            <td> <img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
+            <td><img src={res.sender.user_avatar} className="user__avatar" alt="avatar" /> {res.sender.user_name} <span className="span__contry">➘ {res.sender.country.name}</span></td>
             <td>{res.reason}</td>
             <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
             <td>{res.balance}</td>
@@ -191,8 +194,8 @@ const DetailTrasactionPage: React.FC = () => {
         </tr>
         else
             return <tr key={res.id}>
-            <td> <img src={ApiService.imageUrl + res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
-            <td><img src={ApiService.imageUrl + res.requester.user_avatar} className="user__avatar" alt="avatar" /> {res.requester.user_name} <span className="span__contry">➘ {res.requester.country.name}</span></td>
+            <td> <img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> </td>
+            <td><img src={res.requester.user_avatar} className="user__avatar" alt="avatar" /> {res.requester.user_name} <span className="span__contry">➘ {res.requester.country.name}</span></td>
 
             <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
             <td>{`${res.from_amount} ${res.requester.country.currency}`}</td>
@@ -232,8 +235,13 @@ const DetailTrasactionPage: React.FC = () => {
             getCSVData(custom);
         });
     }
+    //console.log(userData)
+    const userDataToMap: any = 
+        (userData.length && userData[0].attributes) ? userData[0].attributes : userData[0]
+    
 
-
+    
+    
 
     return (
         <div>
@@ -267,25 +275,25 @@ const DetailTrasactionPage: React.FC = () => {
                 (userData.length > 0) && <div className="card shadow-sm px-2 mt-2 py-2 mb-3">
                     <div className="row px-10 px-2 py-2">
                         <div className="col-4" style={{ height: "150px", width: "150px" }}>
-                            <img src={ApiService.imageUrl + userData[0]?.user_avatar} style={{ height: "150px", width: "150px" }} />
+                            <img src={userDataToMap.user_avatar} style={{ height: "150px", width: "150px" }} />
                         </div>
 
                         <div className="col-4  mt-2">
                             <p className="p-0 m-0 text-primary"><i className="fa fa-sort-numeric-down-alt text-primary"></i> User Code</p>
-                            <p className="text-uppercase font-weight-bold"> {userData[0]?.user_code}</p>
+                            <p className="text-uppercase font-weight-bold"> {userDataToMap.user_code}</p>
                             <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
-                            <p className="text-uppercase font-weight-bold">{userData[0]?.user_name} {userData[0]?.['user_last_name']}</p>
+                            <p className="text-uppercase font-weight-bold">{userDataToMap.user_name} {userDataToMap.user_last_name}</p>
                             <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
-                            <p className="text-uppercase font-weight-bold">{userData[0]?.country.name}</p>
+                            <p className="text-uppercase font-weight-bold">{userDataToMap.country.name}</p>
                         </div>
 
                         <div className="col-4  mt-2">
                             <p className="p-0 m-0 text-primary"><i className="fa fa-phone text-primary"></i> Phone number</p>
-                            <h5 className="text-uppercase font-weight-bold"> {userData[0]?.user_phone_number}</h5>
+                            <h5 className="text-uppercase font-weight-bold"> {userDataToMap.user_phone_number}</h5>
                             <p className="pt-1 m-0 text-primary"><i className="fa fa-envelope-square text-primary"></i> Email</p>
-                            <p className="pt-0 text-uppercase font-weight-bold">{userData[0]?.user_email}</p>
+                            <p className="pt-0 text-uppercase font-weight-bold">{userDataToMap.user_email}</p>
                             <p className="p-0 m-0 text-primary"><i className="fa fa-wifi text-primary"></i> Provider </p>
-                            <p className="text-uppercase font-weight-bold">{userData[0]?.provider_name}</p>
+                            <p className="text-uppercase font-weight-bold">{userDataToMap.provider_name}</p>
                         </div>
                     </div>
                 </div>
