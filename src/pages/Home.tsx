@@ -143,8 +143,9 @@ const HomePage: React.FC = () => {
                     <li className={location.pathname == '/admin/access-log' ? "active" : ""}><i className="fa fa-list"></i> <Link to="/admin/access-log">Access log</Link></li>
                     <li className={location.pathname == '/admin/detailtransactionUser' ? "active" : ""}><i className="fa fa-search"></i> <Link to="/admin/detailtransactionUser">Search User</Link></li>
                     <li className={location.pathname == '/admin/all-users' ? "active" : ""}><i className="fa fa-users"></i> <Link to="/admin/all-users">All Users</Link></li>
-                    <li className={location.pathname == '/admin/retrait' ? "active" : ""}><i className="fa fa-money-check"></i> <Link to="/admin/retrait">Demande de retrait</Link></li>
-                    <li className={location.pathname == '/admin/history' ? "active" : ""}><i className="fa fa-history"></i> <Link to="/admin/history">Historiques</Link></li>
+                    <li className={location.pathname == '/admin/retrait' ? "active" : ""}><i className="fa fa-money-check"></i> <Link to="/admin/retrait">Withdrawal request
+</Link></li>
+                    <li className={location.pathname == '/admin/history' ? "active" : ""}><i className="fa fa-history"></i> <Link to="/admin/history">Historical</Link></li>
                     <li className={location.pathname == '/login' ? "mt-5 active" : "mt-5"}><i className="fa fa-sign-out-alt"></i> <Link to="/login" onClick={ () => dispatch(ACTION_LOGOUT())}>Log out</Link></li>
                 </div>
                 <div className="col-md-10 main__row">

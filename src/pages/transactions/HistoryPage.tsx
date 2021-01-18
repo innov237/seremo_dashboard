@@ -15,6 +15,7 @@ const datas = [
         email: 'agent@seramo.cm',
         transaction:'WL00001',
         montant:'123.456',
+        currency:'XAF',
         status:'PENDING',
     },
     {
@@ -22,16 +23,18 @@ const datas = [
         name: 'Bell Antoine',
         email: 'agent1@seramo.cm',
         transaction:'WL000010',
-        montant:'123.456',
-        status:'ACCEPTED',
+        montant:'13.456.548',
+        currency:'$',
+        status:'COMPLETED',
     },
     {
         avatar: '',
         name: 'Tataw',
         email: 'agent5@seramo.cm',
-        transaction:'WL000011',        
-        montant:'123.456',
-        status:'REJECTED',
+        transaction:'WL000011', 
+        currency:'$',       
+        montant:'1.456',
+        status:'PENDING',
     },
 ]
 const HistoryPage: React.FC = () => {
@@ -126,7 +129,7 @@ const HistoryPage: React.FC = () => {
                                 <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
                                 <p className="text-uppercase font-weight-bold">Etamé Lauren</p>
                                 <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
-                                <p className="text-uppercase font-weight-bold">CMR</p>
+                                <p className="text-uppercase font-weight-bold"><img src="https://restcountries.eu/data/cmr.svg" className="user__avatar" alt="avatar" />CMR</p>
                             </div>
 
                             <div className="col-4  mt-2">
@@ -145,7 +148,7 @@ const HistoryPage: React.FC = () => {
 
                                 <div className="col-6  mt-2">
                                     <p className="p-0 m-0 text-primary">Status</p>
-                                    <h5 className="text-uppercase font-weight-bold">PRENDING</h5>
+                                    <h5 className="text-uppercase font-weight-bold">COMPLETED</h5>
                                 </div>
                                 <div className="col-6  mt-2">
                                     <p className="p-0 m-0 text-primary">Amount</p>
@@ -179,7 +182,7 @@ const HistoryPage: React.FC = () => {
     return (
         <div>
         {getModalDetail()}
-            <p className="header__title">Historique des retrait</p>
+            <p className="header__title">Historical</p>
             {isLoad ? (
                 <div className="progress">
                     <div className="progress-bar progress-bar-striped" role="progressbar" style={{ width: "100%" }}></div>
@@ -209,6 +212,7 @@ const HistoryPage: React.FC = () => {
                     <th>Agent</th>
                     <th>Email</th>
                     <th>Montant</th>
+                    <th>Currency</th>
                     <th>Transaction</th>
                     <th>Satus</th>
                     <th>More</th>
@@ -219,6 +223,7 @@ const HistoryPage: React.FC = () => {
                         <td>{res.name}</td>
                         <td>{(res.email) ? res.email : '-'}</td>
                         <td>{res.montant}</td>
+                        <td>{res.currency}</td>
                         <td>{res.transaction}</td>
                         <td>{res.status}</td>
                         <td style={{ textAlign: "center" }} className="more__td" onClick={() => opendetail()}>

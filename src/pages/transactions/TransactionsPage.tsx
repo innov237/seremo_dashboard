@@ -343,8 +343,8 @@ const TrasactionPage: React.FC = () => {
 
                             </select>
                         </div>
-                        <div className="col-md-4">
-                            <CSVLink filename="cvs-SeRemo.csv" data={csvData}> <button className="btn btn-primary">Export CSV</button></CSVLink>
+                        <div className="col-md-8">
+                            <CSVLink filename="cvs-SeRemo.csv" data={csvData}> <button className="btn btn-primary App_pColor">Export CSV</button></CSVLink>
                         </div>
                     </div>
                 </div>

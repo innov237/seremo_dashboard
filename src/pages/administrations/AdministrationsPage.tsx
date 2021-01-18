@@ -13,6 +13,7 @@ const AdministrationPage: React.FC = () => {
     const [next, setNext] = useState<string>('');
     const [prev, setPrev] = useState<string>('');
     const [userData, setUserData] = useState<any>([]);
+    const [countries, setCountries] = useState<any>([]);
     const [isLoad, setLoader] = useState(false);
     const [show, setShow] = useState(false);
 
@@ -39,13 +40,14 @@ const AdministrationPage: React.FC = () => {
 
     useEffect(() => {
         getAllRoles();
+        getCountries();
         getAllAdmin();
     }, []);
 
-    function edit(res: any, role:any) {
-        setName(res.attributes.name);
-        setEmail(res.attributes.email);
-        setType(role.id);
+    function edit(res: any) {
+        setName(res.attributes.user_name);
+        setEmail(res.attributes.user_email);
+        setType(res.attributes.user.access.id);
         setID(res.id);
         handleShow();
     }
@@ -70,7 +72,17 @@ const AdministrationPage: React.FC = () => {
         setRoles(response.data);
     }
 
+    const getCountries = async () => {
+        var response = await ApiService.getData("v1/countries");
+        setCountries(response.data);
+    }
+
     const { register, handleSubmit, watch, errors } = useForm<Inputs>();
+
+
+    const resetForm = () => {
+
+    }
 
     const onSubmit = async (data: any) => {
         setLoader(true);
@@ -189,6 +201,18 @@ const AdministrationPage: React.FC = () => {
                                     className="form-control" ref={register({ required: true })} />
                                     {errors.name && <span>This field is required</span>}
                                 </div>
+                                <div className="form-group col-12">
+                                    <input type="text" value={email} placeholder="User Email" 
+                                        onChange = {evt => setEmail(evt.target.value)}
+                                    className="form-control" ref={register({ required: true })} />
+                                    {errors.name && <span>This field is required</span>}
+                                </div>
+                                <div className="form-group col-12">
+                                    <input type="text" value={email} placeholder="User Email" 
+                                        onChange = {evt => setEmail(evt.target.value)}
+                                    className="form-control" ref={register({ required: true })} />
+                                    {errors.name && <span>This field is required</span>}
+                                </div>
                                 <div className="form-group col-12" style={{display: (auth.user.id == ID) ? 'none' : 'block'}}>
                                     <select onChange={(evt:any) =>  setType(evt.target.value)} className="form-control" ref={register({ required: true })}>
                                         {
@@ -196,7 +220,7 @@ const AdministrationPage: React.FC = () => {
                                             <option 
                                                 value={e.id} key={e.id}
                                                 selected={type == e.id}
-                                            >{e.attributes.name}</option>
+                                            >{e.attributes.label}</option>
                                         )
                                     }
                                     </select>
@@ -207,6 +231,7 @@ const AdministrationPage: React.FC = () => {
                                     {isLoad && <button className="btn btn-primary" value="load..." />}
                                 </div> */}
                             </div>
+
                         </div>
                     </form>
                 </Modal.Body>
@@ -232,11 +257,11 @@ const AdministrationPage: React.FC = () => {
                     <div className="form" >
                         <div className="form-row pt-3 p-2">
                             <div className="form-group col-3">
-                                <input type="text" name="name" placeholder="User Name" className="form-control" ref={register({ required: true })} />
+                                <input type="text" name="user_name" placeholder="User Name" className="form-control" ref={register({ required: true })} />
                                 {errors.name && <span>This field is required</span>}
                             </div>
                             <div className="form-group col-3">
-                                <input type="text" name="email" placeholder="User Email" className="form-control" ref={register({ required: true })} />
+                                <input type="text" name="user_email" placeholder="User Email" className="form-control" ref={register({ required: true })} />
                                 {errors.name && <span>This field is required</span>}
                             </div>
                             <div className="form-group col-3">
@@ -247,7 +272,28 @@ const AdministrationPage: React.FC = () => {
                                 <select name="role_id" className="form-control" ref={register({ required: true })}>
                                     {
                                         roles.map((e:any) => 
-                                            <option value={e.id} key={e.id} >{e.attributes.name}</option>
+                                            <option value={e.id} key={e.id} >{e.attributes.label}</option>
+                                        )
+                                    }
+                                  
+                                </select>
+                                {errors.type && <span>This field is required</span>}
+                            </div>
+                        </div>
+                        <div className="form-row pt-3 p-2">
+                            <div className="form-group col-3">
+                                <input type="text" name="user_last_name" placeholder="Last Name" className="form-control" ref={register({ required: true })} />
+                                {errors.name && <span>This field is required</span>}
+                            </div>
+                            <div className="form-group col-3">
+                                <input type="text" name="user_phone_number" placeholder="Phone" className="form-control" ref={register({ required: true })} />
+                                {errors.name && <span>This field is required</span>}
+                            </div>
+                            <div className="form-group col-3" >
+                                <select name="country_id" className="form-control" ref={register({ required: true })}>
+                                    {
+                                        countries.map((e:any) => 
+                                            <option value={e.id} key={e.id} >{e.name}</option>
                                         )
                                     }
                                   
@@ -278,17 +324,13 @@ const AdministrationPage: React.FC = () => {
                             const statuts = (res.attributes.account_status == 'actived') ? 'Unactived' : 'Actived'
                             
 
-                            const role:any = roles.find((e:any) => e.id == res.relationships.roles.data[0].id)
-
-                            
-
                             return (<tr key={res.attributes.name}>
-                                <td>{res.attributes.name} </td>
-                                <td>{res.attributes.email} </td>
-                                <td>{role.attributes.name}</td>
+                                <td>{res.attributes.user_name} </td>
+                                <td>{res.attributes.user_email} </td>
+                                <td>{res.attributes.level.label}</td>
                                 <td className="d-flex">
                                     <div className="form-group mr-1">
-                                        <input type="submit" value="Edite" onClick={(e) => edit(res, role)} className="btn btn-info " />
+                                        <input type="submit" value="Edite" onClick={(e) => edit(res)} className="btn btn-info " />
                                     </div>
                                     <div className="form-group mr-1" style={{display: (auth.user.id== res.id) ? 'none' : 'block'}}>
                                         <input type="submit" value="Delete" onClick={(e) => deleteAdmin(res)} className="btn btn-danger" />

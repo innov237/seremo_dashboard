@@ -20,7 +20,7 @@ import { history } from "../../config/history";
 
 const LoginPage: React.FC = (props) => {
 
-    const [email, setEmail] = useState("fucker@gmail.com");
+    const [email, setEmail] = useState("faker@gmail.com");
     const [password, setPass] = useState("sucker32");
     const [msg, setmsg] = useState("");
     const [checked, setChecked] = useState(true);
@@ -41,7 +41,7 @@ const LoginPage: React.FC = (props) => {
         var datapost = {
             data:{
                attributes:{
-                "email": email,
+                "user_email": email,
                 "password": password,
                }
             }
@@ -88,7 +88,7 @@ const LoginPage: React.FC = (props) => {
 
     return (
        
-        <div className="bg-primary  d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+        <div className="bg-primary  d-flex justify-content-center align-items-center" style={{ height: "100vh", backgroundColor: "#28A3E6 !important" }}>
 
             <div className="bg-light  rounded py-5 px-5" style={{ height: "400px", width: "500px" }}>
                 <div className="form  ">
