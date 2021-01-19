@@ -19,6 +19,8 @@ const AdministrationPage: React.FC = () => {
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [last, setLast] = useState('');
+    const [phone, setPhone] = useState('');
     const [type, setType] = useState('');
     const [ID, setID] = useState('');
 
@@ -45,9 +47,12 @@ const AdministrationPage: React.FC = () => {
     }, []);
 
     function edit(res: any) {
+        console.log(res)
         setName(res.attributes.user_name);
         setEmail(res.attributes.user_email);
-        setType(res.attributes.user.access.id);
+        setLast(res.attributes.user_last_name);
+        setPhone(res.attributes.user_phone_number);
+        setType(res.attributes.level.id);
         setID(res.id);
         handleShow();
     }
@@ -145,8 +150,10 @@ const AdministrationPage: React.FC = () => {
         const posData = {
             data:{
                 attributes:{
-                    name,
-                    email,
+                    user_phone_number: phone,
+                    user_email:email,
+                    user_last_name:last,
+                    user_name:name,
                     role_id:type
                 }
             }
@@ -196,8 +203,8 @@ const AdministrationPage: React.FC = () => {
                                     {errors.name && <span>This field is required</span>}
                                 </div>
                                 <div className="form-group col-12">
-                                    <input type="text" value={email} placeholder="User Email" 
-                                        onChange = {evt => setEmail(evt.target.value)}
+                                    <input type="text" value={last} placeholder="User Email" 
+                                        onChange = {evt => setLast(evt.target.value)}
                                     className="form-control" ref={register({ required: true })} />
                                     {errors.name && <span>This field is required</span>}
                                 </div>
@@ -208,8 +215,8 @@ const AdministrationPage: React.FC = () => {
                                     {errors.name && <span>This field is required</span>}
                                 </div>
                                 <div className="form-group col-12">
-                                    <input type="text" value={email} placeholder="User Email" 
-                                        onChange = {evt => setEmail(evt.target.value)}
+                                    <input type="text" value={phone} placeholder="User Email" 
+                                        onChange = {evt => setPhone(evt.target.value)}
                                     className="form-control" ref={register({ required: true })} />
                                     {errors.name && <span>This field is required</span>}
                                 </div>

@@ -41,7 +41,8 @@ const HistoryPage: React.FC = () => {
 
     
     const [next, setNext] = useState<string>('');
-    const [data, setData] = useState(datas)
+    const [data, setData] = useState(datas);
+    const [current, setCurrent] = useState<any>(null)
     const [prev, setPrev] = useState<string>('');
     const [usersData, setUsersData] = useState<any>([]);
     const [isLoad, setLoader] = useState(true);
@@ -68,8 +69,8 @@ const HistoryPage: React.FC = () => {
 
     }
 
-    const getAllUser = async (data:string='') => {
-        let url = "v1/users"
+    const getAllHistory = async (data:string='') => {
+        let url = "v1/history"
         if (data != '')
             url = substringURL(data)
 
@@ -81,7 +82,7 @@ const HistoryPage: React.FC = () => {
     }
 
     useEffect(() => {
-        //getAllUser();
+        getAllHistory();
         setLoader(false);
     }, [])
 
@@ -95,8 +96,9 @@ const HistoryPage: React.FC = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    function opendetail() {
+    function opendetail(res:any) {
         
+        setCurrent(res)
         handleShow();
     }
 
@@ -114,9 +116,10 @@ const HistoryPage: React.FC = () => {
                     <Modal.Title></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    {
+                        (current) ? 
+                        <div className="container-fluid">
 
-                    <div className="container-fluid">
-                    
                         <h4>Reciever</h4>
                         <div className="row px-10 px-2 py-2">
                             <div className="col-4" style={{ height: "150px", width: "150px" }}>
@@ -125,20 +128,20 @@ const HistoryPage: React.FC = () => {
 
                             <div className="col-4  mt-2">
                                 <p className="p-0 m-0 text-primary"><i className="fa fa-sort-numeric-down-alt text-primary"></i> User Code</p>
-                                <p className="text-uppercase font-weight-bold">IS2</p>
+                                <p className="text-uppercase font-weight-bold">{current.request.user.user_code}</p>
                                 <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
-                                <p className="text-uppercase font-weight-bold">Etamé Lauren</p>
+                                <p className="text-uppercase font-weight-bold">{current.request.user.user_name}</p>
                                 <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
-                                <p className="text-uppercase font-weight-bold"><img src="https://restcountries.eu/data/cmr.svg" className="user__avatar" alt="avatar" />CMR</p>
+                                <p className="text-uppercase font-weight-bold"><img src={current.request.user.country.flag} className="user__avatar" alt="avatar" />{current.request.user.country.name}</p>
                             </div>
 
                             <div className="col-4  mt-2">
                                 <p className="p-0 m-0 text-primary"><i className="fa fa-phone text-primary"></i> Phone number</p>
-                                <h5 className="text-uppercase font-weight-bold"> +233778946513</h5>
+                                <h5 className="text-uppercase font-weight-bold">{current.request.user.user_phone_number}</h5>
                                 <p className="pt-1 m-0 text-primary"><i className="fa fa-envelope-square text-primary"></i> Email</p>
                                 <p className="pt-0 text-uppercase font-weight-bold">-</p>
                                 <p className="p-0 m-0 text-primary"><i className="fa fa-wifi text-primary"></i> Provider </p>
-                                <p className="text-uppercase font-weight-bold">MTN</p>
+                                <p className="text-uppercase font-weight-bold">-</p>
                             </div>
                         </div>
 
@@ -148,26 +151,28 @@ const HistoryPage: React.FC = () => {
 
                                 <div className="col-6  mt-2">
                                     <p className="p-0 m-0 text-primary">Status</p>
-                                    <h5 className="text-uppercase font-weight-bold">COMPLETED</h5>
+                                    <h5 className="text-uppercase font-weight-bold">{current.request.status}</h5>
                                 </div>
                                 <div className="col-6  mt-2">
                                     <p className="p-0 m-0 text-primary">Amount</p>
-                                    <h5 className="text-uppercase font-weight-bold">789.645 XAF </h5>
+                                    <h5 className="text-uppercase font-weight-bold">{current.request.amount} {current.request.user.country.currency} </h5>
 
                                 </div>
                                 <div className="col-6  mt-2">
                                     <p className="p-0 m-0 text-primary">Date </p>
-                                    <h5 className="text-uppercase font-weight-bold">{ moment(new Date()).format("DD-MMM-YYYY HH:mm:ss")}</h5>
+                                    <h5 className="text-uppercase font-weight-bold">{ moment(current.request.created_at).format("DD-MMM-YYYY HH:mm:ss")}</h5>
                                 </div>
                                  <div className="col-6  mt-2">
-                                    <p className="p-0 m-0 text-primary">Transaction </p>
-                                    <h5 className="text-uppercase font-weight-bold">WL00012</h5>
+                                    <p className="p-0 m-0 text-primary">Wallet </p>
+                                    <h5 className="text-uppercase font-weight-bold">{current.wallet_id}</h5>
                                 </div>
                                 <div />
                             </div>
                         </div>
-                    </div>
+                    </div>: <div></div>
 
+                    }
+                    
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
@@ -213,20 +218,20 @@ const HistoryPage: React.FC = () => {
                     <th>Email</th>
                     <th>Montant</th>
                     <th>Currency</th>
-                    <th>Transaction</th>
+                    <th>Wallet</th>
                     <th>Satus</th>
                     <th>More</th>
                 </tr>
                 
-                {data.length > 0 && data.map((res: any,index: any) => {
+                {usersData.length > 0 && usersData.map((res: any,index: any) => {
                     return (<tr key={index}>
-                        <td>{res.name}</td>
-                        <td>{(res.email) ? res.email : '-'}</td>
-                        <td>{res.montant}</td>
-                        <td>{res.currency}</td>
-                        <td>{res.transaction}</td>
-                        <td>{res.status}</td>
-                        <td style={{ textAlign: "center" }} className="more__td" onClick={() => opendetail()}>
+                        <td>{res.agent.user_name}</td>
+                        <td>{(res.agent.user_email)}</td>
+                        <td>{res.request.amount}</td>
+                        <td>{res.request.user.country.currency}</td>
+                        <td>{res.wallet_id}</td>
+                        <td>{res.request.status}</td>
+                        <td style={{ textAlign: "center" }} className="more__td" onClick={() => opendetail(res)}>
                             <span className="dot"></span>
                             <span className="dot"></span>
                             <span className="dot"></span>
@@ -238,9 +243,9 @@ const HistoryPage: React.FC = () => {
              <div className="d-flex justify-content-center">
                 <nav aria-label="Page navigation example">
                   <ul className="pagination">
-                    <li className={down()} onClick={ () => getAllUser(prev)} ><a className="page-link" >Previous</a></li>
+                    <li className={down()} onClick={ () => getAllHistory(prev)} ><a className="page-link" >Previous</a></li>
                     
-                    <li className={up()} onClick={ () => getAllUser(next)}><a className="page-link" >Next</a></li>
+                    <li className={up()} onClick={ () => getAllHistory(next)}><a className="page-link" >Next</a></li>
                   </ul>
                 </nav>
             </div>

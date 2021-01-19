@@ -78,7 +78,7 @@ const UsersListPage: React.FC = () => {
         handleShow();
     }
 
-    const  approuve = async(res:any) => {
+    const  approveAction = async(res:any) => {
         setLoader(true);
         
 
@@ -89,6 +89,28 @@ const UsersListPage: React.FC = () => {
         }
 
         var response = await ApiService.postData("wallet/cash-out/approve", {cash_out_request_id:res.id},header);
+
+        if (response.success) {
+            
+            alert("Operation success");
+            setLoader(false);
+            getAllCashOut();
+        } else {
+            setLoader(false);
+            alert("Opertaion failed. Contact Admin");
+        }
+    }
+
+    const  validateAction = async(res:any) => {
+        setLoader(true);
+        
+        const header = {
+            "headers":{
+                "Authorization": `Bearer ${auth.token}`
+            }
+        }
+
+        var response = await ApiService.postData("wallet/cash-out/validate", {validation_id:res.validations[0].id},header);
 
         if (response.success) {
             
@@ -241,10 +263,16 @@ const UsersListPage: React.FC = () => {
                         <td>{res.user.country.currency}</td>
                         <td>{res.status}</td>
                         <td className="d-flex">
+                                    {
+                                        (res.status == "PENDING") ? 
+                                        <div className="form-group mr-1" onClick={() => approveAction(res)} >
+                                            <input type="submit" value="Approuved" className="btn btn-primary" />
+                                        </div> : (res.status == "APPROVED") ? 
+                                        <div className="form-group mr-1" onClick={() => validateAction(res)} >
+                                            <input type="submit" value="Treated" className="btn btn-danger" />
+                                        </div>  : <div></div>
+                                    }
                                     
-                                    <div className="form-group mr-1" onClick={() => updateAction("COMPLETED",res)} style={{display: (res.status != "PENDING") ? 'none' : 'block'}}>
-                                        <input type="submit" value="Accepter" className="btn btn-primary" />
-                                    </div>
                                     
                                    
                         </td>

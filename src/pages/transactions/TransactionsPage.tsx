@@ -162,25 +162,25 @@ const TrasactionPage: React.FC = () => {
                     <h4>Reciever</h4>
                         <div className="row">
                             <div className="col-4" style={{ height: "150px", width: "150px" }}>
-                                <img src={currentTransaction.sender?.user_avatar} style={{ height: "150px", width: "150px" }} />
+                                <img src={currentTransaction.requester?.user_avatar} style={{ height: "150px", width: "150px" }} />
                             </div>
 
                             <div className="col-4  mt-2">
                                 <p className="p-0 m-0 text-primary"><i className="fa fa-sort-numeric-down-alt text-primary"></i> User Code</p>
-                                <p className="text-uppercase font-weight-bold"> {currentTransaction.sender?.user_code}</p>
+                                <p className="text-uppercase font-weight-bold"> {currentTransaction.requester?.user_code}</p>
                                 <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
-                                <p className="text-uppercase font-weight-bold">{currentTransaction.sender?.user_name} {currentTransaction.sender?.['user_last_name']}</p>
+                                <p className="text-uppercase font-weight-bold">{currentTransaction.requester?.user_name} {currentTransaction.requester?.['user_last_name']}</p>
                                 <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
-                                <p className="text-uppercase font-weight-bold">{currentTransaction.sender?.country.name}<img src={currentTransaction.sender?.country.flag} className="user__avatar" alt="avatar" /> </p>
+                                <p className="text-uppercase font-weight-bold">{currentTransaction.requester?.country.name}<img src={currentTransaction.requester?.country.flag} className="user__avatar" alt="avatar" /> </p>
                             </div>
 
                             <div className="col-4  mt-2">
                                 <p className="p-0 m-0 text-primary"><i className="fa fa-phone text-primary"></i> Phone number</p>
-                                <h5 className="text-uppercase font-weight-bold"> {currentTransaction.sender?.user_phone_number}</h5>
+                                <h5 className="text-uppercase font-weight-bold"> {currentTransaction.requester?.user_phone_number}</h5>
                                 <p className="pt-1 m-0 text-primary"><i className="fa fa-envelope-square text-primary"></i> Email</p>
-                                <p className="pt-0 text-uppercase font-weight-bold">{currentTransaction.sender?.user_email}</p>
+                                <p className="pt-0 text-uppercase font-weight-bold">{currentTransaction.requester?.user_email}</p>
                                 <p className="p-0 m-0 text-primary"><i className="fa fa-wifi text-primary"></i> Provider </p>
-                                <p className="text-uppercase font-weight-bold">{currentTransaction.sender?.provider_name}</p>
+                                <p className="text-uppercase font-weight-bold">{currentTransaction.requester?.provider_name}</p>
                             </div>
                         </div>
                         <hr />
@@ -215,11 +215,14 @@ const TrasactionPage: React.FC = () => {
 
                                 <div className="col-6  mt-2">
                                     <p className="p-0 m-0 text-primary">Status</p>
-                                    <h5 className="text-uppercase font-weight-bold"> {currentTransaction?.movement_type}</h5>
+                                    <h5 className="text-uppercase font-weight-bold"> {currentTransaction?.status}</h5>
                                 </div>
                                 <div className="col-6  mt-2">
-                                    <p className="p-0 m-0 text-primary">Amount</p>
-                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.balance} {currentTransaction?.currency} </h5>
+                                    <p className="p-0 m-0 text-primary"> From Amount</p>
+                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.from_amount_} {currentTransaction.requester?.country.currency} </h5>
+
+                                    <p className="p-0 m-0 text-primary"> To Amount</p>
+                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.to_amount} {currentTransaction.receiver?.country.currency} </h5>
 
                                 </div>
                                 <div className="col-6  mt-2">
@@ -391,7 +394,6 @@ const TrasactionPage: React.FC = () => {
                 <nav aria-label="Page navigation example">
                   <ul className="pagination">
                     <li className="page-item"><a className="page-link" href="#">Previous</a></li>
-                    
                     <li className="page-item"><a className="page-link" href="#">Next</a></li>
                   </ul>
                 </nav>
