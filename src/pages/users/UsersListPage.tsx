@@ -55,7 +55,7 @@ const UsersListPage: React.FC = () => {
                     <th>Avatar</th>
                     <th>Name</th>
                     <th>Phone number</th>
-                    <th>Email</th>
+                    <th>Code</th>
                     <th>Provider</th>
                     <th>More</th>
                 </tr>
@@ -69,7 +69,7 @@ const UsersListPage: React.FC = () => {
                          </td>
                         <td>{res.attributes.user_name}</td>
                         <td>{res.attributes.user_phone_number}</td>
-                        <td>{(res.attributes.user_email) ? res.attributes.user_email : '-'}</td>
+                        <td>{res.attributes.user_code}</td>
                         <td>{res.attributes.provider_name}</td>
                         <td style={{ textAlign: "center" }} className="more__td" onClick={() => getUserDetail(res)}>
                             <span className="dot"></span>

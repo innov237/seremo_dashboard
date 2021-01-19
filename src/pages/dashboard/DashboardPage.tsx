@@ -153,7 +153,8 @@ const DashBoardPage: React.FC = (props) => {
                         </div>
                         <div className="card-body" >
                             <p><i className="fa fa-calendar-minus" style={{ color: "green" }}></i> From {dateData[0]} to {dateData[dateData.length - 1]}</p>
-                            <p><i className="fa fa-wallet" style={{ color: "blue" }}></i> Tansfer amount:  {amount} XAF</p>
+                            <p><i className="fa fa-wallet" style={{ color: "blue" }}></i> Tansfer amount:  <strong>{amount} XAF</strong></p>
+                            <p><i className="fa fa-wallet" style={{ color: "blue" }}></i> Seremo amount:  <strong>{amount*3.8} XAF</strong></p>
                         </div>
                     </div>
                 </div>
