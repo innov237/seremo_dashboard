@@ -4,11 +4,14 @@ import './Dashboard.css';
 import { Bar, Line, } from "react-chartjs-2";
 import ApiService from '../../services/ApiService';
 
+import {useSelector} from 'react-redux'
+
 const DashBoardPage: React.FC = (props) => {
 
     const [dateData, setDate] = useState<any>([]);
     const [lengthtransferData, setLengthTransferData] = useState<any>([]);
     const [amount, setamount] = useState(0);
+    const [seremoAmount, setSeromoAmount] = useState({balance:0 , currency: ''});
     const [isLoard, setLoarder] = useState(true);
 
     const [customer, setCustomer] = useState({users:0 , admins:0})
@@ -16,8 +19,22 @@ const DashBoardPage: React.FC = (props) => {
     useEffect(() => {
         getStatData();
         customerCount();
+        seremoBalance()
     }, []);
 
+    const auth = useSelector((state:any) => state.auth)
+
+    const seremoBalance = async() => {
+         const header = {
+            "headers":{
+                "Authorization": `Bearer ${auth.token}`
+            }
+        }
+        var response = await ApiService.postData("wallet/seremo-balance", null, header);
+
+        if (response.success)
+            setSeromoAmount(response.data)
+    }    
     const customerCount = async () => {
         var response = await ApiService.getData("v1/customers");
 
@@ -32,9 +49,8 @@ const DashBoardPage: React.FC = (props) => {
             var amount: any = 0;
 
             
-
             response.forEach((element: any) => {
-                console.log(element.date);
+                
                 data.push(element.length);
                 nombre.push(element.date);
                 amount = amount + element.sum;
@@ -153,7 +169,7 @@ const DashBoardPage: React.FC = (props) => {
                         <div className="card-body" >
                             <p><i className="fa fa-calendar-minus" style={{ color: "green" }}></i> From {dateData[0]} to {dateData[dateData.length - 1]}</p>
                             <p><i className="fa fa-wallet" style={{ color: "blue" }}></i> Tansfer amount:  <strong>{amount} XAF</strong></p>
-                            <p><i className="fa fa-wallet" style={{ color: "blue" }}></i> Seremo amount:  <strong>{amount*3.8} XAF</strong></p>
+                            <p><i className="fa fa-wallet" style={{ color: "blue" }}></i> Seremo amount:  <strong>{seremoAmount.balance} {seremoAmount.currency}</strong></p>
                         </div>
                     </div>
                 </div>

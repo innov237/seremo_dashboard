@@ -72,9 +72,14 @@ const HomePage: React.FC = () => {
     async function search(value: any) {
         setLoader(true);
         var res = await ApiService.getData("dashboard/getTransferByCode/" + value);
-        console.log(res);
-        getAllTransfer(res);
-        history.push("/admin/transactions", res);
+        if (res.length){
+           getAllTransfer(res);
+           history.push("/admin/transactions", res);
+        }else
+
+            alert("No transaction found with code:"+value);
+        
+        
         setLoader(false);
     }
 

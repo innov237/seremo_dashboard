@@ -56,7 +56,8 @@ const UsersListPage: React.FC = () => {
                     <th>Name</th>
                     <th>Phone number</th>
                     <th>Code</th>
-                    <th>Provider</th>
+                    <th>Balance</th>
+                    <th>Currency</th>
                     <th>More</th>
                 </tr>
                 
@@ -70,7 +71,8 @@ const UsersListPage: React.FC = () => {
                         <td>{res.attributes.user_name}</td>
                         <td>{res.attributes.user_phone_number}</td>
                         <td>{res.attributes.user_code}</td>
-                        <td>{res.attributes.provider_name}</td>
+                        <td>{res.attributes.balance}</td>
+                        <td>{res.attributes.country.currency}</td>
                         <td style={{ textAlign: "center" }} className="more__td" onClick={() => getUserDetail(res)}>
                             <span className="dot"></span>
                             <span className="dot"></span>
