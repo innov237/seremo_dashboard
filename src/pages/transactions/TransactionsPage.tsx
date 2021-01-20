@@ -36,8 +36,8 @@ const TrasactionPage: React.FC = () => {
     const [activeItem, setActiveItem] = useState('Request');
     const [csvData, getCSVData] = useState<any[]>([]);
 
-    const [next, setNext] = useState<any[]>([]);
-    const [prev, setPrev] = useState<any[]>([]);
+    const [next, setNext] = useState('');
+    const [prev, setPrev] = useState('');
     const [show, setShow] = useState(false);
     const [status, setStatus] = useState('All');
     const handleClose = () => setShow(false);
@@ -51,6 +51,10 @@ const TrasactionPage: React.FC = () => {
 
     }, [])
 
+    const substringURL = (url:string) => {
+        const rootURL = `${process.env.REACT_APP_API_URL}/api`
+        return url.substring(rootURL.length, url.length);
+    }
 
     const getAllMovement = async () => {
 
@@ -86,12 +90,25 @@ const TrasactionPage: React.FC = () => {
             _filterRequest(filter)
     };
 
+    const paginate = (url:string) => {
+        console.log(url)
+
+        if ( 'Transfer' == activeItem)
+            getAllTransferFcPaginate(url)
+        else
+
+            getAllRequestFcPaginate(url)
+    }    
+
     const getAllTransferFc = async (param:any | null = null) => {
         getAllMovement();
         setLoader(true);
         getAllTransfer([]);
-        const url =  (param != null) ? `v1/transactions?type=${param}` : `v1/transactions`;
 
+
+        let url =  (param != null) ? `v1/transactions?type=${param}` : `v1/transactions`;
+        
+       
         setActiveItem('Transfer');
 
         var response = await ApiService.getData(url);
@@ -100,8 +117,8 @@ const TrasactionPage: React.FC = () => {
         formatDataToCsv(response.data);
         setLoader(false);
 
-        setNext(response.first_page_url);
-        setPrev(response.first_page_url);
+        setNext(response.next_page_url);
+        setPrev(response.prev_page_url);
     };
 
 
@@ -116,6 +133,48 @@ const TrasactionPage: React.FC = () => {
 
         getAllTransfer(response.data);
         formatDataToCsv(response.data);
+
+        setNext(response.next_page_url);
+        setPrev(response.prev_page_url);
+
+        setLoader(false);
+    };
+
+    const getAllTransferFcPaginate = async (param:string) => {
+        getAllMovement();
+        setLoader(true);
+        getAllTransfer([]);
+
+        let url = substringURL(param)
+
+        var response = await ApiService.getData(url);
+
+        getAllTransfer(response.data);
+        formatDataToCsv(response.data);
+        
+
+        setNext(response.next_page_url);
+        setPrev(response.prev_page_url);
+
+        setLoader(false);
+    };
+
+
+    const getAllRequestFcPaginate = async (param:string) => {
+        setLoader(true);
+        getAllTransfer([]);
+        setMovement(statusRequest)
+        
+        let url = substringURL(param);
+
+        var response = await ApiService.getData(url);
+        
+        getAllTransfer(response.data);
+        formatDataToCsv(response.data);
+
+        setNext(response.next_page_url);
+        setPrev(response.prev_page_url);
+
         setLoader(false);
     };
 
@@ -248,6 +307,9 @@ const TrasactionPage: React.FC = () => {
         getCurrentTransaction(data);
         handleShow();
     }
+
+    const up = () => `page-item ${(next) ? '' : 'disabled'}`;
+    const down = () => `page-item ${(prev) ? '' : 'disabled'}`;
 
 
     const tabItem = (res:any, type:string='Transfert') => {
@@ -393,8 +455,9 @@ const TrasactionPage: React.FC = () => {
             <div className="d-flex justify-content-center">
                 <nav aria-label="Page navigation example">
                   <ul className="pagination">
-                    <li className="page-item"><a className="page-link" href="#">Previous</a></li>
-                    <li className="page-item"><a className="page-link" href="#">Next</a></li>
+                    <li className={down()} onClick={ () => paginate(prev)} ><a className="page-link" >Previous</a></li>
+                    
+                    <li className={up()} onClick={ () => paginate(next)}><a className="page-link" >Next</a></li>
                   </ul>
                 </nav>
             </div>

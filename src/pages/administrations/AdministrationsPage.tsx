@@ -47,7 +47,7 @@ const AdministrationPage: React.FC = () => {
     }, []);
 
     function edit(res: any) {
-        console.log(res)
+        
         setName(res.attributes.user_name);
         setEmail(res.attributes.user_email);
         setLast(res.attributes.user_last_name);
@@ -63,13 +63,16 @@ const AdministrationPage: React.FC = () => {
     }
 
     const getAllAdmin = async (data:string='') => {
-
+        setLoader(true);
         let url = "v1/admins"
         if (data != '')
             url = substringURL(data)
 
         var response = await ApiService.getData("v1/admins");
         setUserData(response.data);
+        setNext(response.links.next);
+        setPrev(response.links.prev);
+        setLoader(false);
     }
 
     const getAllRoles = async () => {

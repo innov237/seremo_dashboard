@@ -1,11 +1,8 @@
 
 import './Home.css';
-import axios from 'axios';
-import React, { useState, useEffect } from 'react'
-import { CSVLink, CSVDownload } from "react-csv";
+import React, { useState } from 'react'
 import { Redirect, useHistory } from 'react-router-dom';
 import {
-    BrowserRouter as Router,
     Switch,
     Route,
     Link
@@ -71,17 +68,7 @@ const HomePage: React.FC = () => {
         setLoader(false);
     };
 
-    function filterByStatus(value: any) {
-        const filterData = transferData.filter(elt => elt.status.toLowerCase() === value.toLowerCase());
-        if (filterData != null) {
-            getAllTransfer(filterData);
-            formatDataToCsv(filterData);
-        } else {
-            getAllTransfer([]);
-        }
-
-    }
-
+    
     async function search(value: any) {
         setLoader(true);
         var res = await ApiService.getData("dashboard/getTransferByCode/" + value);

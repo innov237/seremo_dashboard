@@ -8,40 +8,11 @@ import ApiService from '../../services/ApiService';
 
 import moment from 'moment'
 
-const datas = [
-    {
-        avatar: '',
-        name: 'Carlos Kameni',
-        email: 'agent@seramo.cm',
-        transaction:'WL00001',
-        montant:'123.456',
-        currency:'XAF',
-        status:'PENDING',
-    },
-    {
-        avatar: '',
-        name: 'Bell Antoine',
-        email: 'agent1@seramo.cm',
-        transaction:'WL000010',
-        montant:'13.456.548',
-        currency:'$',
-        status:'COMPLETED',
-    },
-    {
-        avatar: '',
-        name: 'Tataw',
-        email: 'agent5@seramo.cm',
-        transaction:'WL000011', 
-        currency:'$',       
-        montant:'1.456',
-        status:'PENDING',
-    },
-]
 const HistoryPage: React.FC = () => {
 
     
     const [next, setNext] = useState<string>('');
-    const [data, setData] = useState(datas);
+   
     const [current, setCurrent] = useState<any>(null)
     const [prev, setPrev] = useState<string>('');
     const [usersData, setUsersData] = useState<any>([]);
@@ -55,20 +26,7 @@ const HistoryPage: React.FC = () => {
         return url.substring(rootURL.length, url.length);
     }
 
-    const updateAction = (action:string, user:any) => {
-        
-        const newData = data.map(e => {
-
-            if (e.name == user.name)
-                return Object.assign(e, {status:action})
-            else
-                return e
-        })
-
-        setData(newData)
-
-    }
-
+    
     const getAllHistory = async (data:string='') => {
         let url = "v1/history"
         if (data != '')
@@ -76,8 +34,8 @@ const HistoryPage: React.FC = () => {
 
         var response = await ApiService.getData(url);
         setUsersData(response.data);
-        setNext(response.next);
-        setPrev(response.prev)
+        setNext(response.next_page_url);
+        setPrev(response.prev_page_url)
         setLoader(false);
     }
 

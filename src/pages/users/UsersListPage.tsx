@@ -25,8 +25,8 @@ const UsersListPage: React.FC = () => {
 
         var response = await ApiService.getData(url);
         setUsersData(response.data);
-        setNext(response.next);
-        setPrev(response.prev)
+        setNext(response.links.next);
+        setPrev(response.links.prev)
         setLoader(false);
     }
 

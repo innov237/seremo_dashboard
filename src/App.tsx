@@ -4,10 +4,8 @@ import React, {
 } from 'react';
 
 import {
-  BrowserRouter as Routers,
   Switch,
   Route,
-  Redirect,
   Router
 } from "react-router-dom";
 
@@ -42,7 +40,6 @@ import {
 
 const App: React.FC = () => {
 
-  const [data, setData] = React.useState(null);
   useEffect(() => {
     refreshToken()
   })

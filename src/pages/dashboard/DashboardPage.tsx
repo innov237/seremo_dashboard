@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Dashboard.css';
 import { Bar, Line, } from "react-chartjs-2";
-import { getHeapStatistics } from 'v8';
 import ApiService from '../../services/ApiService';
 
 const DashBoardPage: React.FC = (props) => {

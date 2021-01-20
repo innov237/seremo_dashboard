@@ -12,10 +12,10 @@ const UsersListPage: React.FC = () => {
 
     
     const [next, setNext] = useState<string>('');
+    const [prev, setPrev] = useState<string>('');
 
     const [res, setRes] = useState<any>(null);
-    const [data, setData] = useState([])
-    const [prev, setPrev] = useState<string>('');
+    const [data, setData] = useState([]);
     const [usersData, setUsersData] = useState<any>([]);
     const [show, setShow] = useState(false);
     const [isLoad, setLoader] = useState(true);
@@ -28,11 +28,7 @@ const UsersListPage: React.FC = () => {
         return url.substring(rootURL.length, url.length);
     }
 
-    const updateAction = (action:string, user:any) => {
-        
-
-
-    }
+   
 
     const getAllCashOut = async (data:string='') => {
         let url = "wallet/cash-out/list"
