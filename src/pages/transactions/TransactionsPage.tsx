@@ -202,22 +202,87 @@ const TrasactionPage: React.FC = () => {
     }
 
 
-    function getModalDetail() {
+    const transfertModal = (currentTransaction:any) => {
         return (
-            <Modal
-                show={show}
-                onHide={handleClose}
-                backdrop="static"
-                keyboard={false}
-                className="full-width-modal"
+        <div className="container-fluid">
+        <h4>Reciever</h4>
+            <div className="row">
+                <div className="col-4" style={{ height: "150px", width: "150px" }}>
+                    <img src={currentTransaction.sender?.user_avatar} style={{ height: "150px", width: "150px" }} />
+                </div>
 
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title></Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+                <div className="col-4  mt-2">
+                    <p className="p-0 m-0 text-primary"><i className="fa fa-sort-numeric-down-alt text-primary"></i> User Code</p>
+                    <p className="text-uppercase font-weight-bold"> {currentTransaction.sender.user_code}</p>
+                    <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
+                    <p className="text-uppercase font-weight-bold">{currentTransaction.sender.user_name} {currentTransaction.sender['user_last_name']}</p>
+                    <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
+                    <p className="text-uppercase font-weight-bold">{currentTransaction.sender.country.name}<img src={currentTransaction.sender.country.flag} className="user__avatar" alt="avatar" /> </p>
+                </div>
 
-                    {(currentTransaction !== null) && <div className="container-fluid">
+                <div className="col-4  mt-2">
+                    <p className="p-0 m-0 text-primary"><i className="fa fa-phone text-primary"></i> Phone number</p>
+                    <h5 className="text-uppercase font-weight-bold"> {currentTransaction.sender?.user_phone_number}</h5>
+                    <p className="pt-1 m-0 text-primary"><i className="fa fa-envelope-square text-primary"></i> Email</p>
+                    <p className="pt-0 text-uppercase font-weight-bold">{currentTransaction.sender?.user_email}</p>
+                    <p className="p-0 m-0 text-primary"><i className="fa fa-wifi text-primary"></i> Provider </p>
+                    <p className="text-uppercase font-weight-bold">{currentTransaction.sender?.provider_name}</p>
+                </div>
+            </div>
+            <hr />
+            <h4>Sender</h4>
+            <div className="row px-10 px-2 py-2">
+                <div className="col-4" style={{ height: "150px", width: "150px" }}>
+                    <img src={currentTransaction.receiver?.user_avatar} style={{ height: "150px", width: "150px" }} />
+                </div>
+
+                <div className="col-4  mt-2">
+                    <p className="p-0 m-0 text-primary"><i className="fa fa-sort-numeric-down-alt text-primary"></i> User Code</p>
+                    <p className="text-uppercase font-weight-bold"> {currentTransaction.receiver?.user_code}</p>
+                    <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
+                    <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.user_name} {currentTransaction.receiver?.['user_last_name']}</p>
+                    <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
+                    <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.country.name}<img src={currentTransaction.receiver?.country.flag} className="user__avatar" alt="avatar" /> </p>
+                </div>
+
+                <div className="col-4  mt-2">
+                    <p className="p-0 m-0 text-primary"><i className="fa fa-phone text-primary"></i> Phone number</p>
+                    <h5 className="text-uppercase font-weight-bold"> {currentTransaction.receiver?.user_phone_number}</h5>
+                    <p className="pt-1 m-0 text-primary"><i className="fa fa-envelope-square text-primary"></i> Email</p>
+                    <p className="pt-0 text-uppercase font-weight-bold">{currentTransaction.receiver?.user_email}</p>
+                    <p className="p-0 m-0 text-primary"><i className="fa fa-wifi text-primary"></i> Provider </p>
+                    <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.provider_name}</p>
+                </div>
+            </div>
+
+       
+            <div className="card px-2 py-2 mb-3">
+                <div className="row px-10 px-2 py-2">
+
+                    <div className="col-6  mt-2">
+                        <p className="p-0 m-0 text-primary">Transaction</p>
+                        <h5 className="text-uppercase font-weight-bold"> {currentTransaction.transaction_id}</h5>
+                    </div>
+                    <div className="col-6  mt-2">
+                        <p className="p-0 m-0 text-primary">Amount</p>
+                        <h5 className="text-uppercase font-weight-bold">{currentTransaction?.from_amount_} {currentTransaction.balance} </h5>
+
+                        <p className="p-0 m-0 text-primary">Currency</p>
+                        <h5 className="text-uppercase font-weight-bold">{currentTransaction?.to_amount} {currentTransaction.currency} </h5>
+
+                    </div>
+                    <div className="col-6  mt-2">
+                        <p className="p-0 m-0 text-primary">Date </p>
+                        <h5 className="text-uppercase font-weight-bold">{ moment(currentTransaction?.created_at).format("DD-MMM-YYYY HH:mm:ss")}</h5>
+                    </div>
+                    <div />
+                </div>
+            </div>
+        </div>)
+    }
+    const requestModal = (currentTransaction:any) => {
+        return (
+            <div className="container-fluid">
                     <h4>Reciever</h4>
                         <div className="row">
                             <div className="col-4" style={{ height: "150px", width: "150px" }}>
@@ -278,7 +343,7 @@ const TrasactionPage: React.FC = () => {
                                 </div>
                                 <div className="col-6  mt-2">
                                     <p className="p-0 m-0 text-primary"> From Amount</p>
-                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.from_amount_} {currentTransaction.requester?.country.currency} </h5>
+                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.from_amount} {currentTransaction.requester?.country.currency} </h5>
 
                                     <p className="p-0 m-0 text-primary"> To Amount</p>
                                     <h5 className="text-uppercase font-weight-bold">{currentTransaction?.to_amount} {currentTransaction.receiver?.country.currency} </h5>
@@ -291,7 +356,27 @@ const TrasactionPage: React.FC = () => {
                                 <div />
                             </div>
                         </div>
-                    </div>}
+                    </div>
+        )
+    }
+
+    function getModalDetail() {
+        return (
+            <Modal
+                show={show}
+                onHide={handleClose}
+                backdrop="static"
+                keyboard={false}
+                className="full-width-modal"
+
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title></Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+
+                    {(currentTransaction !== null) ? (activeItem == 'Transfer') ? transfertModal(currentTransaction) : requestModal(currentTransaction) :<></> 
+                    }
 
                 </Modal.Body>
                 <Modal.Footer>
@@ -311,7 +396,7 @@ const TrasactionPage: React.FC = () => {
     const up = () => `page-item ${(next) ? '' : 'disabled'}`;
     const down = () => `page-item ${(prev) ? '' : 'disabled'}`;
 
-
+ 
     const tabItem = (res:any, type:string='Transfert') => {
         if ('Transfert' === type )
             return <tr key={res.id}>

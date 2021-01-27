@@ -77,7 +77,7 @@ const HomePage: React.FC = () => {
            history.push("/admin/transactions", res);
         }else
 
-            alert("No transaction found with code:"+value);
+            alert("No transfert found with code:"+value);
         
         
         setLoader(false);
