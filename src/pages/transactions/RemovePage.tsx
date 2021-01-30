@@ -209,13 +209,13 @@ const UsersListPage: React.FC = () => {
                     
                         <div className="form-group col-md-12">
                             
-                            <select id="inputState"  className="form-control" >
+                            {/*<select id="inputState"  className="form-control" >
                                 <option value="All">All</option>
                                 <option value="All">All</option>
                                 <option value="All">All</option>
                                 <option value="All">All</option>
                                 <option value="All">All</option>
-                            </select>
+    </select>*/}
                         </div>
                        
                     </div>
@@ -244,7 +244,7 @@ const UsersListPage: React.FC = () => {
 
                 </tr>
                 
-                {data.length > 0 && data.map((res: any,index: any) => {
+                {data.length > 0 && data.map((res: any, index: any) => {
                     return (<tr key={index}>
                         <td>
                             <div><img src={res.user.user_avatar} className="user__avatar" alt="avatar" /> <span>{res.user.user_name}</span></div>
