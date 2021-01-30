@@ -138,7 +138,7 @@ const HomePage: React.FC = () => {
                     <li className={location.pathname == '/admin/retrait' ? "active" : ""}><i className="fa fa-money-check"></i> <Link to="/admin/retrait">Withdrawal request
 </Link></li>
                     <li className={location.pathname == '/admin/history' ? "active" : ""}><i className="fa fa-history"></i> <Link to="/admin/history">Historical</Link></li>
-                    <li className={location.pathname == '/login' ? "mt-5 active" : "mt-5"}><i className="fa fa-sign-out-alt"></i> <Link to="/login" onClick={ () => dispatch(ACTION_LOGOUT())}>Log out</Link></li>
+                    <li className={location.pathname == '/login' ? "mt-5 active" : "mt-5"}><i className="fa fa-sign-out-alt"></i> <Link to="/login" onClick={ () => history.push('/login')}>Log out</Link></li>
                 </div>
                 <div className="col-md-10 main__row">
                     <Switch>
