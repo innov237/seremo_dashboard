@@ -157,7 +157,7 @@ const HistoryPage: React.FC = () => {
                     <div className="row">
                         <div className="form-group col-md-12">
                             
-                            <select id="inputState"  className="form-control" onChange={(e) => console.log(e.targe.value)} >
+                            <select id="inputState"  className="form-control" onChange={(e:any) => console.log(e.targe.value)} >
                                 <option value="All">All</option>
                                 <option value="TREATED">TREATED</option>
                                 <option value="APPROVED">APPROVED</option>

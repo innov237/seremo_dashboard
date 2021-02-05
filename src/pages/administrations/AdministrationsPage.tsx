@@ -202,7 +202,7 @@ const AdministrationPage: React.FC = () => {
                         <div className="form" >
                             <div className="form-row pt-3 p-2">
                                 <div className="form-group col-12">
-                                    <input type="text" value={name} placeholder="User Name" onChange = {evt => setName(evt.target.value)} className="form-control" ref={register({ required: true })} />
+                                    <input type="text" value={name} placeholder="User Name" onChange = {(evt:any) => setName(evt.target.value)} className="form-control" ref={register({ required: true })} />
                                     {errors.name && <span>This field is required</span>}
                                 </div>
                                 <div className="form-group col-12">
@@ -330,7 +330,7 @@ const AdministrationPage: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {userData.map((res: any) => {
+                         {userData.map((res: any) => {
                             const statuts = (res.attributes.account_status == 'actived') ? 'Unactived' : 'Actived'
                             
 
