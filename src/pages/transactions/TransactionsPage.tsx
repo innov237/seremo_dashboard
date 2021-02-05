@@ -540,9 +540,9 @@ const TrasactionPage: React.FC = () => {
             <div className="d-flex justify-content-center">
                 <nav aria-label="Page navigation example">
                   <ul className="pagination">
-                    <li className={down()} onClick={ () => paginate(prev)} ><a className="page-link" >Previous</a></li>
+                    <li className={down()} onClick={ () => (prev) ? paginate(prev): ''} ><a className="page-link" >Previous</a></li>
                     
-                    <li className={up()} onClick={ () => paginate(next)}><a className="page-link" >Next</a></li>
+                    <li className={up()} onClick={ () => (next) ? paginate(next) : ''}><a className="page-link" >Next</a></li>
                   </ul>
                 </nav>
             </div>

@@ -8,7 +8,7 @@ import {
   const initializeState: any = {
     user: {},
     token: null,
-    isAuthentificated: true,
+    isAuthentificated: false,
     linkToRedirect: null,
     pageHasbeRefresh: false
   };

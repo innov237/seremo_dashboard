@@ -284,9 +284,9 @@ const UsersListPage: React.FC = () => {
              <div className="d-flex justify-content-center">
                 <nav aria-label="Page navigation example">
                   <ul className="pagination">
-                    <li className={down()} onClick={ () => getAllCashOut(prev)} ><a className="page-link" >Previous</a></li>
+                    <li className={down()} onClick={ () =>  (prev) ? getAllCashOut(prev) : ''} ><a className="page-link" >Previous</a></li>
                     
-                    <li className={up()} onClick={ () => getAllCashOut(next)}><a className="page-link" >Next</a></li>
+                    <li className={up()} onClick={ () => (next) ? getAllCashOut(next) : ''}><a className="page-link" >Next</a></li>
                   </ul>
                 </nav>
             </div>

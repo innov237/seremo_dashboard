@@ -157,7 +157,7 @@ const HistoryPage: React.FC = () => {
                     <div className="row">
                         <div className="form-group col-md-12">
                             
-                            <select id="inputState"  className="form-control" onChange={(e) => console.log(e.targe.value)} >
+                            <select id="inputState"  className="form-control" onChange={(e) => console.log(e.target.value)} >
                                 <option value="All">All</option>
                                 <option value="TREATED">TREATED</option>
                                 <option value="APPROVED">APPROVED</option>
@@ -200,9 +200,9 @@ const HistoryPage: React.FC = () => {
              <div className="d-flex justify-content-center">
                 <nav aria-label="Page navigation example">
                   <ul className="pagination">
-                    <li className={down()} onClick={ () => getAllHistory(prev)} ><a className="page-link" >Previous</a></li>
+                    <li className={down()} onClick={ () => (prev) ? getAllHistory(prev): ''} ><a className="page-link" >Previous</a></li>
                     
-                    <li className={up()} onClick={ () => getAllHistory(next)}><a className="page-link" >Next</a></li>
+                    <li className={up()} onClick={ () =>  (next) ? getAllHistory(next) : ''}><a className="page-link" >Next</a></li>
                   </ul>
                 </nav>
             </div>

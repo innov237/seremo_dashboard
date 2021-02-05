@@ -91,8 +91,8 @@ const App: React.FC = () => {
              <Switch>
                
                 <Route path="/admin" component={ProtectedRoute(HomePage)} />
-                <Route path="/login" component={ProtectedRoute(LoginPage)} />
-                <Route path="/" component={ProtectedRoute(LoginPage)} />  
+                <Route path="/login" component={LoginPage} />
+                <Route path="/" component={LoginPage} />  
              </Switch> 
                :
 

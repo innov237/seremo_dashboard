@@ -15,6 +15,7 @@ const UsersListPage: React.FC = () => {
 
     const substringURL = (url:string) => {
         const rootURL = `${process.env.REACT_APP_API_URL}/api`
+        console.log(rootURL,url)
         return url.substring(rootURL.length, url.length);
     }
 
@@ -85,9 +86,9 @@ const UsersListPage: React.FC = () => {
              <div className="d-flex justify-content-center">
                 <nav aria-label="Page navigation example">
                   <ul className="pagination">
-                    <li className={down()} onClick={ () => getAllUser(prev)} ><a className="page-link" >Previous</a></li>
+                    <li className={down()} onClick={ () => (prev) ? getAllUser(prev) : ''} ><a className="page-link" >Previous</a></li>
                     
-                    <li className={up()} onClick={ () => getAllUser(next)}><a className="page-link" >Next</a></li>
+                    <li className={up()} onClick={ () => (next) ? getAllUser(next) : ''}><a className="page-link" >Next</a></li>
                   </ul>
                 </nav>
             </div>

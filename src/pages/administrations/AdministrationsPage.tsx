@@ -358,9 +358,9 @@ const AdministrationPage: React.FC = () => {
              <div className="d-flex justify-content-center">
                 <nav aria-label="Page navigation example">
                   <ul className="pagination">
-                    <li className={down()} onClick={ () => getAllAdmin(prev)} ><a className="page-link" >Previous</a></li>
+                    <li className={down()} onClick={ () => (prev) ? getAllAdmin(prev) : ''} ><a className="page-link" >Previous</a></li>
                     
-                    <li className={up()} onClick={ () => getAllAdmin(next)}><a className="page-link" >Next</a></li>
+                    <li className={up()} onClick={ () => (next) ? getAllAdmin(next) : ''}><a className="page-link" >Next</a></li>
                   </ul>
                 </nav>
             </div>
