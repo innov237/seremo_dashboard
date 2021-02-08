@@ -15,7 +15,7 @@ const HistoryPage: React.FC = () => {
    
     const [current, setCurrent] = useState<any>(null)
     const [prev, setPrev] = useState<string>('');
-    const [usersData, setUsersData] = useState<any>([]);
+    const [usersData, setUsersData] = useState([]);
     const [isLoad, setLoader] = useState(true);
     const [show, setShow] = useState(false);
     const history = useHistory();
@@ -33,10 +33,12 @@ const HistoryPage: React.FC = () => {
             url = substringURL(data)
 
         var response = await ApiService.getData(url);
+
         setUsersData(response.data);
         setNext(response.next_page_url);
         setPrev(response.prev_page_url)
         setLoader(false);
+        
     }
 
     useEffect(() => {
@@ -180,7 +182,7 @@ const HistoryPage: React.FC = () => {
                     <th>More</th>
                 </tr>
                 
-                {usersData.length > 0 && usersData.map((res: any,index: any) => {
+                {usersData && usersData.map((res: any,index: any) => {
                     return (<tr key={index}>
                         <td>{res.agent.user_name}</td>
                         <td>{(res.agent.user_email)}</td>

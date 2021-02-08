@@ -34,8 +34,6 @@ export default function(ComposedComponent:any): any {
             
             this.updateTile(history.location.pathname)
 
-            console.log(history.location.pathname)
-
             if (!user.isAuthentificated && user.pageHasbeRefresh && history.location.pathname !== '/login')
                 history.push('/login')
              
@@ -49,20 +47,9 @@ export default function(ComposedComponent:any): any {
             const props:any = this.props
             const {user} = props;
 
-            console.log(this.historyPage)
-
-            console.log(user.isAuthentificated)
-
-            if (user.isAuthentificated)
-                return (
-                    <ComposedComponent {...this.props} />
-                )
-            
-            
-            else 
-                return (
-                    <></>
-                )
+            {    return (user.isAuthentificated) ? <ComposedComponent {...this.props} /> : <></>
+                            
+           }
         }
     }
 

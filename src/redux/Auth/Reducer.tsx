@@ -29,10 +29,11 @@ import {
                 linkToRedirect: true
             };
         case LOGOUT:
-          localStorage.removeItem("AuthUserData");
+            localStorage.removeItem("AuthUserData");
             return {
                 ...state,
                 user: {},
+                token:null,
                 redirect: null,
                 isAuthentificated: false
             };

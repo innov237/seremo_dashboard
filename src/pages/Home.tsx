@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 
 import {
-    useDispatch
+    useDispatch, useSelector
 } from 'react-redux'
 
 import {
@@ -32,6 +32,18 @@ const HomePage: React.FC = () => {
 
 
     const dispatch = useDispatch()
+
+    const auth = useSelector((state:any) => state.auth)
+    const logOut = async () => {
+         var datalog = {
+            "id": auth.user.id,
+            "status": "out"
+        }
+        
+        var response = await ApiService.postData("dashboard/createAccessLog", datalog);
+        
+        dispatch(ACTION_LOGOUT())
+    }
 
     const history = useHistory();
     const [transferData, getAllTransfer] = useState<any[]>([]);
@@ -138,7 +150,7 @@ const HomePage: React.FC = () => {
                     <li className={location.pathname == '/admin/retrait' ? "active" : ""}><i className="fa fa-money-check"></i> <Link to="/admin/retrait">Withdrawal request
 </Link></li>
                     <li className={location.pathname == '/admin/history' ? "active" : ""}><i className="fa fa-history"></i> <Link to="/admin/history">Historical</Link></li>
-                    <li className={location.pathname == '/login' ? "mt-5 active" : "mt-5"}><i className="fa fa-sign-out-alt"></i> <Link to="/login" onClick={ () => history.push('/login')}>Log out</Link></li>
+                    <li onClick={logOut} className={location.pathname == '/login' ? "mt-5 active" : "mt-5 text-white"}><i className="fa fa-sign-out-alt"></i> Log out</li>
                 </div>
                 <div className="col-md-10 main__row">
                     <Switch>

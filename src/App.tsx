@@ -56,7 +56,7 @@ const App: React.FC = () => {
     
     if (!auth.pageHasbeRefresh){
       if(token){
-        dispatch(ACTION_REFRESH())
+        //dispatch(ACTION_REFRESH())
         const request = await ApiService.getData('v1/refresh',{
             headers:{
               Authorization: `Bearer ${token}`,
@@ -68,42 +68,40 @@ const App: React.FC = () => {
         if(request.response){
           dispatch(ACTION_LOGIN(request.data))
           localStorage.setItem("AuthUserData", request.data.token);
-         }else
-          dispatch(ACTION_REFRESH())
+         }else{
+           localStorage.removeItem("AuthUserData");
+            dispatch(ACTION_REFRESH())
+          }
 
-    }else{
-        localStorage.removeItem("AuthUserData");
-        dispatch(ACTION_REFRESH())
-    }
+      }else{
+          localStorage.removeItem("AuthUserData");
+          dispatch(ACTION_REFRESH())
+      }
     } 
     
-   }
+  }
 
+  if (auth.pageHasbeRefresh)
+      return (
+        <div className="App">
+          <Router history={history}>
+            <Suspense fallback = {<UserDetails></UserDetails>}>
     
-    return (
-   
-      <div className="App">
-      <Router history={history}>
-              <Suspense fallback = {<UserDetails></UserDetails>}>
-              
-       {
-         (auth.pageHasbeRefresh) ?
-             <Switch>
-               
+              <Switch>
                 <Route path="/admin" component={ProtectedRoute(HomePage)} />
                 <Route path="/login" component={LoginPage} />
                 <Route path="/" component={LoginPage} />  
-             </Switch> 
-               :
-
-        <></>
-       }
-        
+              </Switch> 
             </Suspense>
-        </Router>
-      </div >
+          </Router>
+        </div >
+      )
+  else
+      return (
+        <div className="App">
+        </div >
 
-  );
+      );
   
   
 }

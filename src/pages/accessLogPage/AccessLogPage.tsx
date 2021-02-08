@@ -30,7 +30,6 @@ const AccessLogPage: React.FC = () => {
         if (data != '')
             url = substringURL(data)
 
-        console.log(url)
         var response = await ApiService.getData(url);
         setNext(response.next_page_url);
         setPrev(response.prev_page_url)

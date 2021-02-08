@@ -5,6 +5,11 @@ import { CSVLink, CSVDownload } from "react-csv";
 import { useHistory } from 'react-router-dom';
 import ApiService from '../../services/ApiService';
 
+
+import {
+    useSelector
+} from 'react-redux'
+
 import moment from 'moment'
 
 const statusRequest = [
@@ -38,6 +43,11 @@ const DetailTrasactionPage: React.FC = () => {
     const [movement, setMovement] = useState<any[]>([]);   
       
     const history = useHistory();
+
+    const auth  = useSelector((state: any) => state.auth);
+
+
+    ApiService.putToken(auth.token)
 
     useEffect(() => {
         
@@ -162,11 +172,11 @@ const DetailTrasactionPage: React.FC = () => {
         setLoader(true);
         var res = await ApiService.getData("user/getUserByCode?key=" + value.target.value);
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-        if (res.length) {
+        if (res.data.length) {
             
-            setUserData(res);
-            code = res[0].user_code;
-            setcurrenUserId(res[0].user_code);
+            setUserData(res.data);
+            code = res.data[0].user_code;
+            setcurrenUserId(res.data[0].user_code);
             getAllTransferFc();
             setLoader(false);
         } else {
