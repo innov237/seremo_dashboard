@@ -5,7 +5,7 @@ import { Redirect, useHistory } from 'react-router-dom';
 import {
     Switch,
     Route,
-    Link
+    Link,
 } from "react-router-dom";
 
 import {
@@ -13,9 +13,9 @@ import {
 } from 'react-redux'
 
 import {
-    ACTION_LOGOUT,
+    BEFORE_ACTION_LOGOUT,
+    ACTION_LOGOUT
 } from '../redux/Auth/Actions'
-
 
 import TrasactionPage from './transactions/TransactionsPage';
 import HistoryPage from './transactions/HistoryPage';
@@ -30,10 +30,13 @@ import { useLocation } from 'react-router-dom';
 
 const HomePage: React.FC = () => {
 
-
-    const dispatch = useDispatch()
+    const location = useLocation();
+    const dispatch = useDispatch();
 
     const auth = useSelector((state:any) => state.auth)
+    
+
+
     const logOut = async () => {
          var datalog = {
             "id": auth.user.id,
@@ -43,8 +46,10 @@ const HomePage: React.FC = () => {
         var response = await ApiService.postData("dashboard/createAccessLog", datalog);
         
         dispatch(ACTION_LOGOUT())
+
     }
 
+    
     const history = useHistory();
     const [transferData, getAllTransfer] = useState<any[]>([]);
     const [isLoad, setLoader] = useState(false);
@@ -80,7 +85,11 @@ const HomePage: React.FC = () => {
         setLoader(false);
     };
 
-    
+    if (auth.beforeLogOut){
+        
+        return <Redirect to='/login' />
+    }
+
     async function search(value: any) {
         setLoader(true);
         var res = await ApiService.getData("dashboard/getTransferByCode/" + value);
@@ -117,7 +126,7 @@ const HomePage: React.FC = () => {
         });
     }
 
-    const location = useLocation();
+    
 
     return (
         <div className="container-fluid">

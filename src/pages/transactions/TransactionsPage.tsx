@@ -47,13 +47,10 @@ const TrasactionPage: React.FC = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-
     const auth  = useSelector((state: any) => state.auth);
-
 
     ApiService.putToken(auth.token)
     
-
     useEffect(() => {
         getAllTransferFc();
 

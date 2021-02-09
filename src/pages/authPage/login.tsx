@@ -8,7 +8,9 @@ import {
 
 import {
     ACTION_LOGIN,
+    ACTION_LOGOUT
 } from '../../redux/Auth/Actions'
+
 
 import {
     AppRoutes
@@ -31,8 +33,13 @@ const LoginPage: React.FC = (props) => {
      
     if (auth.linkToRedirect){
         
-        return <Redirect to='/admin/transactions' />
-       // history.push('/admin/transactions')
+        return <Redirect to='/admin/dashboard' />
+       
+    }
+
+    if (auth.beforeLogOut){
+        dispatch(ACTION_LOGOUT())
+        history.push('/login')
     }
 
     const login = async () => {

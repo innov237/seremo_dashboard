@@ -40,7 +40,10 @@ const DetailTrasactionPage: React.FC = () => {
     const [activeItem, setActiveItem] = useState('Transfer');
     const [csvData, getCSVData] = useState<any[]>([]);
     const [status, setStatus] = useState('All');
-    const [movement, setMovement] = useState<any[]>([]);   
+    const [movement, setMovement] = useState<any[]>([]);
+
+    const [next, setNext] = useState<string>('');
+    const [prev, setPrev] = useState<string>('');   
       
     const history = useHistory();
 
@@ -48,6 +51,60 @@ const DetailTrasactionPage: React.FC = () => {
 
 
     ApiService.putToken(auth.token)
+
+
+    const substringURL = (url:string) => {
+        const rootURL = `${process.env.REACT_APP_API_URL}/api`
+        return url.substring(rootURL.length, url.length);
+    }
+
+    const paginate = (url:string) => {
+        console.log(url)
+
+        if ( 'Transfer' == activeItem)
+            getAllTransferFcPaginate(url)
+        else
+
+            getAllRequestFcPaginate(url)
+    }
+
+    const getAllTransferFcPaginate = async (param:string) => {
+        getAllMovement();
+        setLoader(true);
+        getAllTransfer([]);
+
+        let url = substringURL(param)
+
+        var response = await ApiService.getData(`${url}&user=${code}`);
+
+        getAllTransfer(response.data);
+        formatDataToCsv(response.data);
+        
+
+        setNext(response.next_page_url);
+        setPrev(response.prev_page_url);
+
+        setLoader(false);
+    };
+
+
+    const getAllRequestFcPaginate = async (param:string) => {
+        setLoader(true);
+        getAllTransfer([]);
+        setMovement(statusRequest)
+        
+        let url = substringURL(param);
+
+        var response = await ApiService.getData(`${url}&user=${code}`);
+        
+        getAllTransfer(response.data);
+        formatDataToCsv(response.data);
+
+        setNext(response.next_page_url);
+        setPrev(response.prev_page_url);
+
+        setLoader(false);
+    };
 
     useEffect(() => {
         
@@ -107,6 +164,8 @@ const DetailTrasactionPage: React.FC = () => {
 
         getAllTransfer(response.data);
         formatDataToCsv(response.data);
+        setNext(response.next_page_url);
+        setPrev(response.prev_page_url);
         setLoader(false);
     };
 
@@ -120,6 +179,8 @@ const DetailTrasactionPage: React.FC = () => {
 
         getAllTransfer(response.data);
         formatDataToCsv(response.data);
+        setNext(response.next_page_url);
+        setPrev(response.prev_page_url);
         setLoader(false);
     };
 
@@ -153,6 +214,9 @@ const DetailTrasactionPage: React.FC = () => {
             setLoader(false);
         }
     }; */
+
+    console.log(next);
+    console.log(prev);
 
     function filterByStatus(value: any) {
 
@@ -251,6 +315,8 @@ const DetailTrasactionPage: React.FC = () => {
     
 
     
+    const up = () => `page-item ${(next) ? '' : 'disabled'}`;
+    const down = () => `page-item ${(prev) ? '' : 'disabled'}`;
     
 
     return (
@@ -363,6 +429,15 @@ const DetailTrasactionPage: React.FC = () => {
                 </tbody>
 
             </table>
+            <div className="d-flex justify-content-center">
+                <nav aria-label="Page navigation example">
+                  <ul className="pagination">
+                    <li className={down()} onClick={ () => (prev) ? paginate(prev): ''} ><a className="page-link" >Previous</a></li>
+                    
+                    <li className={up()} onClick={ () => (next) ? paginate(next) : ''}><a className="page-link" >Next</a></li>
+                  </ul>
+                </nav>
+            </div>
         </div>
     )
 }

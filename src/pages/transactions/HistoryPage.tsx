@@ -8,6 +8,10 @@ import ApiService from '../../services/ApiService';
 
 import moment from 'moment'
 
+import {
+    useSelector
+} from 'react-redux'
+
 const HistoryPage: React.FC = () => {
 
     
@@ -26,6 +30,9 @@ const HistoryPage: React.FC = () => {
         return url.substring(rootURL.length, url.length);
     }
 
+    const auth = useSelector((state:any) => state.auth)
+
+    ApiService.putToken(auth.token)
     
     const getAllHistory = async (data:string='') => {
         let url = "v1/history"

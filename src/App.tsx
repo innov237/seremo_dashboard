@@ -6,7 +6,8 @@ import React, {
 import {
   Switch,
   Route,
-  Router
+  Router,
+  Redirect
 } from "react-router-dom";
 
 import {
@@ -27,7 +28,6 @@ import LoginPage from './pages/authPage/login';
 import ProtectedRoute from "./component/DataComponent"
 
 import './App.css';
-
 
 import ApiService from './services/ApiService';
 
@@ -52,8 +52,7 @@ const App: React.FC = () => {
   const refreshToken = async() => {
     
     const token = localStorage.getItem("AuthUserData");
-    
-    
+        
     if (!auth.pageHasbeRefresh){
       if(token){
         //dispatch(ACTION_REFRESH())
@@ -81,26 +80,21 @@ const App: React.FC = () => {
     
   }
 
-  if (auth.pageHasbeRefresh)
-      return (
-        <div className="App">
-          <Router history={history}>
-            <Suspense fallback = {<UserDetails></UserDetails>}>
-    
-              <Switch>
-                <Route path="/admin" component={ProtectedRoute(HomePage)} />
-                <Route path="/login" component={LoginPage} />
-                <Route path="/" component={LoginPage} />  
-              </Switch> 
-            </Suspense>
-          </Router>
-        </div >
-      )
-  else
-      return (
-        <div className="App">
-        </div >
 
+      return (
+        <div className="App">
+          {
+            (auth.pageHasbeRefresh) ?
+                <Router history={history}>
+                  <Switch>
+                      <Route path="/admin" component={ProtectedRoute(HomePage)} />
+                      <Route path="/login" component={LoginPage} />
+                      <Route path="/" component={LoginPage} />  
+                    </Switch> 
+                </Router>
+            : <></>
+          }
+        </div>
       );
   
   

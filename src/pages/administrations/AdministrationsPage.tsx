@@ -67,11 +67,12 @@ const AdministrationPage: React.FC = () => {
 
     const getAllAdmin = async (data:string='') => {
         setLoader(true);
+
         let url = "v1/admins"
         if (data != '')
             url = substringURL(data)
 
-        var response = await ApiService.getData("v1/admins");
+        var response = await ApiService.getData(url);
         
         if (response.data){
             setUserData(response.data);

@@ -2,15 +2,17 @@ import {
     LOGIN,
     LOGOUT,
     REDIRECT,
-    REFRESH
+    REFRESH,
+    BEFORE_LOGOUT
   } from './Actions';
   
   const initializeState: any = {
-    user: {},
+    user: null,
     token: null,
     isAuthentificated: false,
     linkToRedirect: null,
-    pageHasbeRefresh: false
+    pageHasbeRefresh: false,
+    beforeLogOut:false
   };
   
   export const authReducer = (
@@ -29,13 +31,13 @@ import {
                 linkToRedirect: true
             };
         case LOGOUT:
-            localStorage.removeItem("AuthUserData");
+           
             return {
                 ...state,
-                user: {},
+                user: null,
                 token:null,
-                redirect: null,
-                isAuthentificated: false
+                isAuthentificated: false,
+                beforeLogOut: false
             };
         
         case REDIRECT:
@@ -43,6 +45,12 @@ import {
                   ...state,
                   linkToRedirect:action.payload
               };
+
+        case BEFORE_LOGOUT:
+            return {
+                ...state,
+                beforeLogOut: true
+            };
 
         case REFRESH:
             return {

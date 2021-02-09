@@ -1,3 +1,52 @@
+/*import React from 'react';
+
+import { connect } from 'react-redux'
+
+import {
+    Redirect, useHistory
+} from 'react-router-dom';
+
+
+import LoginPage from '../pages/authPage/login';
+
+import {
+    AppRoutes
+} from '../pages/AppRoute';
+
+import {
+    useSelector
+} from 'react-redux'
+
+
+export default function(ComposedComponent:any): any {
+
+    return (props:any) => {
+
+        const history = useHistory()
+
+        const auth = useSelector((state:any) => state.auth )
+
+        const builTitle = (pathname: String): any => Object.values(AppRoutes).find((route:any) => route.path === pathname)
+        
+
+        const updateTile = (pathname: String) => {
+            const route = builTitle(pathname);
+
+            document.title = (route) ? `Seremo-dashbord ${route.title}` : `Seremo-dashbord`
+        }
+
+        React.useEffect(() => {
+
+        },[])
+
+        console.log(history.location.pathname)
+        console.log(auth)
+        
+        if (auth.isAuthentificated)
+            return <ComposedComponent {...props} />
+
+    }
+}*/
 
 import React from 'react';
 
@@ -34,6 +83,8 @@ export default function(ComposedComponent:any): any {
             
             this.updateTile(history.location.pathname)
 
+            console.log(history.location.pathname)
+
             if (!user.isAuthentificated && user.pageHasbeRefresh && history.location.pathname !== '/login')
                 history.push('/login')
              
@@ -47,9 +98,20 @@ export default function(ComposedComponent:any): any {
             const props:any = this.props
             const {user} = props;
 
-            {    return (user.isAuthentificated) ? <ComposedComponent {...this.props} /> : <></>
-                            
-           }
+            console.log(this.historyPage)
+
+            console.log(user.isAuthentificated)
+
+            if (user.isAuthentificated)
+                return (
+                    <ComposedComponent {...this.props} />
+                )
+            
+            
+            else 
+                return (
+                    <></>
+                )
         }
     }
 
@@ -63,5 +125,4 @@ export default function(ComposedComponent:any): any {
 
     
     return connect(mapStateToProps)(Authentificated)
-}
-
+} 

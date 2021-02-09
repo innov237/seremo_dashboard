@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import {
+    useSelector
+} from 'react-redux'
+
 import ApiService from '../../services/ApiService';
 
 const UsersListPage: React.FC = () => {
@@ -19,15 +23,22 @@ const UsersListPage: React.FC = () => {
         return url.substring(rootURL.length, url.length);
     }
 
+    const auth = useSelector((state:any) => state.auth)
+
+    ApiService.putToken(auth.token)
+
     const getAllUser = async (data:string='') => {
         let url = "v1/users"
         if (data != '')
             url = substringURL(data)
 
         var response = await ApiService.getData(url);
-        setUsersData(response.data);
-        setNext(response.links.next);
-        setPrev(response.links.prev)
+        if (!response.hasOwnProperty('success')){
+            setUsersData(response.data);
+            setNext(response.links.next);
+            setPrev(response.links.prev);
+        }
+        
         setLoader(false);
     }
 
