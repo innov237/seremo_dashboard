@@ -31,7 +31,7 @@ import {
                 linkToRedirect: true
             };
         case LOGOUT:
-           
+            localStorage.removeItem("srDash");
             return {
                 ...state,
                 user: null,

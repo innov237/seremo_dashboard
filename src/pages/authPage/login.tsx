@@ -22,12 +22,14 @@ import { history } from "../../config/history";
 
 const LoginPage: React.FC = (props) => {
 
-    const [email, setEmail] = useState("faker@gmail.com");
-    const [password, setPass] = useState("sucker32");
+    const [email, setEmail] = useState("");
+    const [password, setPass] = useState("");
     const [msg, setmsg] = useState("");
     const [checked, setChecked] = useState(true);
     
     const auth  = useSelector((state: any) => state.auth);
+
+    const disabled = (email.length && password.length) ? false : true
 
     const dispatch = useDispatch();
      
@@ -43,8 +45,8 @@ const LoginPage: React.FC = (props) => {
         var datapost = {
             data:{
                attributes:{
-                "user_email": email,
-                "password": password,
+                "user_email": email.trim(),
+                "password": password.trim(),
                }
             }
         };
@@ -54,7 +56,7 @@ const LoginPage: React.FC = (props) => {
         if (response.response) {
 
             if (checked)
-                localStorage.setItem("AuthUserData", response.data.token);
+                localStorage.setItem("srDash", response.data.token);
             let log = saveLog(response.data);           
             
         } else {
@@ -96,20 +98,20 @@ const LoginPage: React.FC = (props) => {
                 <div className="form  ">
                     <div className="mb-3" >
                         <label>Email</label>
-                        <input type="email" className="form-control" id="email" value={email} onChange={(e) => { getEmail(e) }} placeholder="Entrer votre Email" />
+                        <input type="email" className="form-control" id="email" value={email} onChange={(e) => { getEmail(e) }} placeholder="Entrer votre Email" required/>
                         {/* <small className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
 
                     <div className="mb-3">
                         <label>Password</label>
-                        <input type="password" placeholder="Entrer votre Password" value={password} id="password" onChange={(e) => { getpassword(e) }} className="form-control flex-1 mr-1" />
+                        <input required type="password" placeholder="Entrer votre Password" value={password} id="password" onChange={(e) => { getpassword(e) }} className="form-control flex-1 mr-1" />
                     </div>
                     <div className="form-check">
                         <input type="checkbox" className="form-check-input" onChange={() => setChecked(!checked)} defaultChecked={checked}/>
                         <label className="form-check-label">Resté connecté</label>
                     </div>
                     <div className="mt-3">
-                        <button type="button" className="btn btn-primary btn-lg btn-block" onClick={(e) => login()} >Login</button>
+                        <button type="button" className="btn btn-primary btn-lg btn-block" onClick={(e) => login()}  disabled={disabled}>Login</button>
                         <p></p>
                         <p className="text-danger">{msg}</p>
                     </div>

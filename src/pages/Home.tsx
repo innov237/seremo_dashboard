@@ -28,6 +28,8 @@ import UsersListPage from './users/UsersListPage';
 import DashBoardPage from './dashboard/DashboardPage';
 import { useLocation } from 'react-router-dom';
 
+
+
 const HomePage: React.FC = () => {
     const history = useHistory();
     const location = useLocation();
@@ -39,7 +41,9 @@ const HomePage: React.FC = () => {
     const [activeItem, setActiveItem] = useState('Transfer');
     const [csvData, getCSVData] = useState<any[]>([]);
 
-    const auth = useSelector((state:any) => state.auth)
+    const auth  = useSelector((state: any) => state.auth);
+
+    ApiService.putToken(auth.token)
     
    
     const logOut = async () => {
@@ -49,11 +53,16 @@ const HomePage: React.FC = () => {
         }
         
         var response = await ApiService.postData("dashboard/createAccessLog", datalog);
-        
-        dispatch(ACTION_LOGOUT())
 
-        //return history.push("/login")
+    }
 
+
+    async function logOutApi() {
+        logOut()
+        var res = await ApiService.getData("v1/logout");
+        console.log(res)
+        if (res.success)
+            dispatch(ACTION_LOGOUT())
     }
 
 
@@ -77,10 +86,6 @@ const HomePage: React.FC = () => {
         setLoader(false);
     };
 
-    if (auth.beforeLogOut){
-        
-        return <Redirect to='/login' />
-    }
 
     async function search(value: any) {
         setLoader(true);
@@ -151,7 +156,7 @@ const HomePage: React.FC = () => {
                     <li className={location.pathname == '/admin/retrait' ? "active" : ""}><i className="fa fa-money-check"></i> <Link to="/admin/retrait">Withdrawal request
 </Link></li>
                     <li className={location.pathname == '/admin/history' ? "active" : ""}><i className="fa fa-history"></i> <Link to="/admin/history">Historical</Link></li>
-                    <li onClick={logOut} className={location.pathname == '/login' ? "mt-5 active" : "mt-5 text-white"}><i className="fa fa-sign-out-alt"></i> Log out</li>
+                    <li onClick={logOutApi} className={location.pathname == '/login' ? "mt-5 active" : "mt-5 text-white"}><i className="fa fa-sign-out-alt"></i> Log out</li>
                 </div>
                 <div className="col-md-10 main__row">
                     <Switch>

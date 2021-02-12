@@ -50,7 +50,7 @@ const App: React.FC = () => {
 
   const refreshToken = async() => {
     
-    const token = localStorage.getItem("AuthUserData");
+    const token = localStorage.getItem("srDash");
         
     if (!auth.pageHasbeRefresh){
       if(token){
@@ -65,14 +65,14 @@ const App: React.FC = () => {
 
         if(request.response){
           dispatch(ACTION_LOGIN(request.data))
-          localStorage.setItem("AuthUserData", request.data.token);
+          localStorage.setItem("srDash", request.data.token);
          }else{
-           localStorage.removeItem("AuthUserData");
+           localStorage.removeItem("srDash");
             dispatch(ACTION_REFRESH())
           }
 
       }else{
-          localStorage.removeItem("AuthUserData");
+          localStorage.removeItem("srDash");
           dispatch(ACTION_REFRESH())
       }
     } 
