@@ -44,7 +44,6 @@ const App: React.FC = () => {
     refreshToken()
   })
 
-
   const auth  = useSelector((state: any) => state.auth);
 
   const dispatch = useDispatch();
@@ -87,7 +86,16 @@ const App: React.FC = () => {
             (auth.pageHasbeRefresh) ?
                 <Router history={history}>
                   <Switch>
-                      <Route path="/admin" component={ProtectedRoute(HomePage)} />
+                      <ProtectedRoute excat path="/admin" component={HomePage} />
+                      <ProtectedRoute path="/admin/administrations" component={HomePage} ></ProtectedRoute>
+                      <ProtectedRoute path="/admin/access-log" component={HomePage}></ProtectedRoute>
+                      <ProtectedRoute path="/admin/detailtransactionUser" component={HomePage}></ProtectedRoute>
+                      <ProtectedRoute path="/admin/all-users" component={HomePage} />
+                      <ProtectedRoute path="/admin/dashboard" component={HomePage} />
+                      <ProtectedRoute path="/admin/retrait" component={HomePage} />
+                      <ProtectedRoute path="/admin/history" component={HomePage} />
+                      <ProtectedRoute path="/admin/dashboard" component={HomePage} />
+                      
                       <Route path="/login" component={LoginPage} />
                       <Route path="/" component={LoginPage} />  
                     </Switch> 

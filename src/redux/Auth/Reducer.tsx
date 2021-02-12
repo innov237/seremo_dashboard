@@ -37,7 +37,8 @@ import {
                 user: null,
                 token:null,
                 isAuthentificated: false,
-                beforeLogOut: false
+                beforeLogOut: false,
+                linkToRedirect: false
             };
         
         case REDIRECT:

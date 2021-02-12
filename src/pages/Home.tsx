@@ -41,12 +41,7 @@ const HomePage: React.FC = () => {
 
     const auth = useSelector((state:any) => state.auth)
     
-    if (auth.beforeLogOut){
-        
-        //return <Redirect to='/login' />
-       
-    }
-
+   
     const logOut = async () => {
          var datalog = {
             "id": auth.user.id,
@@ -55,20 +50,11 @@ const HomePage: React.FC = () => {
         
         var response = await ApiService.postData("dashboard/createAccessLog", datalog);
         
-        dispatch(BEFORE_ACTION_LOGOUT())
+        dispatch(ACTION_LOGOUT())
+
+        //return history.push("/login")
 
     }
-
-    
-    
-    
-
-    const imageUrl = "https://seremoworld.com/seremoapi/public/storage/";
-
-    /*useEffect(() => {
-        getAllTransferFc();
-        getAllRequestFc();
-    }, []) */
 
 
     const getAllTransferFc = async () => {
