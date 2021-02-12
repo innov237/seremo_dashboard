@@ -60,7 +60,6 @@ const HomePage: React.FC = () => {
     async function logOutApi() {
         logOut()
         var res = await ApiService.getData("v1/logout");
-        console.log(res)
         if (res.success)
             dispatch(ACTION_LOGOUT())
     }
