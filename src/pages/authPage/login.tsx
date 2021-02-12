@@ -38,8 +38,8 @@ const LoginPage: React.FC = (props) => {
     }
 
     if (auth.beforeLogOut){
-        dispatch(ACTION_LOGOUT())
-        history.push('/login')
+        //dispatch(ACTION_LOGOUT())
+        //history.push('/login')
     }
 
     const login = async () => {

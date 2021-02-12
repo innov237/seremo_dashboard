@@ -53,7 +53,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 
 import {
-    Redirect, useHistory
+    Redirect, Route, useHistory
 } from 'react-router-dom';
 
 import {
@@ -84,34 +84,36 @@ export default function(ComposedComponent:any): any {
             this.updateTile(history.location.pathname)
 
             console.log(history.location.pathname)
-
-            if (!user.isAuthentificated && user.pageHasbeRefresh && history.location.pathname !== '/login')
-                history.push('/login')
              
         }
+
 
         componentWillUpdate(){
 
         }
 
         render(){
+
+
             const props:any = this.props
             const {user} = props;
 
-            console.log(this.historyPage)
-
             console.log(user.isAuthentificated)
 
-            if (user.isAuthentificated)
-                return (
-                    <ComposedComponent {...this.props} />
-                )
-            
-            
-            else 
-                return (
-                    <></>
-                )
+
+            return <Route 
+                    render = { (props:any) => {
+                        if (user.isAuthentificated)
+                            return (
+                                <ComposedComponent {...this.props} />
+                            )            
+                        else 
+                            return (
+                                <Redirect to='/login' />
+                        )
+                    }}
+            />
+           
         }
     }
 

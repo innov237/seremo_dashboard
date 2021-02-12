@@ -215,9 +215,6 @@ const DetailTrasactionPage: React.FC = () => {
         }
     }; */
 
-    console.log(next);
-    console.log(prev);
-
     function filterByStatus(value: any) {
 
         const filterData = transferData.filter(elt => elt.status.toLowerCase() === value.toLowerCase());

@@ -29,13 +29,23 @@ import DashBoardPage from './dashboard/DashboardPage';
 import { useLocation } from 'react-router-dom';
 
 const HomePage: React.FC = () => {
-
+    const history = useHistory();
     const location = useLocation();
     const dispatch = useDispatch();
 
+    const [transferData, getAllTransfer] = useState<any[]>([]);
+    const [isLoad, setLoader] = useState(false);
+    const [searchValue, setsearchValue] = useState('');
+    const [activeItem, setActiveItem] = useState('Transfer');
+    const [csvData, getCSVData] = useState<any[]>([]);
+
     const auth = useSelector((state:any) => state.auth)
     
-
+    if (auth.beforeLogOut){
+        
+        //return <Redirect to='/login' />
+       
+    }
 
     const logOut = async () => {
          var datalog = {
@@ -45,17 +55,13 @@ const HomePage: React.FC = () => {
         
         var response = await ApiService.postData("dashboard/createAccessLog", datalog);
         
-        dispatch(ACTION_LOGOUT())
+        dispatch(BEFORE_ACTION_LOGOUT())
 
     }
 
     
-    const history = useHistory();
-    const [transferData, getAllTransfer] = useState<any[]>([]);
-    const [isLoad, setLoader] = useState(false);
-    const [searchValue, setsearchValue] = useState('');
-    const [activeItem, setActiveItem] = useState('Transfer');
-    const [csvData, getCSVData] = useState<any[]>([]);
+    
+    
 
     const imageUrl = "https://seremoworld.com/seremoapi/public/storage/";
 

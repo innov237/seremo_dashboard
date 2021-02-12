@@ -39,7 +39,7 @@ const DashBoardPage: React.FC = (props) => {
     }    
     const customerCount = async () => {
         var response = await ApiService.getData("v1/customers");
-
+       
         if (response.success)
             setCustomer(response.data)
     }
