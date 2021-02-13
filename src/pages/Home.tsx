@@ -13,7 +13,7 @@ import {
 } from 'react-redux'
 
 import {
-    ACTION_LOGOUT,
+    ACTION_LOGOUT, LOGOUT,
 } from '../redux/Auth/Actions'
 
 
@@ -33,7 +33,7 @@ const HomePage: React.FC = () => {
 
     const dispatch = useDispatch()
 
-    const history = useHistory();
+    const history = useHistory<any>();
     const [transferData, getAllTransfer] = useState<any[]>([]);
     const [isLoad, setLoader] = useState(false);
     const [searchValue, setsearchValue] = useState('');
@@ -47,6 +47,14 @@ const HomePage: React.FC = () => {
         getAllRequestFc();
     }, []) */
 
+    const logout = async () => {
+
+        if (window.confirm("Do you want to log out ?")) {
+            await localStorage.clear();
+            history.push('/login');
+        }
+
+    }
 
     const getAllTransferFc = async () => {
         setActiveItem('Transfer');
@@ -68,18 +76,18 @@ const HomePage: React.FC = () => {
         setLoader(false);
     };
 
-    
+
     async function search(value: any) {
         setLoader(true);
         var res = await ApiService.getData("dashboard/getTransferByCode/" + value);
-        if (res.length){
-           getAllTransfer(res);
-           history.push("/admin/transactions", res);
-        }else
+        if (res.length) {
+            getAllTransfer(res);
+            history.push("/admin/transactions", res);
+        } else
 
-            alert("No transfert found with code:"+value);
-        
-        
+            alert("No transfert found with code:" + value);
+
+
         setLoader(false);
     }
 
@@ -126,7 +134,7 @@ const HomePage: React.FC = () => {
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
             <div className="row">
                 <div className="col-md-2 side__menu">
                     <li className={location.pathname == '/admin/dashboard' ? "active" : ""}><i className="fa fa-tachometer-alt"></i> <Link to="/admin/dashboard">Dashboard</Link></li>
@@ -138,7 +146,7 @@ const HomePage: React.FC = () => {
                     <li className={location.pathname == '/admin/retrait' ? "active" : ""}><i className="fa fa-money-check"></i> <Link to="/admin/retrait">Withdrawal request
 </Link></li>
                     <li className={location.pathname == '/admin/history' ? "active" : ""}><i className="fa fa-history"></i> <Link to="/admin/history">Historical</Link></li>
-                    <li className={location.pathname == '/login' ? "mt-5 active" : "mt-5"}><i className="fa fa-sign-out-alt"></i> <Link to="/login" onClick={ () => history.push('/login')}>Log out</Link></li>
+                    <li className={location.pathname == '/log-out' ? "mt-5 active" : "mt-5"}><i className="fa fa-sign-out-alt"></i> <button className="btn btn-danger" onClick={() => logout()}>Log out</button></li>
                 </div>
                 <div className="col-md-10 main__row">
                     <Switch>

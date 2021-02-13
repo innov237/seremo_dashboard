@@ -6,19 +6,20 @@ import React, {
 import {
   Switch,
   Route,
-  Router
+  Router,
+  HashRouter
 } from "react-router-dom";
 
 import {
-    useDispatch,
-    useSelector
+  useDispatch,
+  useSelector
 } from 'react-redux'
 
-import { 
+import {
   history
 } from './config/history';
 
-import { 
+import {
   UserDetails
 } from "./pages/UserDetails"
 
@@ -32,8 +33,8 @@ import './App.css';
 import ApiService from './services/ApiService';
 
 import {
-    ACTION_REFRESH,
-    ACTION_LOGIN
+  ACTION_REFRESH,
+  ACTION_LOGIN
 } from './redux/Auth/Actions'
 
 
@@ -45,67 +46,67 @@ const App: React.FC = () => {
   })
 
 
-  const auth  = useSelector((state: any) => state.auth);
+  const auth = useSelector((state: any) => state.auth);
 
   const dispatch = useDispatch();
 
-  const refreshToken = async() => {
-    
+  const refreshToken = async () => {
+
     const token = localStorage.getItem("AuthUserData");
-    
-    
-    if (!auth.pageHasbeRefresh){
-      if(token){
+
+
+    if (!auth.pageHasbeRefresh) {
+      if (token) {
         dispatch(ACTION_REFRESH())
-        const request = await ApiService.getData('v1/refresh',{
-            headers:{
-              Authorization: `Bearer ${token}`,
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-             }
+        const request = await ApiService.getData('v1/refresh', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          }
         })
 
-        if(request.response){
+        if (request.response) {
           dispatch(ACTION_LOGIN(request.data))
           localStorage.setItem("AuthUserData", request.data.token);
-         }else
+        } else
           dispatch(ACTION_REFRESH())
 
-    }else{
+      } else {
         localStorage.removeItem("AuthUserData");
         dispatch(ACTION_REFRESH())
+      }
     }
-    } 
-    
-   }
 
-    
-    return (
-   
-      <div className="App">
-      <Router history={history}>
-              <Suspense fallback = {<UserDetails></UserDetails>}>
-              
-       {
-         (auth.pageHasbeRefresh) ?
-             <Switch>
-               
+  }
+
+
+  return (
+    <div className="App">
+      <HashRouter>
+        <Suspense fallback={<UserDetails></UserDetails>}>
+
+          {
+            (auth.pageHasbeRefresh) ?
+              <Switch>
+
                 <Route path="/admin" component={ProtectedRoute(HomePage)} />
-                <Route path="/login" component={ProtectedRoute(LoginPage)} />
-                <Route path="/" component={ProtectedRoute(LoginPage)} />  
-             </Switch> 
-               :
+                <Route path="/login" exact={true} component={LoginPage} />
+                <Route path="/" component={LoginPage} />
+              </Switch>
+              :
 
-        <></>
-       }
-        
-            </Suspense>
-        </Router>
-      </div >
+              <></>
+          }
+
+        </Suspense>
+
+      </HashRouter>
+    </div >
 
   );
-  
-  
+
+
 }
 
 

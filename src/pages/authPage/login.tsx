@@ -20,10 +20,11 @@ import { history } from "../../config/history";
 
 const LoginPage: React.FC = (props) => {
 
-    const [email, setEmail] = useState("faker@gmail.com");
-    const [password, setPass] = useState("sucker32");
+    const [email, setEmail] = useState("");
+    const [password, setPass] = useState("");
     const [msg, setmsg] = useState("");
     const [checked, setChecked] = useState(true);
+    const [isLoad, setLoader] = useState(false);
     
     const auth  = useSelector((state: any) => state.auth);
 
@@ -36,6 +37,10 @@ const LoginPage: React.FC = (props) => {
     }
 
     const login = async () => {
+        
+        setChecked(true);
+        setLoader(true);
+
         setmsg('')
         
         var datapost = {
@@ -50,13 +55,14 @@ const LoginPage: React.FC = (props) => {
         var response = await ApiService.postData("v1/login", datapost);
 
         if (response.response) {
-
+    
             if (checked)
                 localStorage.setItem("AuthUserData", response.data.token);
             let log = saveLog(response.data);           
             
         } else {
             setmsg(response.message);
+            setLoader(false);
         }
 
     }
@@ -88,7 +94,7 @@ const LoginPage: React.FC = (props) => {
 
     return (
        
-        <div className="bg-primary  d-flex justify-content-center align-items-center" style={{ height: "100vh", backgroundColor: "#28A3E6 !important" }}>
+        <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh", backgroundColor: "#28A3E6" }}>
 
             <div className="bg-light  rounded py-5 px-5" style={{ height: "400px", width: "500px" }}>
                 <div className="form  ">
@@ -104,10 +110,11 @@ const LoginPage: React.FC = (props) => {
                     </div>
                     <div className="form-check">
                         <input type="checkbox" className="form-check-input" onChange={() => setChecked(!checked)} defaultChecked={checked}/>
-                        <label className="form-check-label">Resté connecté</label>
+                        <label className="form-check-label">Stay connected</label>
                     </div>
                     <div className="mt-3">
-                        <button type="button" className="btn btn-primary btn-lg btn-block" onClick={(e) => login()} >Login</button>
+                        {!isLoad && <button type="button" className="btn btn-primary btn-lg btn-block" onClick={(e) => login()} >Login</button>}
+                        {isLoad && <button type="button" className="btn btn-primary btn-lg btn-block" >in progress...</button>}
                         <p></p>
                         <p className="text-danger">{msg}</p>
                     </div>

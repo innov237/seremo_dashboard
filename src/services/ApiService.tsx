@@ -2,8 +2,8 @@ import Axios from 'axios';
 import 'react';
 
 class ApiService {
-    
-    baseUrl: String =  `${process.env.REACT_APP_API_URL}api/`;
+
+    baseUrl: String = `${process.env.REACT_APP_API_URL}api/`;
     
     get imageUrl() {
         return `${process.env.REACT_APP_API_URL}public/storage/`;

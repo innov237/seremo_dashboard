@@ -103,15 +103,15 @@ const AdministrationPage: React.FC = () => {
         }
 
         var response = await ApiService.postData("v1/admins", posData);
+        console.log(response);
 
-        if (response.data.id) {
-            
+        if (response.data?.id) {
             alert("Admin have been created");
             setLoader(false);
             getAllAdmin();
         } else {
             setLoader(false);
-            alert("error while create admin");
+            alert(response.message);
         }
 
     };
@@ -121,14 +121,14 @@ const AdministrationPage: React.FC = () => {
         var postData = {
             data:{
                 attributes: {
-                    account_status: (data.attributes.account_status == "actived") ? "unactived" : "actived"
+                    account_status: (data.attributes.account_status == "activated") ? "unactivated" : "activated"
                 }
             }
         };
         
         var response = await ApiService.patchData("v1/admins/" + data.id,postData);
         if (response.data.id) {
-            alert("Update");
+            alert("Do you want to change this user status ?");
             getAllAdmin();
         } else {
             alert("check your connexion an try again");
@@ -331,7 +331,7 @@ const AdministrationPage: React.FC = () => {
                     </thead>
                     <tbody>
                          {userData.map((res: any) => {
-                            const statuts = (res.attributes.account_status == 'actived') ? 'Unactived' : 'Actived'
+                            const statuts = (res.attributes.account_status == 'activated') ? 'unactivated' : 'activated'
                             
 
                             return (<tr key={res.attributes.name}>
@@ -347,7 +347,7 @@ const AdministrationPage: React.FC = () => {
                                     </div>
                                     <div className="form-group mr-1" style={{display: (auth.user.id== res.id) ? 'none' : 'block'}}>
                                         <input type="submit" value={statuts} onClick={(e) => enableOrDisabledAdmin(res)} className="btn btn-warning" />
-                                    </div>
+                                    </div> 
                                    
                                 </td>
                             </tr>)
@@ -358,9 +358,9 @@ const AdministrationPage: React.FC = () => {
              <div className="d-flex justify-content-center">
                 <nav aria-label="Page navigation example">
                   <ul className="pagination">
-                    <li className={down()} onClick={ () => getAllAdmin(prev)} ><a className="page-link" >Previous</a></li>
+                    <li className={down()} onClick={ () => (prev) ? getAllAdmin(prev) : ''} ><a className="page-link" >Previous</a></li>
                     
-                    <li className={up()} onClick={ () => getAllAdmin(next)}><a className="page-link" >Next</a></li>
+                    <li className={up()} onClick={ () => (next) ? getAllAdmin(next) : ''}><a className="page-link" >Next</a></li>
                   </ul>
                 </nav>
             </div>
