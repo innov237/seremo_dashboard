@@ -146,14 +146,20 @@ const HomePage: React.FC = () => {
             </div> 
             <div className="row">
                 <div className="col-md-2 side__menu">
-                    <li className={location.pathname == '/admin/dashboard' ? "active" : ""}><i className="fa fa-tachometer-alt"></i> <Link to="/admin/dashboard">Dashboard</Link></li>
-                    <li className={location.pathname == '/admin/transactions' ? "active" : ""}><i className="fa fa-exchange-alt"></i> <Link to="/admin/transactions">Transactions</Link></li>
+                    {
+                        (25 != auth.user.attributes.level.rank) ?
+                        <>
+                            <li className={location.pathname == '/admin/dashboard' ? "active" : ""}><i className="fa fa-tachometer-alt"></i> <Link to="/admin/dashboard">Dashboard</Link></li>
+                            <li className={location.pathname == '/admin/transactions' ? "active" : ""}><i className="fa fa-exchange-alt"></i> <Link to="/admin/transactions">Transactions</Link></li>
+                            <li className={location.pathname == '/admin/access-log' ? "active" : ""}><i className="fa fa-list"></i> <Link to="/admin/access-log">Access log</Link></li>
+                            <li className={location.pathname == '/admin/detailtransactionUser' ? "active" : ""}><i className="fa fa-search"></i> <Link to="/admin/detailtransactionUser">Search User</Link></li>
+                            <li className={location.pathname == '/admin/all-users' ? "active" : ""}><i className="fa fa-users"></i> <Link to="/admin/all-users">All Users</Link></li>
+                        </> : <></>
+                    }
+                    
+                    
                     <li className={location.pathname == '/admin/administrations' ? "active" : ""}><i className="fa fa-users-cog"></i> <Link to="/admin/administrations">Administrations</Link></li>
-                    <li className={location.pathname == '/admin/access-log' ? "active" : ""}><i className="fa fa-list"></i> <Link to="/admin/access-log">Access log</Link></li>
-                    <li className={location.pathname == '/admin/detailtransactionUser' ? "active" : ""}><i className="fa fa-search"></i> <Link to="/admin/detailtransactionUser">Search User</Link></li>
-                    <li className={location.pathname == '/admin/all-users' ? "active" : ""}><i className="fa fa-users"></i> <Link to="/admin/all-users">All Users</Link></li>
-                    <li className={location.pathname == '/admin/retrait' ? "active" : ""}><i className="fa fa-money-check"></i> <Link to="/admin/retrait">Withdrawal request
-</Link></li>
+                    <li className={location.pathname == '/admin/retrait' ? "active" : ""}><i className="fa fa-money-check"></i> <Link to="/admin/retrait">Withdrawal request</Link></li>
                     <li className={location.pathname == '/admin/history' ? "active" : ""}><i className="fa fa-history"></i> <Link to="/admin/history">Historical</Link></li>
                     <li onClick={logOutApi} className={location.pathname == '/login' ? "mt-5 active" : "mt-5 text-white"}><i className="fa fa-sign-out-alt"></i> Log out</li>
                 </div>
