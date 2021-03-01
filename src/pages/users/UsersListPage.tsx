@@ -50,7 +50,10 @@ const UsersListPage: React.FC = () => {
     const down = () => `page-item ${(prev) ? '' : 'disabled'}`;
 
     const getUserDetail = (usersData: any) => {
-        history.push("DetailtransactionUser", usersData);
+        history.push({
+            pathname: `/admin/detailtransactionUser`,
+            search: `${usersData.id}`
+        });
     }
 
     return (
