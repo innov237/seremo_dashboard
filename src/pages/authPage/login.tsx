@@ -26,28 +26,33 @@ const LoginPage: React.FC = (props) => {
     const [password, setPass] = useState("");
     const [msg, setmsg] = useState("");
     const [checked, setChecked] = useState(true);
-    
-    const auth  = useSelector((state: any) => state.auth);
+    const [isLoad, setLoader] = useState(false);
+
+    const auth = useSelector((state: any) => state.auth);
 
     const disabled = (email.length && password.length) ? false : true
 
     const dispatch = useDispatch();
-     
-    if (auth.linkToRedirect){
-        
+
+    if (auth.linkToRedirect) {
+
         return <Redirect to='/admin/dashboard' />
-       
+
     }
 
     const login = async () => {
+
+        setChecked(true);
+        setLoader(true);
+
         setmsg('')
-        
+
         var datapost = {
-            data:{
-               attributes:{
-                "user_email": email.trim(),
-                "password": password.trim(),
-               }
+            data: {
+                attributes: {
+                    "user_email": email.trim(),
+                    "password": password.trim(),
+                }
             }
         };
 
@@ -57,27 +62,28 @@ const LoginPage: React.FC = (props) => {
 
             if (checked)
                 localStorage.setItem("srDash", response.data.token);
-            let log = saveLog(response.data);           
-            
+            let log = saveLog(response.data);
+
         } else {
             setmsg(response.message);
+            setLoader(false);
         }
 
     }
 
     const saveLog = async (data: any) => {
-        
+
         var datalog = {
             "id": data.user.id,
             "status": "in"
         }
-        
+
         var response = await ApiService.postData("dashboard/createAccessLog", datalog);
-        
-        if(response.success){
+
+        if (response.success) {
             dispatch(ACTION_LOGIN(data))
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -85,20 +91,20 @@ const LoginPage: React.FC = (props) => {
     function getEmail(e: any) {
         setEmail(e.target.value);
     }
-    
+
     function getpassword(e: any) {
         setPass(e.target.value);
     }
 
     return (
-       
-        <div className="bg-primary  d-flex justify-content-center align-items-center" style={{ height: "100vh", backgroundColor: "#28A3E6 !important" }}>
+
+        <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh", backgroundColor: "#28A3E6" }}>
 
             <div className="bg-light  rounded py-5 px-5" style={{ height: "400px", width: "500px" }}>
                 <div className="form  ">
                     <div className="mb-3" >
                         <label>Email</label>
-                        <input type="email" className="form-control" id="email" value={email} onChange={(e) => { getEmail(e) }} placeholder="Entrer votre Email" required/>
+                        <input type="email" className="form-control" id="email" value={email} onChange={(e) => { getEmail(e) }} placeholder="Entrer votre Email" required />
                         {/* <small className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
 
@@ -107,11 +113,12 @@ const LoginPage: React.FC = (props) => {
                         <input required type="password" placeholder="Entrer votre Password" value={password} id="password" onChange={(e) => { getpassword(e) }} className="form-control flex-1 mr-1" />
                     </div>
                     <div className="form-check">
-                        <input type="checkbox" className="form-check-input" onChange={() => setChecked(!checked)} defaultChecked={checked}/>
-                        <label className="form-check-label">Resté connecté</label>
+                        <input type="checkbox" className="form-check-input" onChange={() => setChecked(!checked)} defaultChecked={checked} />
+                        <label className="form-check-label">Stay connected</label>
                     </div>
                     <div className="mt-3">
-                        <button type="button" className="btn btn-primary btn-lg btn-block" onClick={(e) => login()}  disabled={disabled}>Login</button>
+                        {!isLoad && <button type="button" className="btn btn-primary btn-lg btn-block" onClick={(e) => login()} disabled={disabled}>Login</button>}
+                        {isLoad && <button type="button" className="btn btn-primary btn-lg btn-block" >in progress...</button>}
                         <p></p>
                         <p className="text-danger">{msg}</p>
                     </div>
@@ -119,7 +126,7 @@ const LoginPage: React.FC = (props) => {
             </div>
 
         </div>
-        )
+    )
 }
 
 export default LoginPage;

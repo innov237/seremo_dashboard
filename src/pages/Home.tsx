@@ -64,6 +64,14 @@ const HomePage: React.FC = () => {
             dispatch(ACTION_LOGOUT())
     }
 
+    const logout = async () => {
+
+        if (window.confirm("Do you want to log out ?")) {
+            await localStorage.clear();
+            history.push('/login');
+        }
+
+    }
 
     const getAllTransferFc = async () => {
         setActiveItem('Transfer');
@@ -89,14 +97,14 @@ const HomePage: React.FC = () => {
     async function search(value: any) {
         setLoader(true);
         var res = await ApiService.getData("dashboard/getTransferByCode/" + value);
-        if (res.length){
-           getAllTransfer(res);
-           history.push("/admin/transactions", res);
-        }else
+        if (res.length) {
+            getAllTransfer(res);
+            history.push("/admin/transactions", res);
+        } else
 
-            alert("No transfert found with code:"+value);
-        
-        
+            alert("No transfert found with code:" + value);
+
+
         setLoader(false);
     }
 
@@ -143,7 +151,7 @@ const HomePage: React.FC = () => {
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
             <div className="row">
                 <div className="col-md-2 side__menu">
                     {

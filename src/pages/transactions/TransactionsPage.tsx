@@ -43,7 +43,7 @@ const TrasactionPage: React.FC = () => {
 
     }, [])
 
-    const substringURL = (url:string) => {
+    const substringURL = (url: string) => {
         const rootURL = `${process.env.REACT_APP_API_URL}/api`
         return url.substring(rootURL.length, url.length);
     }
@@ -56,42 +56,42 @@ const TrasactionPage: React.FC = () => {
 
     };
 
-    const _filterRequest = (filter:string): void => {
+    const _filterRequest = (filter: string): void => {
         getAllTransfer([]);
-    	setStatus(filter);
+        setStatus(filter);
 
-    	if (filter == 'All')
+        if (filter == 'All')
             getAllRequestFc();
         else
             getAllRequestFc(filter);
     }
 
-    const _filterTransaction = (filter:string): void => {
+    const _filterTransaction = (filter: string): void => {
         getAllTransfer([]);
-    	setStatus(filter);
+        setStatus(filter);
 
-    	if (filter == 'All')
-          getAllTransferFc();
+        if (filter == 'All')
+            getAllTransferFc();
         else
-          getAllTransferFc(filter);
+            getAllTransferFc(filter);
     }
 
-    const updateStatus  = (filter:string): void => {
+    const updateStatus = (filter: string): void => {
         if (activeItem == 'Transfer')
             _filterTransaction(filter)
         else
             _filterRequest(filter)
     };
 
-    const paginate = (url:string) => {
+    const paginate = (url: string) => {
         console.log(url)
 
-        if ( 'Transfer' == activeItem)
+        if ('Transfer' == activeItem)
             getAllTransferFcPaginate(url)
         else
 
             getAllRequestFcPaginate(url)
-    }    
+    }
 
     const getAllTransferFc = async (param:any | null = null) => {
         setActiveItem('Transfer');
@@ -131,7 +131,7 @@ const TrasactionPage: React.FC = () => {
         setLoader(false);
     };
 
-    const getAllTransferFcPaginate = async (param:string) => {
+    const getAllTransferFcPaginate = async (param: string) => {
         getAllMovement();
         setLoader(true);
         getAllTransfer([]);
@@ -142,7 +142,7 @@ const TrasactionPage: React.FC = () => {
 
         getAllTransfer(response.data);
         formatDataToCsv(response.data);
-        
+
 
         setNext(response.next_page_url);
         setPrev(response.prev_page_url);
@@ -151,15 +151,15 @@ const TrasactionPage: React.FC = () => {
     };
 
 
-    const getAllRequestFcPaginate = async (param:string) => {
+    const getAllRequestFcPaginate = async (param: string) => {
         setLoader(true);
         getAllTransfer([]);
         setMovement(statusRequest)
-        
+
         let url = substringURL(param);
 
         var response = await ApiService.getData(url);
-        
+
         getAllTransfer(response.data);
         formatDataToCsv(response.data);
 
@@ -193,161 +193,161 @@ const TrasactionPage: React.FC = () => {
     }
 
 
-    const transfertModal = (currentTransaction:any) => {
-        return (
-        <div className="container-fluid">
-        <h4>Reciever</h4>
-            <div className="row">
-                <div className="col-4" style={{ height: "150px", width: "150px" }}>
-                    <img src={currentTransaction.sender?.user_avatar} style={{ height: "150px", width: "150px" }} />
-                </div>
-
-                <div className="col-4  mt-2">
-                    <p className="p-0 m-0 text-primary"><i className="fa fa-sort-numeric-down-alt text-primary"></i> User Code</p>
-                    <p className="text-uppercase font-weight-bold"> {currentTransaction.sender.user_code}</p>
-                    <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
-                    <p className="text-uppercase font-weight-bold">{currentTransaction.sender.user_name} {currentTransaction.sender['user_last_name']}</p>
-                    <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
-                    <p className="text-uppercase font-weight-bold">{currentTransaction.sender.country.name}<img src={currentTransaction.sender.country.flag} className="user__avatar" alt="avatar" /> </p>
-                </div>
-
-                <div className="col-4  mt-2">
-                    <p className="p-0 m-0 text-primary"><i className="fa fa-phone text-primary"></i> Phone number</p>
-                    <h5 className="text-uppercase font-weight-bold"> {currentTransaction.sender?.user_phone_number}</h5>
-                    <p className="pt-1 m-0 text-primary"><i className="fa fa-envelope-square text-primary"></i> Email</p>
-                    <p className="pt-0 text-uppercase font-weight-bold">{currentTransaction.sender?.user_email}</p>
-                    <p className="p-0 m-0 text-primary"><i className="fa fa-wifi text-primary"></i> Provider </p>
-                    <p className="text-uppercase font-weight-bold">{currentTransaction.sender?.provider_name}</p>
-                </div>
-            </div>
-            <hr />
-            <h4>Sender</h4>
-            <div className="row px-10 px-2 py-2">
-                <div className="col-4" style={{ height: "150px", width: "150px" }}>
-                    <img src={currentTransaction.receiver?.user_avatar} style={{ height: "150px", width: "150px" }} />
-                </div>
-
-                <div className="col-4  mt-2">
-                    <p className="p-0 m-0 text-primary"><i className="fa fa-sort-numeric-down-alt text-primary"></i> User Code</p>
-                    <p className="text-uppercase font-weight-bold"> {currentTransaction.receiver?.user_code}</p>
-                    <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
-                    <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.user_name} {currentTransaction.receiver?.['user_last_name']}</p>
-                    <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
-                    <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.country.name}<img src={currentTransaction.receiver?.country.flag} className="user__avatar" alt="avatar" /> </p>
-                </div>
-
-                <div className="col-4  mt-2">
-                    <p className="p-0 m-0 text-primary"><i className="fa fa-phone text-primary"></i> Phone number</p>
-                    <h5 className="text-uppercase font-weight-bold"> {currentTransaction.receiver?.user_phone_number}</h5>
-                    <p className="pt-1 m-0 text-primary"><i className="fa fa-envelope-square text-primary"></i> Email</p>
-                    <p className="pt-0 text-uppercase font-weight-bold">{currentTransaction.receiver?.user_email}</p>
-                    <p className="p-0 m-0 text-primary"><i className="fa fa-wifi text-primary"></i> Provider </p>
-                    <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.provider_name}</p>
-                </div>
-            </div>
-
-       
-            <div className="card px-2 py-2 mb-3">
-                <div className="row px-10 px-2 py-2">
-
-                    <div className="col-6  mt-2">
-                        <p className="p-0 m-0 text-primary">Transaction</p>
-                        <h5 className="text-uppercase font-weight-bold"> {currentTransaction.transaction_id}</h5>
-                    </div>
-                    <div className="col-6  mt-2">
-                        <p className="p-0 m-0 text-primary">Amount</p>
-                        <h5 className="text-uppercase font-weight-bold">{currentTransaction?.from_amount_} {currentTransaction.balance} </h5>
-
-                        <p className="p-0 m-0 text-primary">Currency</p>
-                        <h5 className="text-uppercase font-weight-bold">{currentTransaction?.to_amount} {currentTransaction.currency} </h5>
-
-                    </div>
-                    <div className="col-6  mt-2">
-                        <p className="p-0 m-0 text-primary">Date </p>
-                        <h5 className="text-uppercase font-weight-bold">{ moment(currentTransaction?.created_at).format("DD-MMM-YYYY HH:mm:ss")}</h5>
-                    </div>
-                    <div />
-                </div>
-            </div>
-        </div>)
-    }
-    const requestModal = (currentTransaction:any) => {
+    const transfertModal = (currentTransaction: any) => {
         return (
             <div className="container-fluid">
-                    <h4>Reciever</h4>
-                        <div className="row">
-                            <div className="col-4" style={{ height: "150px", width: "150px" }}>
-                                <img src={currentTransaction.requester?.user_avatar} style={{ height: "150px", width: "150px" }} />
-                            </div>
-
-                            <div className="col-4  mt-2">
-                                <p className="p-0 m-0 text-primary"><i className="fa fa-sort-numeric-down-alt text-primary"></i> User Code</p>
-                                <p className="text-uppercase font-weight-bold"> {currentTransaction.requester?.user_code}</p>
-                                <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
-                                <p className="text-uppercase font-weight-bold">{currentTransaction.requester?.user_name} {currentTransaction.requester?.['user_last_name']}</p>
-                                <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
-                                <p className="text-uppercase font-weight-bold">{currentTransaction.requester?.country.name}<img src={currentTransaction.requester?.country.flag} className="user__avatar" alt="avatar" /> </p>
-                            </div>
-
-                            <div className="col-4  mt-2">
-                                <p className="p-0 m-0 text-primary"><i className="fa fa-phone text-primary"></i> Phone number</p>
-                                <h5 className="text-uppercase font-weight-bold"> {currentTransaction.requester?.user_phone_number}</h5>
-                                <p className="pt-1 m-0 text-primary"><i className="fa fa-envelope-square text-primary"></i> Email</p>
-                                <p className="pt-0 text-uppercase font-weight-bold">{currentTransaction.requester?.user_email}</p>
-                                <p className="p-0 m-0 text-primary"><i className="fa fa-wifi text-primary"></i> Provider </p>
-                                <p className="text-uppercase font-weight-bold">{currentTransaction.requester?.provider_name}</p>
-                            </div>
-                        </div>
-                        <hr />
-                        <h4>Sender</h4>
-                        <div className="row px-10 px-2 py-2">
-                            <div className="col-4" style={{ height: "150px", width: "150px" }}>
-                                <img src={currentTransaction.receiver?.user_avatar} style={{ height: "150px", width: "150px" }} />
-                            </div>
-
-                            <div className="col-4  mt-2">
-                                <p className="p-0 m-0 text-primary"><i className="fa fa-sort-numeric-down-alt text-primary"></i> User Code</p>
-                                <p className="text-uppercase font-weight-bold"> {currentTransaction.receiver?.user_code}</p>
-                                <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
-                                <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.user_name} {currentTransaction.receiver?.['user_last_name']}</p>
-                                <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
-                                <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.country.name}<img src={currentTransaction.receiver?.country.flag} className="user__avatar" alt="avatar" /> </p>
-                            </div>
-
-                            <div className="col-4  mt-2">
-                                <p className="p-0 m-0 text-primary"><i className="fa fa-phone text-primary"></i> Phone number</p>
-                                <h5 className="text-uppercase font-weight-bold"> {currentTransaction.receiver?.user_phone_number}</h5>
-                                <p className="pt-1 m-0 text-primary"><i className="fa fa-envelope-square text-primary"></i> Email</p>
-                                <p className="pt-0 text-uppercase font-weight-bold">{currentTransaction.receiver?.user_email}</p>
-                                <p className="p-0 m-0 text-primary"><i className="fa fa-wifi text-primary"></i> Provider </p>
-                                <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.provider_name}</p>
-                            </div>
-                        </div>
-
-
-                        <div className="card px-2 py-2 mb-3">
-                            <div className="row px-10 px-2 py-2">
-
-                                <div className="col-6  mt-2">
-                                    <p className="p-0 m-0 text-primary">Status</p>
-                                    <h5 className="text-uppercase font-weight-bold"> {currentTransaction?.status}</h5>
-                                </div>
-                                <div className="col-6  mt-2">
-                                    <p className="p-0 m-0 text-primary"> From Amount</p>
-                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.from_amount} {currentTransaction.requester?.country.currency} </h5>
-
-                                    <p className="p-0 m-0 text-primary"> To Amount</p>
-                                    <h5 className="text-uppercase font-weight-bold">{currentTransaction?.to_amount} {currentTransaction.receiver?.country.currency} </h5>
-
-                                </div>
-                                <div className="col-6  mt-2">
-                                    <p className="p-0 m-0 text-primary">Date </p>
-                                    <h5 className="text-uppercase font-weight-bold">{ moment(currentTransaction?.created_at).format("DD-MMM-YYYY HH:mm:ss")}</h5>
-                                </div>
-                                <div />
-                            </div>
-                        </div>
+                <h4>Receiver</h4>
+                <div className="row">
+                    <div className="col-4" style={{ height: "150px", width: "150px" }}>
+                        <img src={currentTransaction.sender?.user_avatar} style={{ height: "100px", width: "100px" }} />
                     </div>
+
+                    <div className="col-4  mt-2">
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-sort-numeric-down-alt text-primary"></i> User Code</p>
+                        <p className="text-uppercase font-weight-bold"> {currentTransaction.sender.user_code}</p>
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
+                        <p className="text-uppercase font-weight-bold">{currentTransaction.sender.user_name} {currentTransaction.sender['user_last_name']}</p>
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
+                        <p className="text-uppercase font-weight-bold">{currentTransaction.sender.country.name}<img src={currentTransaction.sender.country.flag} className="user__avatar" alt="avatar" /> </p>
+                    </div>
+
+                    <div className="col-4  mt-2">
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-phone text-primary"></i> Phone number</p>
+                        <h5 className="text-uppercase font-weight-bold"> {currentTransaction.sender?.user_phone_number}</h5>
+                        <p className="pt-1 m-0 text-primary"><i className="fa fa-envelope-square text-primary"></i> Email</p>
+                        <p className="pt-0 text-uppercase font-weight-bold">{currentTransaction.sender?.user_email}</p>
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-wifi text-primary"></i> Provider </p>
+                        <p className="text-uppercase font-weight-bold">{currentTransaction.sender?.provider_name}</p>
+                    </div>
+                </div>
+                <hr />
+                <h4>Sender</h4>
+                <div className="row px-10 px-2 py-2">
+                    <div className="col-4" style={{ height: "150px", width: "150px" }}>
+                        <img src={currentTransaction.receiver?.user_avatar} style={{ height: "100px", width: "100px" }} />
+                    </div>
+
+                    <div className="col-4  mt-2">
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-sort-numeric-down-alt text-primary"></i> User Code</p>
+                        <p className="text-uppercase font-weight-bold"> {currentTransaction.receiver?.user_code}</p>
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
+                        <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.user_name} {currentTransaction.receiver?.['user_last_name']}</p>
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
+                        <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.country.name}<img src={currentTransaction.receiver?.country.flag} className="user__avatar" alt="avatar" /> </p>
+                    </div>
+
+                    <div className="col-4  mt-2">
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-phone text-primary"></i> Phone number</p>
+                        <h5 className="text-uppercase font-weight-bold"> {currentTransaction.receiver?.user_phone_number}</h5>
+                        <p className="pt-1 m-0 text-primary"><i className="fa fa-envelope-square text-primary"></i> Email</p>
+                        <p className="pt-0 text-uppercase font-weight-bold">{currentTransaction.receiver?.user_email}</p>
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-wifi text-primary"></i> Provider </p>
+                        <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.provider_name}</p>
+                    </div>
+                </div>
+
+
+                <div className="card px-2 py-2 mb-3">
+                    <div className="row px-10 px-2 py-2">
+
+                        <div className="col-6  mt-2">
+                            <p className="p-0 m-0 text-primary">Transaction</p>
+                            <h5 className="text-uppercase font-weight-bold"> {currentTransaction.transaction_id}</h5>
+                        </div>
+                        <div className="col-6  mt-2">
+                            <p className="p-0 m-0 text-primary">Amount</p>
+                            <h5 className="text-uppercase font-weight-bold">{currentTransaction?.from_amount_} {currentTransaction.balance} </h5>
+
+                            <p className="p-0 m-0 text-primary">Currency</p>
+                            <h5 className="text-uppercase font-weight-bold">{currentTransaction?.to_amount} {currentTransaction.currency} </h5>
+
+                        </div>
+                        <div className="col-6  mt-2">
+                            <p className="p-0 m-0 text-primary">Date </p>
+                            <h5 className="text-uppercase font-weight-bold">{moment(currentTransaction?.created_at).format("DD-MMM-YYYY HH:mm:ss")}</h5>
+                        </div>
+                        <div />
+                    </div>
+                </div>
+            </div>)
+    }
+    const requestModal = (currentTransaction: any) => {
+        return (
+            <div className="container-fluid">
+                <h4>Receiver</h4>
+                <div className="row">
+                    <div className="col-4" style={{ height: "150px", width: "150px" }}>
+                        <img src={currentTransaction.requester?.user_avatar} style={{ height: "150px", width: "150px" }} />
+                    </div>
+
+                    <div className="col-4  mt-2">
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-sort-numeric-down-alt text-primary"></i> User Code</p>
+                        <p className="text-uppercase font-weight-bold"> {currentTransaction.requester?.user_code}</p>
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
+                        <p className="text-uppercase font-weight-bold">{currentTransaction.requester?.user_name} {currentTransaction.requester?.['user_last_name']}</p>
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
+                        <p className="text-uppercase font-weight-bold">{currentTransaction.requester?.country.name}<img src={currentTransaction.requester?.country.flag} className="user__avatar" alt="avatar" /> </p>
+                    </div>
+
+                    <div className="col-4  mt-2">
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-phone text-primary"></i> Phone number</p>
+                        <h5 className="text-uppercase font-weight-bold"> {currentTransaction.requester?.user_phone_number}</h5>
+                        <p className="pt-1 m-0 text-primary"><i className="fa fa-envelope-square text-primary"></i> Email</p>
+                        <p className="pt-0 text-uppercase font-weight-bold">{currentTransaction.requester?.user_email}</p>
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-wifi text-primary"></i> Provider </p>
+                        <p className="text-uppercase font-weight-bold">{currentTransaction.requester?.provider_name}</p>
+                    </div>
+                </div>
+                <hr />
+                <h4>Sender</h4>
+                <div className="row px-10 px-2 py-2">
+                    <div className="col-4" style={{ height: "150px", width: "150px" }}>
+                        <img src={currentTransaction.receiver?.user_avatar} style={{ height: "150px", width: "150px" }} />
+                    </div>
+
+                    <div className="col-4  mt-2">
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-sort-numeric-down-alt text-primary"></i> User Code</p>
+                        <p className="text-uppercase font-weight-bold"> {currentTransaction.receiver?.user_code}</p>
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-user text-primary" ></i> Name </p>
+                        <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.user_name} {currentTransaction.receiver?.['user_last_name']}</p>
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-globe-asia text-primary"></i> Country</p>
+                        <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.country.name}<img src={currentTransaction.receiver?.country.flag} className="user__avatar" alt="avatar" /> </p>
+                    </div>
+
+                    <div className="col-4  mt-2">
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-phone text-primary"></i> Phone number</p>
+                        <h5 className="text-uppercase font-weight-bold"> {currentTransaction.receiver?.user_phone_number}</h5>
+                        <p className="pt-1 m-0 text-primary"><i className="fa fa-envelope-square text-primary"></i> Email</p>
+                        <p className="pt-0 text-uppercase font-weight-bold">{currentTransaction.receiver?.user_email}</p>
+                        <p className="p-0 m-0 text-primary"><i className="fa fa-wifi text-primary"></i> Provider </p>
+                        <p className="text-uppercase font-weight-bold">{currentTransaction.receiver?.provider_name}</p>
+                    </div>
+                </div>
+
+
+                <div className="card px-2 py-2 mb-3">
+                    <div className="row px-10 px-2 py-2">
+
+                        <div className="col-6  mt-2">
+                            <p className="p-0 m-0 text-primary">Status</p>
+                            <h5 className="text-uppercase font-weight-bold"> {currentTransaction?.status}</h5>
+                        </div>
+                        <div className="col-6  mt-2">
+                            <p className="p-0 m-0 text-primary"> From Amount</p>
+                            <h5 className="text-uppercase font-weight-bold">{currentTransaction?.from_amount} {currentTransaction.requester?.country.currency} </h5>
+
+                            <p className="p-0 m-0 text-primary"> To Amount</p>
+                            <h5 className="text-uppercase font-weight-bold">{currentTransaction?.to_amount} {currentTransaction.receiver?.country.currency} </h5>
+
+                        </div>
+                        <div className="col-6  mt-2">
+                            <p className="p-0 m-0 text-primary">Date </p>
+                            <h5 className="text-uppercase font-weight-bold">{moment(currentTransaction?.created_at).format("DD-MMM-YYYY HH:mm:ss")}</h5>
+                        </div>
+                        <div />
+                    </div>
+                </div>
+            </div>
         )
     }
 
@@ -366,7 +366,7 @@ const TrasactionPage: React.FC = () => {
                 </Modal.Header>
                 <Modal.Body>
 
-                    {(currentTransaction !== null) ? (activeItem == 'Transfer') ? transfertModal(currentTransaction) : requestModal(currentTransaction) :<></> 
+                    {(currentTransaction !== null) ? (activeItem == 'Transfer') ? transfertModal(currentTransaction) : requestModal(currentTransaction) : <></>
                     }
 
                 </Modal.Body>
@@ -378,7 +378,7 @@ const TrasactionPage: React.FC = () => {
             </Modal>
         );
     }
- 
+
     function opendetail(data: any) {
         getCurrentTransaction(data);
         handleShow();
@@ -387,42 +387,42 @@ const TrasactionPage: React.FC = () => {
     const up = () => `page-item ${(next) ? '' : 'disabled'}`;
     const down = () => `page-item ${(prev) ? '' : 'disabled'}`;
 
- 
-    const tabItem = (res:any, type:string='Transfert') => {
-        if ('Transfert' === type )
+
+    const tabItem = (res: any, type: string = 'Transfert') => {
+        if ('Transfert' === type)
             return <tr key={res.id}>
-            <td><img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name}<span className="span__contry">{res.receiver.country.name} ➚ </span> <img src={res.receiver.country.flag} className="user__avatar" alt="avatar" /></td>
-            <td><img src={res.sender.user_avatar} className="user__avatar" alt="avatar" /> {res.sender.user_name} <span className="span__contry">➘ {res.sender.country.name}</span> <img src={res.sender.country.flag} className="user__avatar" alt="avatar" /></td>
-            <td>{res.reason}</td>
-            <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
-            <td>{res.balance}</td>
-            <td>{res.currency}</td>
-            <td>{res.movement_type}</td>
-            <td style={{ textAlign: "center" }} className="more__td" onClick={(e) => opendetail(res)}>
-                <span className="dot"></span>
-                <span className="dot"></span>
-                <span className="dot"></span>
-            </td>
-        </tr>
+                <td><img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name}<span className="span__contry">{res.receiver.country.name} ➚ </span> <img src={res.receiver.country.flag} className="country__flag" alt="avatar" /></td>
+                <td><img src={res.sender.user_avatar} className="user__avatar" alt="avatar" /> {res.sender.user_name} <span className="span__contry">➘ {res.sender.country.name}</span> <img src={res.sender.country.flag} className="country__flag" alt="avatar" /></td>
+                <td>{res.reason}</td>
+                <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
+                <td>{res.balance}</td>
+                <td>{res.currency}</td>
+                <td>{res.movement_type}</td>
+                <td style={{ textAlign: "center" }} className="more__td" onClick={(e) => opendetail(res)}>
+                    <span className="dot"></span>
+                    <span className="dot"></span>
+                    <span className="dot"></span>
+                </td>
+            </tr>
         else
             return <tr key={res.id}>
-            <td> <img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> <img src={res.receiver.country.flag} className="user__avatar" alt="avatar" /></td>
-            <td><img src={res.requester.user_avatar} className="user__avatar" alt="avatar" /> {res.requester.user_name} <span className="span__contry">➘ {res.requester.country.name}</span><img src={res.requester.country.flag} className="user__avatar" alt="avatar" /></td>
+                <td> <img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> <img src={res.receiver.country.flag} className="country__flag" alt="avatar" /></td>
+                <td><img src={res.requester.user_avatar} className="user__avatar" alt="avatar" /> {res.requester.user_name} <span className="span__contry">➘ {res.requester.country.name}</span><img src={res.requester.country.flag} className="country__flag" alt="avatar" /></td>
 
-            <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
-            <td>{`${res.from_amount} ${res.requester.country.currency}`}</td>
-            <td>{`${res.to_amount} ${res.receiver.country.currency}`}</td>
-            <td>{res.applied_rate}</td>
-            <td>{res.status}</td>
-            <td style={{ textAlign: "center" }} className="more__td" onClick={(e) => opendetail(res)}>
-                <span className="dot"></span>
-                <span className="dot"></span>
-                <span className="dot"></span>
-            </td>
-        </tr>
+                <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
+                <td>{`${res.from_amount} ${res.requester.country.currency}`}</td>
+                <td>{`${res.to_amount} ${res.receiver.country.currency}`}</td>
+                <td>{res.applied_rate}</td>
+                <td>{res.status}</td>
+                <td style={{ textAlign: "center" }} className="more__td" onClick={(e) => opendetail(res)}>
+                    <span className="dot"></span>
+                    <span className="dot"></span>
+                    <span className="dot"></span>
+                </td>
+            </tr>
     }
 
-    const proxyData = (data:any): any => (data.sender) ? data.sender : data.requester
+    const proxyData = (data: any): any => (data.sender) ? data.sender : data.requester
 
     function formatDataToCsv(data: any) {
         let custom: any = [];
@@ -481,7 +481,6 @@ const TrasactionPage: React.FC = () => {
                                 {
                                     movement.map(e => <option key={e.id} value={e.id}>{e.label}</option>)
                                 }
-
                             </select>
                         </div>
                         <div className="col-md-8">
@@ -501,24 +500,24 @@ const TrasactionPage: React.FC = () => {
                 <tbody>
                     <tr className="theader">
                         <th>Sender</th>
-                        <th>Reciever</th>
+                        <th>Receiver</th>
                         {activeItem === 'Transfer' ? (<th>Reason of Request</th>) : null}
                         <th>Date of Operation </th>
 
                         {activeItem === 'Transfer' ? <><th>amount</th>
-                        <th>currency</th>
-                        <th >status</th></>:
-                        <>
-                            <th>From amout</th>
-                            <th>To amount</th>
-                            <th >Rate</th>
-                            <th >Status</th>
-                        </>
+                            <th>currency</th>
+                            <th >status</th></> :
+                            <>
+                                <th>From amout</th>
+                                <th>To amount</th>
+                                <th >Rate</th>
+                                <th >Status</th>
+                            </>
                         }
-                        
+
                         <th>More</th>
                     </tr>
-                    {   (isLoad) ? <></> :
+                    {(isLoad) ? <></> :
                         (activeItem === 'Transfer') ?
                             transferData.map((res) => tabItem(res)) :
                             transferData.map((res) => tabItem(res, 'Request'))
@@ -530,11 +529,11 @@ const TrasactionPage: React.FC = () => {
 
             <div className="d-flex justify-content-center">
                 <nav aria-label="Page navigation example">
-                  <ul className="pagination">
-                    <li className={down()} onClick={ () => (prev) ? paginate(prev): ''} ><a className="page-link" >Previous</a></li>
-                    
-                    <li className={up()} onClick={ () => (next) ? paginate(next) : ''}><a className="page-link" >Next</a></li>
-                  </ul>
+                    <ul className="pagination">
+                        <li className={down()} onClick={() => (prev) ? paginate(prev) : ''} ><a className="page-link" >Previous</a></li>
+
+                        <li className={up()} onClick={() => (next) ? paginate(next) : ''}><a className="page-link" >Next</a></li>
+                    </ul>
                 </nav>
             </div>
         </div>
