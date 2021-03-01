@@ -24,6 +24,8 @@ const DashBoardPage: React.FC = (props) => {
 
     const auth = useSelector((state:any) => state.auth)
 
+    ApiService.putToken(auth.token)
+
     const seremoBalance = async() => {
          const header = {
             "headers":{
@@ -37,19 +39,22 @@ const DashBoardPage: React.FC = (props) => {
     }    
     const customerCount = async () => {
         var response = await ApiService.getData("v1/customers");
-
-        setCustomer(response.data)
+       
+        if (response.success)
+            setCustomer(response.data)
     }
     const getStatData = async () => {
         var response = await ApiService.getData("v1/transactions/stats");
 
-        if (response != null) {
+      
+
+        if (response.success) {
             var data: any = [];
             var nombre: any = [];
             var amount: any = 0;
 
             
-            response.forEach((element: any) => {
+            response.data.forEach((element: any) => {
                 
                 data.push(element.length);
                 nombre.push(element.date);

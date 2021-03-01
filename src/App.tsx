@@ -7,6 +7,7 @@ import {
   Switch,
   Route,
   Router,
+  Redirect,
   HashRouter
 } from "react-router-dom";
 
@@ -29,7 +30,6 @@ import ProtectedRoute from "./component/DataComponent"
 
 import './App.css';
 
-
 import ApiService from './services/ApiService';
 
 import {
@@ -45,68 +45,68 @@ const App: React.FC = () => {
     refreshToken()
   })
 
-
-  const auth = useSelector((state: any) => state.auth);
+  const auth  = useSelector((state: any) => state.auth);
 
   const dispatch = useDispatch();
 
-  const refreshToken = async () => {
-
-    const token = localStorage.getItem("AuthUserData");
-
-
-    if (!auth.pageHasbeRefresh) {
-      if (token) {
-        dispatch(ACTION_REFRESH())
-        const request = await ApiService.getData('v1/refresh', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          }
+  const refreshToken = async() => {
+    
+    const token = localStorage.getItem("srDash");
+        
+    if (!auth.pageHasbeRefresh){
+      if(token){
+        //dispatch(ACTION_REFRESH())
+        const request = await ApiService.getData('v1/refresh',{
+            headers:{
+              Authorization: `Bearer ${token}`,
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+             }
         })
 
         if (request.response) {
           dispatch(ACTION_LOGIN(request.data))
-          localStorage.setItem("AuthUserData", request.data.token);
-        } else
+          localStorage.setItem("srDash", request.data.token);
+         }else{
+           localStorage.removeItem("srDash");
+            dispatch(ACTION_REFRESH())
+          }
+
+      }else{
+          localStorage.removeItem("srDash");
           dispatch(ACTION_REFRESH())
-
-      } else {
-        localStorage.removeItem("AuthUserData");
-        dispatch(ACTION_REFRESH())
       }
-    }
-
+    } 
+    
   }
 
 
-  return (
-    <div className="App">
-      <HashRouter>
-        <Suspense fallback={<UserDetails></UserDetails>}>
-
+      return (
+        <div className="App">
           {
             (auth.pageHasbeRefresh) ?
-              <Switch>
-
-                <Route path="/admin" component={ProtectedRoute(HomePage)} />
-                <Route path="/login" exact={true} component={LoginPage} />
-                <Route path="/" component={LoginPage} />
-              </Switch>
-              :
-
-              <></>
+                <HashRouter>
+                  <Switch>
+                      <ProtectedRoute excat path="/admin" component={HomePage} />
+                      <ProtectedRoute path="/admin/administrations" component={HomePage} ></ProtectedRoute>
+                      <ProtectedRoute path="/admin/access-log" component={HomePage}></ProtectedRoute>
+                      <ProtectedRoute path="/admin/detailtransactionUser" component={HomePage}></ProtectedRoute>
+                      <ProtectedRoute path="/admin/all-users" component={HomePage} />
+                      <ProtectedRoute path="/admin/dashboard" component={HomePage} />
+                      <ProtectedRoute path="/admin/retrait" component={HomePage} />
+                      <ProtectedRoute path="/admin/history" component={HomePage} />
+                      <ProtectedRoute path="/admin/dashboard" component={HomePage} />
+                      
+                      <Route path="/login" component={LoginPage} />
+                      <Route path="/" component={LoginPage} />  
+                    </Switch> 
+                </HashRouter>
+            : <></>
           }
-
-        </Suspense>
-
-      </HashRouter>
-    </div >
-
-  );
-
-
+        </div>
+      );
+  
+  
 }
 
 

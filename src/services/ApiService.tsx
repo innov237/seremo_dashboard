@@ -4,12 +4,27 @@ import 'react';
 class ApiService {
 
     baseUrl: String = `${process.env.REACT_APP_API_URL}api/`;
+
+    header: Object = {};
     
     get imageUrl() {
         return `${process.env.REACT_APP_API_URL}public/storage/`;
     }
 
-    getData = async (route: string, header: any | null = null) => {
+    putToken(token:any){
+        this.header = {
+            headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        }
+
+    }
+
+    getData = async (route: string, authorization: any | null = null) => {
+
+        const header = (authorization) ? authorization : this.header
         
         var response = await Axios.get(this.baseUrl + route, header).then((result) => {
             if (result.status === 200) {
@@ -33,7 +48,9 @@ class ApiService {
         return response;
     }
 
-    patchData = async (route: string, header: any | null = null) => {
+    patchData = async (route: string, authorization: any | null = null) => {
+
+        const header = (authorization) ? authorization : this.header
         
         var response = await Axios.patch(this.baseUrl + route, header).then((result) => {
             if (result.status === 200) {
@@ -46,7 +63,9 @@ class ApiService {
         return response;
     }
 
-    deleteData = async (route: string, header: any | null = null) => {
+    deleteData = async (route: string, authorization: any | null = null) => {
+
+        const header = (authorization) ? authorization : this.header
         
         var response = await Axios.delete(this.baseUrl + route, header).then((result) => {
             if (result.status === 204) {
@@ -59,7 +78,9 @@ class ApiService {
         return response;
     }
 
-    postData = async (route: string, data: any, header: any | null = null) => {
+    postData = async (route: string, data: any, authorization: any | null = null) => {
+
+        const header = (authorization) ? authorization : this.header
 
         
         var response = await Axios.post(this.baseUrl + route, data,header).then((result) => {

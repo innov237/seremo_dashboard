@@ -6,6 +6,10 @@ import { useHistory } from 'react-router-dom';
 import { Modal, Button } from "react-bootstrap";
 import ApiService from '../../services/ApiService';
 
+import {
+    useSelector
+} from 'react-redux'
+
 
 import moment from 'moment';
 
@@ -43,9 +47,10 @@ const TrasactionPage: React.FC = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const auth  = useSelector((state: any) => state.auth);
 
-
-
+    ApiService.putToken(auth.token)
+    
     useEffect(() => {
         getAllTransferFc();
 

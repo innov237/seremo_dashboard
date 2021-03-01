@@ -5,17 +5,17 @@ import { Redirect, useHistory } from 'react-router-dom';
 import {
     Switch,
     Route,
-    Link
+    Link,
 } from "react-router-dom";
 
 import {
-    useDispatch
+    useDispatch, useSelector
 } from 'react-redux'
 
 import {
-    ACTION_LOGOUT, LOGOUT,
+    BEFORE_ACTION_LOGOUT,
+    ACTION_LOGOUT
 } from '../redux/Auth/Actions'
-
 
 import TrasactionPage from './transactions/TransactionsPage';
 import HistoryPage from './transactions/HistoryPage';
@@ -28,24 +28,41 @@ import UsersListPage from './users/UsersListPage';
 import DashBoardPage from './dashboard/DashboardPage';
 import { useLocation } from 'react-router-dom';
 
+
+
 const HomePage: React.FC = () => {
+    const history = useHistory();
+    const location = useLocation();
+    const dispatch = useDispatch();
 
-
-    const dispatch = useDispatch()
-
-    const history = useHistory<any>();
     const [transferData, getAllTransfer] = useState<any[]>([]);
     const [isLoad, setLoader] = useState(false);
     const [searchValue, setsearchValue] = useState('');
     const [activeItem, setActiveItem] = useState('Transfer');
     const [csvData, getCSVData] = useState<any[]>([]);
 
-    const imageUrl = "https://seremoworld.com/seremoapi/public/storage/";
+    const auth  = useSelector((state: any) => state.auth);
 
-    /*useEffect(() => {
-        getAllTransferFc();
-        getAllRequestFc();
-    }, []) */
+    ApiService.putToken(auth.token)
+    
+   
+    const logOut = async () => {
+         var datalog = {
+            "id": auth.user.id,
+            "status": "out"
+        }
+        
+        var response = await ApiService.postData("dashboard/createAccessLog", datalog);
+
+    }
+
+
+    async function logOutApi() {
+        logOut()
+        var res = await ApiService.getData("v1/logout");
+        if (res.success)
+            dispatch(ACTION_LOGOUT())
+    }
 
     const logout = async () => {
 
@@ -113,7 +130,7 @@ const HomePage: React.FC = () => {
         });
     }
 
-    const location = useLocation();
+    
 
     return (
         <div className="container-fluid">
@@ -146,7 +163,7 @@ const HomePage: React.FC = () => {
                     <li className={location.pathname == '/admin/retrait' ? "active" : ""}><i className="fa fa-money-check"></i> <Link to="/admin/retrait">Withdrawal request
 </Link></li>
                     <li className={location.pathname == '/admin/history' ? "active" : ""}><i className="fa fa-history"></i> <Link to="/admin/history">Historical</Link></li>
-                    <li className={location.pathname == '/log-out' ? "mt-5 active" : "mt-5"}><i className="fa fa-sign-out-alt"></i> <button className="btn btn-danger" onClick={() => logout()}>Log out</button></li>
+                    <li onClick={logOutApi} className={location.pathname == '/login' ? "mt-5 active" : "mt-5 text-white"}><i className="fa fa-sign-out-alt"></i> Log out</li>
                 </div>
                 <div className="col-md-10 main__row">
                     <Switch>

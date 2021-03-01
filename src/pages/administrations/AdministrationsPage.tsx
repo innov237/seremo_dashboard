@@ -32,6 +32,9 @@ const AdministrationPage: React.FC = () => {
     const auth  = useSelector((state: any) => state.auth);
 
 
+    ApiService.putToken(auth.token)
+
+    const PERMISSION: any = auth.user.attributes.level
 
     type Inputs = {
         name: string,
@@ -64,14 +67,19 @@ const AdministrationPage: React.FC = () => {
 
     const getAllAdmin = async (data:string='') => {
         setLoader(true);
+
         let url = "v1/admins"
         if (data != '')
             url = substringURL(data)
 
-        var response = await ApiService.getData("v1/admins");
-        setUserData(response.data);
-        setNext(response.links.next);
-        setPrev(response.links.prev);
+        var response = await ApiService.getData(url);
+        
+        if (response.data){
+            setUserData(response.data);
+            setNext(response.links.next);
+            setPrev(response.links.prev);
+        }
+            
         setLoader(false);
     }
 
@@ -106,6 +114,7 @@ const AdministrationPage: React.FC = () => {
         console.log(response);
 
         if (response.data?.id) {
+            
             alert("Admin have been created");
             setLoader(false);
             getAllAdmin();
@@ -179,7 +188,7 @@ const AdministrationPage: React.FC = () => {
 
     };
 
-    const up = () => `page-item ${(next) ? '' : 'disabled'}`;
+    const up = ()   => `page-item ${(next) ? '' : 'disabled'}`;
     const down = () => `page-item ${(prev) ? '' : 'disabled'}`;
 
 
@@ -255,15 +264,36 @@ const AdministrationPage: React.FC = () => {
         );
     }
 
+
+    const toggle = (user:any, action:String) => {
+       
+
+        if ("Edit" == action){
+            return (auth.user.id == user.id)? 'block' : 'none'
+        }
+
+        if ("Delete" == action){
+            return (PERMISSION.rank >25 && (auth.user.id != user.id) )? 'block' : 'none'
+        }
+
+        if ("Status" == action){
+           
+            return (PERMISSION.rank>25 && (auth.user.id != user.id))? 'block' : 'none'
+        } 
+
+  
+    }
+    
+
     return (
         <div>
             {getModal()}
             <p className="header__title pb-2">Administrations</p>
-            <div className="card">
+            <div className="card" style={{'display': (PERMISSION.rank>25)? 'block': 'none'}}>
                 <div className="card-header">
                     <h1>New user</h1>
                 </div>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit)} >
                     <div className="form" >
                         <div className="form-row pt-3 p-2">
                             <div className="form-group col-3">
@@ -339,13 +369,13 @@ const AdministrationPage: React.FC = () => {
                                 <td>{res.attributes.user_email} </td>
                                 <td>{res.attributes.level.label}</td>
                                 <td className="d-flex">
-                                    <div className="form-group mr-1">
+                                    <div className="form-group mr-1" style={{display: toggle(res, "Edit")}}>
                                         <input type="submit" value="Edite" onClick={(e) => edit(res)} className="btn btn-info " />
                                     </div>
-                                    <div className="form-group mr-1" style={{display: (auth.user.id== res.id) ? 'none' : 'block'}}>
+                                    <div className="form-group mr-1" style={{display: toggle(res, "Delete")}}>
                                         <input type="submit" value="Delete" onClick={(e) => deleteAdmin(res)} className="btn btn-danger" />
                                     </div>
-                                    <div className="form-group mr-1" style={{display: (auth.user.id== res.id) ? 'none' : 'block'}}>
+                                    <div className="form-group mr-1" style={{display: toggle(res, "Status")}}>
                                         <input type="submit" value={statuts} onClick={(e) => enableOrDisabledAdmin(res)} className="btn btn-warning" />
                                     </div> 
                                    

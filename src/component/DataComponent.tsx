@@ -1,80 +1,20 @@
+import React from 'react'
 
-import React from 'react';
-
-import { connect } from 'react-redux'
-
-import {
-    Redirect, useHistory
-} from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 
 import {
-    AppRoutes
-} from '../pages/AppRoute';
+	useSelector
+} from 'react-redux'
 
-
-
-export default function(ComposedComponent:any): any {
-
-    class Authentificated extends React.Component {
-        
-        builTitle: any = (pathname: String): any => Object.values(AppRoutes).find((route:any) => route.path === pathname)
-        historyPage: any = () => useHistory()
-
-        updateTile: any = (pathname: String) => {
-            const route = this.builTitle(pathname);
-
-            document.title = (route) ? `Seremo-dashbord ${route.title}` : `Seremo-dashbord`
-           
-        }
-
-        componentWillMount(){
-            const props:any = this.props
-
-            const {history, user, refresh, login} = props
-            
-            this.updateTile(history.location.pathname)
-
-            console.log(history.location.pathname)
-
-            if (!user.isAuthentificated && user.pageHasbeRefresh && history.location.pathname !== '/login')
-                history.push('/login')
-             
-        }
-
-        componentWillUpdate(){
-
-        }
-
-        render(){
-            const props:any = this.props
-            const {user} = props;
-
-            console.log(this.historyPage)
-
-            console.log(user.isAuthentificated)
-
-            if (user.isAuthentificated)
-                return (
-                    <ComposedComponent {...this.props} />
-                )
-            
-            
-            else 
-                return (
-                    <></>
-                )
-        }
-    }
-
-   
-
-    function mapStateToProps(state: any): any {
-        return {
-            user: state.auth,
-        }
-    }
-
+const DataWrapper:any = (propers:any) => {
+    const props: any = propers
     
-    return connect(mapStateToProps)(Authentificated)
+	const Component = props.component
+
+    const auth = useSelector((state:any) => state.auth)
+    	
+	return (auth.isAuthentificated) ? 
+        <Component /> : <Redirect to={{ pathname: '/login' }} />
 }
 
+export default DataWrapper;
