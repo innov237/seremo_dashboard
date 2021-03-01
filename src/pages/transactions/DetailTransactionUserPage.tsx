@@ -5,7 +5,6 @@ import { CSVLink, CSVDownload } from "react-csv";
 import { useHistory } from 'react-router-dom';
 import ApiService from '../../services/ApiService';
 
-
 import {
     useSelector
 } from 'react-redux'
@@ -14,15 +13,16 @@ import moment from 'moment'
 
 const statusRequest = [ { id:1,label: 'PENDING'}, { id:2, label: 'REJECTED'},{ id:3,label: 'ACCEPTED'}]
 
-let code: String | null = null;
+let code: string = ''
+const DetailTrasactionPage: React.FC = (proper: any) => {
 
-
-const DetailTrasactionPage: React.FC = () => {
-
+    const props: any = proper
+    
+    const history = useHistory()
     const [transferData, getAllTransfer] = useState<any[]>([]);
     const [isLoad, setLoader] = useState(false);
     const [currenUserId, setcurrenUserId] = useState('');
-    const [userData, setUserData] = useState<any>([]);
+    const [userData, setUserData] = useState<any>(null);
     const [activeItem, setActiveItem] = useState('Transfer');
     const [csvData, getCSVData] = useState<any[]>([]);
     const [status, setStatus] = useState('All');
@@ -31,7 +31,7 @@ const DetailTrasactionPage: React.FC = () => {
     const [next, setNext] = useState<string>('');
     const [prev, setPrev] = useState<string>('');   
       
-    const history = useHistory();
+    
 
     const auth  = useSelector((state: any) => state.auth);
 
@@ -74,6 +74,18 @@ const DetailTrasactionPage: React.FC = () => {
     };
 
 
+    const fetchUser = async (uuid: any) => {
+        const response = await ApiService.getData('v1/admins/'+uuid)
+        if (response.data){
+           
+            code = response.data.attributes.user_code
+            setUserData(response.data)
+            getAllTransferFc()
+        }else{
+            history.push(`/admin/detailtransactionUser`);
+        }
+    }
+    
     const getAllRequestFcPaginate = async (param:string) => {
         setLoader(true);
         getAllTransfer([]);
@@ -93,12 +105,8 @@ const DetailTrasactionPage: React.FC = () => {
     };
 
     useEffect(() => {
-        
-        if (history.location.state != null) {
-            setUserData([history.location.state]);
-            let stateData: any = history.location.state;
-            
-            search({target:{value:stateData.attributes.user_code}})
+        if ( props.location.search.length){
+            fetchUser(props.location.search.substring(1,props.location.search.length))
         }
         getAllMovement()
     }, [])
@@ -147,7 +155,7 @@ const DetailTrasactionPage: React.FC = () => {
         setActiveItem('Transfer');
 
         var response = await ApiService.getData(url);
-
+       
         getAllTransfer(response.data);
         formatDataToCsv(response.data);
         setNext(response.next_page_url);
@@ -220,8 +228,8 @@ const DetailTrasactionPage: React.FC = () => {
         var res = await ApiService.getData("user/getUserByCode?key=" + value.target.value);
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
         if (res.data.length) {
-            
-            setUserData(res.data);
+            console.log(res.data)
+            setUserData(res.data[0]);
             code = res.data[0].user_code;
             setcurrenUserId(res.data[0].user_code);
             getAllTransferFc();
@@ -233,11 +241,10 @@ const DetailTrasactionPage: React.FC = () => {
 
     const tabItem = (res:any, type:string='Transfert') => {
         
-        
         if ('Transfert' === type )
             return <tr key={res.id}>
-            <td><img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name}<span className="span__contry">{res.receiver.country.name} ➚ </span> <img src={res.receiver.country.flag} className="user__avatar" alt="avatar" /></td>
-            <td><img src={res.sender.user_avatar} className="user__avatar" alt="avatar" /> {res.sender.user_name} <span className="span__contry">➘ {res.sender.country.name}</span> <img src={res.sender.country.flag} className="user__avatar" alt="avatar" /></td>
+            <td><img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name}<span className="span__contry">{res.receiver.country.name} ➚ </span> <img src={res.receiver.country.flag} className="country__flag" alt="avatar" /></td>
+            <td><img src={res.sender.user_avatar} className="user__avatar" alt="avatar" /> {res.sender.user_name} <span className="span__contry">➘ {res.sender.country.name}</span> <img src={res.sender.country.flag} className="country__flag" alt="avatar" /></td>
             <td>{res.reason}</td>
             <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
             <td>{res.balance}</td>
@@ -251,8 +258,8 @@ const DetailTrasactionPage: React.FC = () => {
         </tr>
         else
             return <tr key={res.id}>
-            <td> <img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> <img src={res.receiver.country.flag} className="user__avatar" alt="avatar" /></td>
-            <td><img src={res.requester.user_avatar} className="user__avatar" alt="avatar" /> {res.requester.user_name} <span className="span__contry">➘ {res.requester.country.name}</span><img src={res.requester.country.flag} className="user__avatar" alt="avatar" /></td>
+            <td> <img src={res.receiver.user_avatar} className="user__avatar" alt="avatar" /> {res.receiver.user_name} <span className="span__contry">{res.receiver.country.name} ➚ </span> <img src={res.receiver.country.flag} className="country__flag" alt="avatar" /></td>
+            <td><img src={res.requester.user_avatar} className="user__avatar" alt="avatar" /> {res.requester.user_name} <span className="span__contry">➘ {res.requester.country.name}</span><img src={res.requester.country.flag} className="country__flag" alt="avatar" /></td>
 
             <td>{moment(res.created_at).format("DD-MMM-YYYY HH:mm:ss")} </td>
             <td>{`${res.from_amount} ${res.requester.country.currency}`}</td>
@@ -294,7 +301,7 @@ const DetailTrasactionPage: React.FC = () => {
     }
     //console.log(userData)
     const userDataToMap: any = 
-        (userData.length && userData[0].attributes) ? userData[0].attributes : userData[0]
+        (userData && userData.attributes) ? userData.attributes : userData
     
 
     
@@ -331,7 +338,7 @@ const DetailTrasactionPage: React.FC = () => {
                 </div>
             </div>
             {
-                (userData.length > 0) && <div className="card shadow-sm px-2 mt-2 py-2 mb-3">
+                (userData) && <div className="card shadow-sm px-2 mt-2 py-2 mb-3">
                     <div className="row px-10 px-2 py-2">
                         <div className="col-4" style={{ height: "150px", width: "150px" }}>
                             <img src={userDataToMap.user_avatar} style={{ height: "150px", width: "150px" }} />
@@ -386,7 +393,7 @@ const DetailTrasactionPage: React.FC = () => {
                 <tbody>
                     <tr className="theader">
                         <th>Sender</th>
-                        <th>Reciever</th>
+                        <th>receiver</th>
                         {activeItem === 'Transfer' ? (<th>Reason of Request</th>) : null}
                         <th>Date of Operation </th>
 

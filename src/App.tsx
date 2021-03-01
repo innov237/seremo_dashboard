@@ -7,19 +7,20 @@ import {
   Switch,
   Route,
   Router,
-  Redirect
+  Redirect,
+  HashRouter
 } from "react-router-dom";
 
 import {
-    useDispatch,
-    useSelector
+  useDispatch,
+  useSelector
 } from 'react-redux'
 
-import { 
+import {
   history
 } from './config/history';
 
-import { 
+import {
   UserDetails
 } from "./pages/UserDetails"
 
@@ -32,8 +33,8 @@ import './App.css';
 import ApiService from './services/ApiService';
 
 import {
-    ACTION_REFRESH,
-    ACTION_LOGIN
+  ACTION_REFRESH,
+  ACTION_LOGIN
 } from './redux/Auth/Actions'
 
 
@@ -63,7 +64,7 @@ const App: React.FC = () => {
              }
         })
 
-        if(request.response){
+        if (request.response) {
           dispatch(ACTION_LOGIN(request.data))
           localStorage.setItem("srDash", request.data.token);
          }else{
@@ -84,22 +85,22 @@ const App: React.FC = () => {
         <div className="App">
           {
             (auth.pageHasbeRefresh) ?
-                <Router history={history}>
+                <HashRouter>
                   <Switch>
                       <ProtectedRoute excat path="/admin" component={HomePage} />
-                      <ProtectedRoute path="/admin/administrations" component={HomePage} ></ProtectedRoute>
-                      <ProtectedRoute path="/admin/access-log" component={HomePage}></ProtectedRoute>
-                      <ProtectedRoute path="/admin/detailtransactionUser" component={HomePage}></ProtectedRoute>
-                      <ProtectedRoute path="/admin/all-users" component={HomePage} />
-                      <ProtectedRoute path="/admin/dashboard" component={HomePage} />
-                      <ProtectedRoute path="/admin/retrait" component={HomePage} />
-                      <ProtectedRoute path="/admin/history" component={HomePage} />
-                      <ProtectedRoute path="/admin/dashboard" component={HomePage} />
+                      <ProtectedRoute excat path="/admin/administrations" component={HomePage} ></ProtectedRoute>
+                      <ProtectedRoute excat path="/admin/access-log" component={HomePage}></ProtectedRoute>
+                      <ProtectedRoute excat path="/admin/detailtransactionUser" component={HomePage}></ProtectedRoute>
+                      <ProtectedRoute excat path="/admin/all-users" component={HomePage} />
+                      <ProtectedRoute excat path="/admin/dashboard" component={HomePage} />
+                      <ProtectedRoute excat path="/admin/retrait" component={HomePage} />
+                      <ProtectedRoute excat path="/admin/history" component={HomePage} />
+                      <ProtectedRoute excat path="/admin/dashboard" component={HomePage} />
                       
                       <Route path="/login" component={LoginPage} />
                       <Route path="/" component={LoginPage} />  
                     </Switch> 
-                </Router>
+                </HashRouter>
             : <></>
           }
         </div>

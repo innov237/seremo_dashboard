@@ -111,6 +111,7 @@ const AdministrationPage: React.FC = () => {
         }
 
         var response = await ApiService.postData("v1/admins", posData);
+        console.log(response);
 
         if (response.data?.id) {
             
@@ -119,7 +120,7 @@ const AdministrationPage: React.FC = () => {
             getAllAdmin();
         } else {
             setLoader(false);
-            alert("error while create admin");
+            alert(response.message);
         }
 
     };
@@ -129,14 +130,14 @@ const AdministrationPage: React.FC = () => {
         var postData = {
             data:{
                 attributes: {
-                    account_status: (data.attributes.account_status == "actived") ? "unactived" : "actived"
+                    account_status: (data.attributes.account_status == "activated") ? "unactivated" : "activated"
                 }
             }
         };
         
         var response = await ApiService.patchData("v1/admins/" + data.id,postData);
         if (response.data.id) {
-            alert("Update");
+            alert("Do you want to change this user status ?");
             getAllAdmin();
         } else {
             alert("check your connexion an try again");
@@ -210,7 +211,7 @@ const AdministrationPage: React.FC = () => {
                         <div className="form" >
                             <div className="form-row pt-3 p-2">
                                 <div className="form-group col-12">
-                                    <input type="text" value={name} placeholder="User Name" onChange = {evt => setName(evt.target.value)} className="form-control" ref={register({ required: true })} />
+                                    <input type="text" value={name} placeholder="User Name" onChange = {(evt:any) => setName(evt.target.value)} className="form-control" ref={register({ required: true })} />
                                     {errors.name && <span>This field is required</span>}
                                 </div>
                                 <div className="form-group col-12">
@@ -359,8 +360,8 @@ const AdministrationPage: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {userData.map((res: any) => {
-                            const statuts = (res.attributes.account_status == 'actived') ? 'Unactived' : 'Actived'
+                         {userData.map((res: any) => {
+                            const statuts = (res.attributes.account_status == 'activated') ? 'unactivated' : 'activated'
                             
 
                             return (<tr key={res.attributes.name}>
@@ -376,7 +377,7 @@ const AdministrationPage: React.FC = () => {
                                     </div>
                                     <div className="form-group mr-1" style={{display: toggle(res, "Status")}}>
                                         <input type="submit" value={statuts} onClick={(e) => enableOrDisabledAdmin(res)} className="btn btn-warning" />
-                                    </div>
+                                    </div> 
                                    
                                 </td>
                             </tr>)
