@@ -97,7 +97,6 @@ const DetailTrasactionPage: React.FC = () => {
         if (history.location.state != null) {
             setUserData([history.location.state]);
             let stateData: any = history.location.state;
-            
             search({target:{value:stateData.attributes.user_code}})
         }
         getAllMovement()

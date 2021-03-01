@@ -9,7 +9,7 @@ import ApiService from '../../services/ApiService';
 
 const UsersListPage: React.FC = () => {
 
-
+    
     const [next, setNext] = useState<string>('');
     const [prev, setPrev] = useState<string>('');
     const [usersData, setUsersData] = useState<any>([]);
@@ -17,9 +17,9 @@ const UsersListPage: React.FC = () => {
     const history = useHistory();
 
 
-    const substringURL = (url: string) => {
+    const substringURL = (url:string) => {
         const rootURL = `${process.env.REACT_APP_API_URL}/api`
-        console.log(rootURL, url)
+        console.log(rootURL,url)
         return url.substring(rootURL.length, url.length);
     }
 
@@ -63,40 +63,44 @@ const UsersListPage: React.FC = () => {
             ) : ""}
             <table className="table">
                 <tbody>
-                    <tr className="theader">
-                        <th>User</th>
-                        <th>Phone number</th>
-                        <th>Code</th>
-                        <th>Balance</th>
-                        <th>Currency</th>
-                        <th>More</th>
-                    </tr>
+                <tr className="theader">
+                    <th>Avatar</th>
+                    <th>Name</th>
+                    <th>Phone number</th>
+                    <th>Code</th>
+                    <th>Balance</th>
+                    <th>Currency</th>
+                    <th>More</th>
+                </tr>
+                
+                {usersData.length > 0 && usersData.map((res: any,index: any) => {
+                    return (<tr key={index}>
+                        <td>
+                            <div><img src={res.attributes.user_avatar} className="user__avatar" alt="avatar" /> <span>{res.attributes.user_name}</span></div>
+                            <div className="d-flex justify-content-start"><img src={res.attributes.country.flag} className="user__avatar" alt="avatar" /> <span className="span__contry">{res.attributes.country.name}</span> </div>
 
-                    {usersData.length > 0 && usersData.map((res: any, index: any) => {
-                        return (<tr key={index}>
-                            <td>
-                                <img src={res.attributes.user_avatar} className="user__avatar" alt="avatar" /> {res.attributes.user_name}<span className="span__contry">{res.attributes.country.name}</span> <img src={res.attributes.country.flag} className="country__flag" alt="avatar" />
-                            </td>
-                            <td>{res.attributes.user_phone_number}</td>
-                            <td>{res.attributes.user_code}</td>
-                            <td>{res.attributes.balance}</td>
-                            <td>{res.attributes.country.currency}</td>
-                            <td style={{ textAlign: "center" }} className="more__td" onClick={() => getUserDetail(res)}>
-                                <span className="dot"></span>
-                                <span className="dot"></span>
-                                <span className="dot"></span>
-                            </td>
-                        </tr>)
-                    })}
+                         </td>
+                        <td>{res.attributes.user_name}</td>
+                        <td>{res.attributes.user_phone_number}</td>
+                        <td>{res.attributes.user_code}</td>
+                        <td>{res.attributes.balance}</td>
+                        <td>{res.attributes.country.currency}</td>
+                        <td style={{ textAlign: "center" }} className="more__td" onClick={() => getUserDetail(res)}>
+                            <span className="dot"></span>
+                            <span className="dot"></span>
+                            <span className="dot"></span>
+                        </td>
+                    </tr>)
+                })}
                 </tbody>
             </table>
-            <div className="d-flex justify-content-center">
+             <div className="d-flex justify-content-center">
                 <nav aria-label="Page navigation example">
-                    <ul className="pagination">
-                        <li className={down()} onClick={() => (prev) ? getAllUser(prev) : ''} ><a className="page-link" >Previous</a></li>
-
-                        <li className={up()} onClick={() => (next) ? getAllUser(next) : ''}><a className="page-link" >Next</a></li>
-                    </ul>
+                  <ul className="pagination">
+                    <li className={down()} onClick={ () => (prev) ? getAllUser(prev) : ''} ><a className="page-link" >Previous</a></li>
+                    
+                    <li className={up()} onClick={ () => (next) ? getAllUser(next) : ''}><a className="page-link" >Next</a></li>
+                  </ul>
                 </nav>
             </div>
         </div>
