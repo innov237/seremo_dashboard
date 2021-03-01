@@ -13,20 +13,7 @@ import {
 
 import moment from 'moment';
 
-const statusRequest = [
-  {
-    id:1,
-    label: 'PENDING'
-  },
-  {
-    id:2,
-    label: 'REJECTED'
-  },
-  {
-    id:3,
-    label: 'ACCEPTED'
-  },
-]
+const statusRequest = [ { id:1,label: 'PENDING'}, { id:2, label: 'REJECTED'},{ id:3,label: 'ACCEPTED'}]
 
 const TrasactionPage: React.FC = () => {
 
@@ -64,7 +51,8 @@ const TrasactionPage: React.FC = () => {
     const getAllMovement = async () => {
 
         var response = await ApiService.getData("v1/movements");
-        setMovement(response)
+
+        setMovement( [...response.filter((e: any) => e.id !=3) ,{id:99, label:'TRANSFER'} ])
 
     };
 
@@ -106,16 +94,13 @@ const TrasactionPage: React.FC = () => {
     }    
 
     const getAllTransferFc = async (param:any | null = null) => {
+        setActiveItem('Transfer');
         getAllMovement();
         setLoader(true);
         getAllTransfer([]);
 
-
-        let url =  (param != null) ? `v1/transactions?type=${param}` : `v1/transactions`;
+        let url =  (param != null) ? `v1/transactions/type/${param}` : `v1/transactions`;
         
-       
-        setActiveItem('Transfer');
-
         var response = await ApiService.getData(url);
 
         getAllTransfer(response.data);
@@ -128,12 +113,13 @@ const TrasactionPage: React.FC = () => {
 
 
     const getAllRequestFc = async (param:any | null = null) => {
+        setMovement([])
+        setActiveItem('Request');
         setLoader(true);
         getAllTransfer([]);
-        setActiveItem('Request');
-        setMovement(statusRequest)
         
-        const url =  (param != null) ? `v1/requests?type=${statusRequest.filter(e => e.id=param)[0].label}` : `v1/requests`;
+        setMovement([ { id:1,label: 'PENDING'}, { id:2, label: 'REJECTED'},{ id:3,label: 'ACCEPTED'}]        )
+        const url =  (param != null) ? `v1/requests/type/${[ { id:1,label: 'PENDING'}, { id:2, label: 'REJECTED'},{ id:3,label: 'ACCEPTED'}].filter(e => e.id==param)[0].label}` : `v1/requests`;
         var response = await ApiService.getData(url);
 
         getAllTransfer(response.data);
@@ -200,7 +186,7 @@ const TrasactionPage: React.FC = () => {
         getAllMovement();
         setLoader(true);
         getAllTransfer([]);
-        var res = await ApiService.getData(`v1/transactions?code=${value}`);
+        var res = await ApiService.getData(`v1/transactions/code/${value}`);
         
         getAllTransfer(res.data);
         setLoader(false);

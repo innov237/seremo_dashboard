@@ -12,21 +12,7 @@ import {
 
 import moment from 'moment'
 
-const statusRequest = [
-    {
-      id:1,
-      label: 'PENDING'
-    },
-    {
-      id:2,
-      label: 'REJECTED'
-    },
-    {
-      id:3,
-      label: 'ACCEPTED'
-    },
-]
-
+const statusRequest = [ { id:1,label: 'PENDING'}, { id:2, label: 'REJECTED'},{ id:3,label: 'ACCEPTED'}]
 
 let code: String | null = null;
 
@@ -59,7 +45,7 @@ const DetailTrasactionPage: React.FC = () => {
     }
 
     const paginate = (url:string) => {
-        console.log(url)
+        
 
         if ( 'Transfer' == activeItem)
             getAllTransferFcPaginate(url)
@@ -75,7 +61,7 @@ const DetailTrasactionPage: React.FC = () => {
 
         let url = substringURL(param)
 
-        var response = await ApiService.getData(`${url}&user=${code}`);
+        var response = await ApiService.getData(`${url}`);
 
         getAllTransfer(response.data);
         formatDataToCsv(response.data);
@@ -95,7 +81,7 @@ const DetailTrasactionPage: React.FC = () => {
         
         let url = substringURL(param);
 
-        var response = await ApiService.getData(`${url}&user=${code}`);
+        var response = await ApiService.getData(`${url}`);
         
         getAllTransfer(response.data);
         formatDataToCsv(response.data);
@@ -120,7 +106,7 @@ const DetailTrasactionPage: React.FC = () => {
     const getAllMovement = async () => {
 
         var response = await ApiService.getData("v1/movements");
-        setMovement(response)
+        setMovement( [...response.filter((e: any) => e.id !=3) ,{id:99, label:'TRANSFER'} ])
 
     };
 
@@ -156,7 +142,7 @@ const DetailTrasactionPage: React.FC = () => {
         getAllMovement();
         setLoader(true);
         getAllTransfer([]);
-        const url =  (param == null) ? `v1/transactions?user=${code}` : `v1/transactions?user=${code}&type=${param}`;
+        const url =  (param == null) ? `v1/transactions/user/${code}` : `v1/transactions/user/${code}/type/${param}`;
 
         setActiveItem('Transfer');
 
@@ -174,7 +160,7 @@ const DetailTrasactionPage: React.FC = () => {
         getAllTransfer([]);
         setActiveItem('Request');
         setMovement(statusRequest)
-        const url =  (param == null) ? `v1/requests?user=${code}` : `v1/requests?user=${code}&type=${param}`;
+        const url =  (param == null) ? `v1/requests/user/${code}` : `v1/requests/user/${code}/type/${[ { id:1,label: 'PENDING'}, { id:2, label: 'REJECTED'},{ id:3,label: 'ACCEPTED'}].filter(e => e.id==param)[0].label}`;
         var response = await ApiService.getData(url);
 
         getAllTransfer(response.data);
@@ -257,11 +243,11 @@ const DetailTrasactionPage: React.FC = () => {
             <td>{res.balance}</td>
             <td>{res.currency}</td>
             <td>{res.movement_type}</td>
-            <td style={{ textAlign: "center" }} className="more__td" >
+            {/*<td style={{ textAlign: "center" }} className="more__td" >
                 <span className="dot"></span>
                 <span className="dot"></span>
                 <span className="dot"></span>
-            </td>
+            </td>*/}
         </tr>
         else
             return <tr key={res.id}>
@@ -273,11 +259,11 @@ const DetailTrasactionPage: React.FC = () => {
             <td>{`${res.to_amount} ${res.receiver.country.currency}`}</td>
             <td>{res.applied_rate}</td>
             <td>{res.status}</td>
-            <td style={{ textAlign: "center" }} className="more__td">
+             {/*<td style={{ textAlign: "center" }} className="more__td" >
                 <span className="dot"></span>
                 <span className="dot"></span>
                 <span className="dot"></span>
-            </td>
+            </td>*/}
         </tr>
     }
 
@@ -333,7 +319,7 @@ const DetailTrasactionPage: React.FC = () => {
                                 <option value="All">All</option>
 
                                 {
-                                    movement.map(e => <option key={e.id} value={e.label}>{e.label}</option>)
+                                    movement.map(e => <option key={e.id} value={e.id}>{e.label}</option>)
                                 }
 
                             </select>
@@ -415,7 +401,7 @@ const DetailTrasactionPage: React.FC = () => {
                         </>
                         }
                         
-                        <th>More</th>
+                        {/*<th>More</th>*/}
                     </tr>
                     {   (isLoad) ? <></> :
                         (activeItem === 'Transfer') ?
